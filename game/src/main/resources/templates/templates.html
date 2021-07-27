@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>game</title>
+
+    <style type="text/css">
+        #bu1,#bu2,#bu3{
+            width: 20%;
+            height: 20%;
+        }
+    </style>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<!--    <script th:inline="javascript" type="text/javascript"  src="js/game.js"></script>-->
+</head>
+
+<body>
+<div align="center">
+    <p style="font-size: 600%;" >卡点10:00:00游戏</p>
+    <p style="font-size: 600%;" id="v1" >00:00:00</p>
+    <button style="font-size: 400%;" type="button" id="bu1" onclick="anj1()">开始</button>
+    <button style="font-size: 400%;" type="button" id="bu2" onclick="anj2()">暂停</button>
+    <button style="font-size: 400%;" type="button" id="bu3" onclick="anj3()">重置</button>
+    <div id="div22" style="display: none;">
+        <p>
+            <input type="text" id="put"  value="" maxlength="20" style=" font-size: 200%;width: 30%;height: 10%" placeholder="请输入你的签名:"/>
+        </p>
+        <input type="button" name="" id="but4" value="确定" onclick="anj4()"   style="font-size: 200%;width: 10%;height: 10%;"/>
+    </div>
+</div>
+
+<div align="center">
+    <h1>记录</h1>
+    <table style="margin-left: 7%">
+    <span th:each="Map,mapp : ${list}" >
+    <tr>
+        <td th:text="${mapp.current.get('city')}" style="width: 32%;"></td>
+        <td th:text="${mapp.current.get('content')}"  style="width: 25%;"></td>
+        <td th:text="${mapp.current.get('name')}" ></td>
+    </tr>
+    </span>
+    </table>
+</div>
+<script th:inline = "javascript"  type = "text/javascript" >
+    var a1=0;
+    var a2=0;
+    var b1=0;
+    var b2=0;
+    var c1=0;
+    var c2=0;
+    var aa2;
+    var 防重复提交=false;
+    var 防空提交=true;
+    // var jym;
+
+    // window.onload = function(){
+    //      jym = [[${jym}]];
+    //     alert(jym);
+    // }
+
+    var zhi="";
+    function anj1(){
+        if(c1==0){
+            aa2=setInterval("ff()",1)
+        }
+        c1=1;
+    }
+    function ff(){
+        a1++;
+        if(a1==10){
+            a1=0;
+            a2++;
+            if(a2==10){
+                a2=0;
+                b1++;
+                if(b1==10){
+                    b1=0;
+                    b2++;
+                }
+            }
+        }
+        var d1=Math.floor(Math.random()*100);
+        var d2="";
+        if (d1<10){
+            d2=0+""+d1;
+        }else if (d1==100) {
+            d2==99;
+        }else {
+            d2=d1;
+        }
+        document.getElementById("v1").innerHTML=b2+""+b1+":"+a2+""+a1+":"+d2;
+        zhi=b2+""+b1+":"+a2+""+a1+":"+d2;
+    }
+
+    function anj2(){
+        防重复提交=true;
+        clearInterval(aa2);
+        c1=0;
+        if(c2==3){
+            document.getElementById("v1").innerHTML=1+""+0+":"+0+""+0+":"+0+""+0;
+        }else{
+            c2=0;
+        }
+        // var s=document.getElementById("v1").innerHTML.slice(0, 2);
+        // var ss=document.getElementById("v1").innerHTML.slice(3,5);
+        //    if(s==10&&ss>70){
+        document.getElementById("div22").style.display = "block";
+        // }else if (s==9&&ss<30) {
+        //     document.getElementById("div22").style.display = "block";
+
+
+
+    }
+    function anj3(){
+        c2++;
+        clearInterval(aa2);
+        c1=0;
+        a1=0;
+        a2=0;
+        b1=0;
+        b2=0;
+        document.getElementById("v1").innerHTML=0+""+0+":"+0+""+0+":"+0+""+0;
+        document.getElementById("div22").style.display = "none";
+    }
+    function anj4() {
+
+        var s=zhi.slice(0, 2);
+        var ss=zhi.slice(3,5);
+        var sss=zhi.slice(-2);
+        var ssss=parseInt(s+""+ss+""+sss)-100000;
+        if (ssss<0){
+            ssss=0-ssss;
+        }else if (ssss==-1000) {
+            ssss=0;
+        }
+        ssss+=512;
+        var name=document.getElementById("put").value;
+        var achievement = ssss;
+        var content = zhi;
+        var city=returnCitySN['cname'];
+
+        var postForm = document.createElement("form");//表单对象
+        postForm.method="post" ;
+        postForm.action = '/insertsql' ;
+
+        var nameInput = document.createElement("input") ; //email input
+        nameInput.setAttribute("name", "name1") ;
+        nameInput.setAttribute("value", name);
+        postForm.appendChild(nameInput);
+
+        var achievementInput = document.createElement("input");// password input
+        achievementInput.setAttribute("name","achievement1");
+        achievementInput.setAttribute("value",achievement+"");
+        postForm.appendChild(achievementInput);
+
+        var contentInput = document.createElement("input");// password input
+        contentInput.setAttribute("name","content1");
+        contentInput.setAttribute("value",content);
+        postForm.appendChild(contentInput);
+
+        var cityInput = document.createElement("input");// password input
+        cityInput.setAttribute("name","city1");
+        cityInput.setAttribute("value",city);
+        postForm.appendChild(cityInput);
+
+        // var jymInput = document.createElement("input");// password input
+        // jymInput.setAttribute("name","jym");
+        // jymInput.setAttribute("value",jym);
+        // postForm.appendChild(jymInput);
+
+
+        if (name == "" || name== null ) {
+            防空提交=false;
+        }else 防空提交=true;
+
+        if (防重复提交&&防空提交) {
+            防重复提交=false;
+            document.body.appendChild(postForm) ;
+            postForm.submit() ;
+            document.body.removeChild(postForm) ;
+
+        }else if (!防重复提交) {
+            alert("你已提交，请勿重复提交")
+        }else {
+            alert("请输入你的签名再提交！")
+        }
+    }
+
+</script>
+</body>
+
+</html>
