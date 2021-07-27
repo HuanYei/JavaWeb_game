@@ -10,6 +10,7 @@
             height: 20%;
         }
     </style>
+    <script src="KadianGame.js"></script>
     <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
 </head>
 
@@ -40,132 +41,6 @@
     </span>
     </table>
 </div>
-<script th:inline = "javascript"  type = "text/javascript" >
-    var a1=0;
-    var a2=0;
-    var b1=0;
-    var b2=0;
-    var c1=0;
-    var c2=0;
-    var aa2;
-    var 防重复提交=false;
-    var 防空提交=true;
-    var zhi="";
-
-    function anj1(){
-        if(c1==0){
-            aa2=setInterval("ff()",1)
-        }
-        c1=1;
-    }
-    function ff(){
-        a1++;
-        if(a1==10){
-            a1=0;
-            a2++;
-            if(a2==10){
-                a2=0;
-                b1++;
-                if(b1==10){
-                    b1=0;
-                    b2++;
-                }
-            }
-        }
-        var d1=Math.floor(Math.random()*100);
-        var d2="";
-        if (d1<10){
-            d2=0+""+d1;
-        }else if (d1==100) {
-            d2==99;
-        }else {
-            d2=d1;
-        }
-        document.getElementById("v1").innerHTML=b2+""+b1+":"+a2+""+a1+":"+d2;
-        zhi=b2+""+b1+":"+a2+""+a1+":"+d2;
-    }
-
-    function anj2(){
-        防重复提交=true;
-        clearInterval(aa2);
-        c1=0;
-        if(c2==3){
-            document.getElementById("v1").innerHTML=1+""+0+":"+0+""+0+":"+0+""+0;
-        }else{
-            c2=0;
-        }
-        document.getElementById("div22").style.display = "block";
-    }
-    function anj3(){
-        c2++;
-        clearInterval(aa2);
-        c1=0;
-        a1=0;
-        a2=0;
-        b1=0;
-        b2=0;
-        document.getElementById("v1").innerHTML=0+""+0+":"+0+""+0+":"+0+""+0;
-        document.getElementById("div22").style.display = "none";
-    }
-    function anj4() {
-
-        var s=zhi.slice(0, 2);
-        var ss=zhi.slice(3,5);
-        var sss=zhi.slice(-2);
-        var ssss=parseInt(s+""+ss+""+sss)-100000;
-        if (ssss<0){
-            ssss=0-ssss;
-        }else if (ssss==-1000) {
-            ssss=0;
-        }
-        ssss+=512;
-        var name=document.getElementById("put").value;
-        var achievement = ssss;
-        var content = zhi;
-        var city=returnCitySN['cname'];
-
-        var postForm = document.createElement("form");//表单对象
-        postForm.method="post" ;
-        postForm.action = '/insertsql' ;
-
-        var nameInput = document.createElement("input") ;
-        nameInput.setAttribute("name", "name1") ;
-        nameInput.setAttribute("value", name);
-        postForm.appendChild(nameInput);
-
-        var achievementInput = document.createElement("input");
-        achievementInput.setAttribute("name","achievement1");
-        achievementInput.setAttribute("value",achievement+"");
-        postForm.appendChild(achievementInput);
-
-        var contentInput = document.createElement("input");
-        contentInput.setAttribute("name","content1");
-        contentInput.setAttribute("value",content);
-        postForm.appendChild(contentInput);
-
-        var cityInput = document.createElement("input");
-        cityInput.setAttribute("name","city1");
-        cityInput.setAttribute("value",city);
-        postForm.appendChild(cityInput);
-
-        if (name == "" || name== null ) {
-            防空提交=false;
-        }else 防空提交=true;
-
-        if (防重复提交&&防空提交) {
-            防重复提交=false;
-            document.body.appendChild(postForm) ;
-            postForm.submit() ;
-            document.body.removeChild(postForm) ;
-
-        }else if (!防重复提交) {
-            alert("你已提交，请勿重复提交")
-        }else {
-            alert("请输入你的签名再提交！")
-        }
-    }
-
-</script>
 </body>
 
 </html>
