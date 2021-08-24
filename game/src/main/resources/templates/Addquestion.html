@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>RCA问题回复</title>
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+</head>
+
+<body>
+<div align="content">
+    <p style="font-size: 200%;color: chartreuse" >请输入问题及问题回复 </p>
+    <button style="font-size: 150%;" onclick="tj()">提交</button>
+    <br>
+    <br>
+    <textarea style="width: 100% ;height: 2000px" id="put">
+请输入序号 “1.2.3.” 。还有 “回复”，用以识别，请按照下列示例。使用时请清空所有内容,勿加上此行。
+1.
+The factory should ensure that it is preload Google play service and Google play store and they are hidden and could work normally.
+DK2021.6.22回复：已添加google服务和商店并且已隐藏。测试功能正常
+2.
+Boot-up animation: The final screen quiet time is too short, and the required time is about 2 seconds.
+DK2021.6.22回复：对用户不会造成很大影响。之前未因此题造成客诉，请接受
+
+    </textarea>
+</div>
+</body>
+<script th:inline = "javascript"  type = "text/javascript" >
+    function tj() {
+        var name=document.getElementById("put").value;
+        // alert(name);
+        var postForm = document.createElement("form");//表单对象
+        postForm.method="post" ;
+        postForm.action = '/addBUG' ;
+
+        var nameInput = document.createElement("input") ;
+        nameInput.setAttribute("name", "name1") ;
+        nameInput.setAttribute("value", name);
+        postForm.appendChild(nameInput);
+
+        document.body.appendChild(postForm) ;
+        postForm.submit() ;
+        alert("提交成功");
+    }
+</script>
+</html>
