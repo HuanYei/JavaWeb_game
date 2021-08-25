@@ -1,5 +1,6 @@
 package com.example.game.conntroller;
 
+import com.example.game.util.CompareStrSimUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -80,23 +81,51 @@ public class AnswerController {
             name=name.substring(name.indexOf((i+1)+"."));
         }
 
-        System.out.println(list.size()+"dd"+list2.size());
-
+//        System.out.println(list.size()+"dd"+list2.size());
+        //模糊查找
         String jg="";
+        List<Map<String, Object>> list1=selectall();
         for (int i=0;i<list.size();i++){
-            if (select(list.get(i)).size()!=0){
-                jg+=(i+1)+"."+list2.get(i)+"<br/>"+"<span style=\"background: chartreuse\">DK"+Timeing()+"回复"+select(list.get(i)).get(0).get("reply")+"</span><br/><br/>";
-            }else {
-                jg+=(i+1)+"."+list2.get(i)+"<br/><br/>";
+            for (int j=0;j<list1.size();j++){
+                if (ispass(list1.get(j).get("content").toString(),list.get(i))){
+                    jg+=(i+1)+"."+list2.get(i)+"<br/>"+"<span style=\"background: chartreuse\">DK"+Timeing()+"回复"+list1.get(j).get("reply")+"</span><br/><br/>";
+                    break;
+                }
+                if (j==list1.size()-1){
+                    jg+=(i+1)+"."+list2.get(i)+"<br/><br/>";
+                }
             }
         }
+        //精准查找
+//        for (int i=0;i<list.size();i++){
+//            if (select(list.get(i)).size()!=0){
+//                jg+=(i+1)+"."+list2.get(i)+"<br/>"+"<span style=\"background: chartreuse\">DK"+Timeing()+"回复"+select(list.get(i)).get(0).get("reply")+"</span><br/><br/>";
+//            }else {
+//                jg+=(i+1)+"."+list2.get(i)+"<br/><br/>";
+//            }
+//        }
         model.addAttribute("jg",jg);
         return "jg";
+    }
+    //判断示范点
+    public boolean ispass(String Str1,String Str2){
+        int passrate=  Math.round((CompareStrSimUtil.getSimilarityRatio(Str1,Str2,true)*100));
+        if (passrate>80){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public List<Map<String, Object>> select(String conent){
         String sql="select * from customer_reply where content='"+conent+"'";
         System.out.println(sql);
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    public List<Map<String, Object>> selectall(){
+        String sql="select * from customer_reply";
+//        System.out.println(sql);
         return jdbcTemplate.queryForList(sql);
     }
 
