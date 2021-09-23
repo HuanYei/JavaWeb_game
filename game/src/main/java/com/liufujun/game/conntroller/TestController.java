@@ -1,4 +1,4 @@
-package com.example.game.conntroller;
+package com.liufujun.game.conntroller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

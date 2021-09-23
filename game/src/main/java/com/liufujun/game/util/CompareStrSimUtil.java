@@ -1,4 +1,4 @@
-package com.example.game.util;
+package com.liufujun.game.util;
 
 public class CompareStrSimUtil {
     private static int compare(String str, String target, boolean isIgnore) {
