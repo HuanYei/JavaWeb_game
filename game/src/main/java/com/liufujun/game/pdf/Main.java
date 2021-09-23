@@ -69,7 +69,10 @@ public class Main {
 
     private static String jbNameString(String jbname) {
         旧版型= StringUtil.删除字符(旧版型,"\"");
-
+        String 旧Mirror="MirrorOn_";
+        if (jbString.indexOf("mirror_on=0")!=-1){
+            旧Mirror="MirrorOFF_";
+        }
         String 订单机型板卡=jbname.substring(jbname.indexOf("-")-6,jbname.indexOf(旧版型)+旧版型.length());
         String 旧客户名=StringUtil.删除字符(jbname.substring(0,jbname.indexOf(订单机型板卡)),"C001",旧国家,"_");
         String 电流=v(jbname,"SW","MA");
@@ -86,6 +89,10 @@ public class Main {
         jbname=jbname.replace(屏名logo遥控器智像,new屏名logo遥控器智像);
         jbname=jbname.replace(旧国家,Country.国家(user.get国家()));
         jbname=jbname.replace(旧客户名,user.get客户缩写());
+        if (jbname.indexOf("Mirror")==-1){
+            System.out.println("jjjjj");
+            jbname=jbname.replace(new屏名logo遥控器智像,旧Mirror+new屏名logo遥控器智像);
+        }
         System.out.println(jbname);
         if (isPDF){
             打印+="\n"+"脚本名：\n<span style=\"color: green\">"+jbname+"</span>";
