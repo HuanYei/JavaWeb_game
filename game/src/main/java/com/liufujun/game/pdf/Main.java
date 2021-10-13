@@ -90,7 +90,6 @@ public class Main {
         jbname=jbname.replace(旧国家,Country.国家(user.get国家()));
         jbname=jbname.replace(旧客户名,user.get客户缩写());
         if (jbname.indexOf("Mirror")==-1){
-            System.out.println("jjjjj");
             jbname=jbname.replace(new屏名logo遥控器智像,旧Mirror+new屏名logo遥控器智像);
         }
         System.out.println(jbname);
@@ -142,7 +141,13 @@ public class Main {
         String pcbname="\""+user.get版型()+"\"";
         Stringmacro("pcbname",pcbname);
 
-        String customer_folder="$toptech_path/customer/$cus_id/"+user.get客户订单号()+"_"+Country.国家(user.get国家())+"_"+user.get机型()+"_"+user.get版型()+"_"+user.get屏名()+"_CX"+user.get遥控器名()+"_"+user.get开机logo();
+        String customer_folder="";
+        if(user.get版型().indexOf("9632")!=-1){
+            customer_folder ="$toptech_path/customer/9632/$cus_id/"+user.get客户订单号()+"_"+Country.国家(user.get国家())+"_"+user.get机型()+"_"+user.get版型()+"_"+user.get屏名()+"_CX"+user.get遥控器名()+"_"+user.get开机logo();
+        }else {
+            customer_folder ="$toptech_path/customer/$cus_id/"+user.get客户订单号()+"_"+Country.国家(user.get国家())+"_"+user.get机型()+"_"+user.get版型()+"_"+user.get屏名()+"_CX"+user.get遥控器名()+"_"+user.get开机logo();
+
+        }
         Stringmacro("customer_folder",customer_folder);
 
         String panelname=user.get屏名()+".ini";

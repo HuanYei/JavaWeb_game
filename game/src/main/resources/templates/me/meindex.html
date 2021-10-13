@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -8,14 +8,10 @@
 <div style="width: 100%" >
     <a href="/" style="font-size: 150%">主页</a>
 </div>
-<h1>
-    彩讯订单PDF文件自动生成脚本
-</h1>
 <form action="/pdfupload" method="post" enctype="multipart/form-data" style="font-size: 150%;">
-    彩讯订单PDF文件:<input type="file" style="font-size: 100%; width: 100%;" name="file"><br><br>
-    参考脚本文件：<input type="file" style="font-size: 100%; width: 100%;" name="file2"><br><br>
+    软件名:<input type="file" style="font-size: 100%; width: 100%;" name="file"><br><br>
     请在pdf文件中不包含的时候输入<br>
-    LOGO名：<input type="text" name="logo">
+    软件名：<input type="text" name="logo">
     屏名：<input type="text" name="panel"><br><br>
     <button type="submit" style="font-size: 500%;" >生成</button>
 </form>

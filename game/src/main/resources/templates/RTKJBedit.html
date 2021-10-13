@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .inputtxt{
+        position: absolute;
+        left: 200px;
+    }
+</style>
+<body>
+<div style="width: 100%" >
+    <a href="/" style="font-size: 150%">主页</a>
+</div>
+<form action="/" th:action="@{/}" th:object="${44}"  method="post" enctype="multipart/form-data" style="margin-left: 20px">
+    <div style="margin-top: 7px">
+     客户缩写：<input type="text" class="inputtxt" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     客户订单号：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     机型：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     客制化文件夹名：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     主版型：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     副版型：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     按键板名：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     屏名：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     国家：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     语言：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     时区：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     电视制式：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     TT：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     CI：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     是否1G内存：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     屏背光电流：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     软硬件控流：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     声音功率：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     遥控器名：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     预制应用列表：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     C001_onekeypad：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     开机logo：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     开机视频：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     杜比是否：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     蓝牙是否：<input type="text" class="inputtxt" th:value=""><br/></div> <div style="margin-top: 7px">
+     屏贴是否：<input type="text" class="inputtxt" th:value=""><br/></div><br/>
+    <button type="submit" style="font-size: 300%;" >生成脚本</button>
+</form>
+
+</body>
+</html>

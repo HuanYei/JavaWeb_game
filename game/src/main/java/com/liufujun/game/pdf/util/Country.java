@@ -41,6 +41,8 @@ public class Country {
                 return "Europe/Istanbul";
             case "SA":
                 return "Asia/Riyadh";
+            case "AE":
+                return "Asia/Dubai";
             default:
                 return gu;
         }
@@ -58,6 +60,8 @@ public class Country {
                 return "TR";
             case "沙特阿拉伯":
                 return "SA";
+            case "阿联酋":
+                return "AE";
             default:
                 return gu;
         }
@@ -75,6 +79,8 @@ public class Country {
                 return "TURKEY";
             case "SA":
                 return "SAUDI_ARABIA";
+            case "AE":
+                return "ARE";
             default:
                 return gu;
         }
@@ -91,6 +97,8 @@ public class Country {
             return "P75_368_V65";
         }else if(Board.indexOf("P150-9632V6.2")!=-1){
             return "P150_9632V62";
+        }else if(Board.indexOf("P50-368V5.0")!=-1){
+            return "P50_368_V50";
         }
         return Board;
     }
