@@ -15,4 +15,6 @@ public class StringUtil {
     public static String 删除字符(String 源字符,String 需删除字符1,String 需删除字符2,String 需删除字符3){
         return 源字符.replace(需删除字符1,"").replace(需删除字符2,"").replace(需删除字符3,"");
     }
+
+
 }

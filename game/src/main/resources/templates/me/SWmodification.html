@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="width: 100%">
+    <a href="/" style="font-size: 150%">主页</a>
+</div>
+<div style="margin-left: 20px">
+    <h1>软件信息</h1>
+    <p><b>脚本：<a href="/toColor">修改</a></b></p>
+    <div style="margin-left: 30px">
+        <span th:text="${SW.software_name}"></span>
+    </div>
+    <p><b>logo：<a href="/toColor">更改</a></b></p>
+    <div style="margin-left: 30px">
+        <span th:text="${SW.software_logo_name}"></span><br>
+        <a th:href="${SW.logoweb}">
+            <img style="height: 180px;width: 320px;" th:src="${SW.logoweb}">
+        </a>
+    </div>
+
+    <p>
+        <b>屏： <a href="/toColor">修改</a></b>
+    <div style="margin-left: 30px">
+        <span th:text="${SW.screen_name}"></span><br>
+        Ti Mode: <span></span>
+    </div>
+    </p>
+
+    <b>色温： <a href="/Color">修改</a> </b>
+    <form action="/subswname" method="post" enctype="multipart/form-data" th:object="${SW}">
+        <table style="margin-left: 30px">
+            <tr>
+                <th></th>
+                <th>Standard</th>
+                <th>COOL</th>
+                <th>Warm</th>
+            </tr>
+            <tr>
+                <th>R</th>
+                <td><input type="text" th:value="*{PQ_data.getStandardR()}"/></td>
+                <td><input type="text" th:value="*{PQ_data.getCoolR()}"/></td>
+                <td><input type="text" th:value="*{PQ_data.getWarmR()}"/></td>
+            </tr>
+            <tr>
+                <th>G</th>
+                <td><input type="text" th:value="*{PQ_data.getStandardG()}"/></td>
+                <td><input type="text" th:value="*{PQ_data.getCoolG()}"/></td>
+                <td><input type="text" th:value="*{PQ_data.getWarmG()}"/></td>
+            </tr>
+            <tr>
+                <th>B</th>
+                <td><input type="text" th:value="*{PQ_data.getStandardB()}"/></td>
+                <td><input type="text" th:value="*{PQ_data.getCoolB()}"/></td>
+                <td><input type="text" th:value="*{PQ_data.getWarmB()}"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
