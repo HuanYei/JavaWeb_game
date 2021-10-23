@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #text{
+            color: white;
+            font-size: 16px;
+            width: 85% ;
+            height:10000px;
+            float: left;
+        }
+        #wrap{
+            background: #282c34;
+
+            margin:0 auto;
+            overflow: hidden;
+        }
+        #Rownumber{
+            text-align:center;
+            color: white;
+            width:60px;
+            font-size: 16px;
+            height:10000px;
+            background: #1e222a;
+            float: left;
+        }
+        #divdd{
+            border: solid 2px black;
+            color: white;
+            width: 100%;
+            height:10000px;
+            background: #1e222a;
+        }
+        #path{
+            color: white;
+            padding-left: 60px;
+            padding-top: 15px;
+            height: 45px;
+            font-size: 16px;
+            background: #1e222a;
+        }
+        [contenteditable]:focus{
+            outline: none;
+        }
+    </style>
+</head>
+<body onload="myFunction()">
+<div style="width: 100%" >
+    <a href="/" style="font-size: 150%">主页</a>
+    <a onclick="upSW()" href="#" style="font-size: 100%">返回软件信息页面</a>
+</div>
+<h2>脚本编辑</h2>
+<button onclick="OpenFile()">打开文件所在位置(Ctrl+B)</button><button onclick="submit()">保存修改(Ctrl+S)</button><button onclick="Refresh()">还原修改(Ctrl+Alt+Z)</button>
+<br>
+<div id="divdd">
+<div  th:text="${scriptpath}" id="path"></div>
+<div id="wrap">
+<div id="Rownumber" ></div>
+<div id="text"   th:utext="${content}"  contenteditable="true">
+    <span style="color: #a2a2a2">
+
+    </span>
+    <span style="color: #a21616">=</span>
+    <span style="color: #d3af62">
+
+    </span>
+  </div>
+</div>
+</div>
+</body>
+<script type = "text/javascript"  th:inline = "javascript">
+    function myFunction(){
+        var row = [[${row}]];
+        var rowdd="";
+        for (var i = 1; i <row+1 ; i++) {
+            rowdd+=i+"<br>"
+        }
+        document.getElementById("Rownumber").innerHTML=rowdd;
+        var msg=[[${msg}]];
+        if (msg.length>1){
+            alert(msg);
+        }
+
+
+    }
+    function submit(){
+        var text=document.getElementById("text").innerHTML;
+        var textpath=document.getElementById("path").innerHTML;
+        var postForm = document.createElement("form");//表单对象
+        postForm.method="post" ;
+        postForm.action = '/textUpdate' ;
+
+        var nameInput = document.createElement("input") ;
+        nameInput.setAttribute("name", "textcontent") ;
+        nameInput.setAttribute("value", text);
+        postForm.appendChild(nameInput);
+
+        var pathInput = document.createElement("input") ;
+        pathInput.setAttribute("name", "textpath") ;
+        pathInput.setAttribute("value", textpath);
+        postForm.appendChild(pathInput);
+
+        document.body.appendChild(postForm) ;
+        postForm.submit() ;
+    }
+
+    function OpenFile(){
+        var textpath=document.getElementById("path").innerHTML;
+        var postForm = document.createElement("form");//表单对象
+        postForm.method="post" ;
+        postForm.action = '/OpenFile' ;
+
+        var pathInput = document.createElement("input") ;
+        pathInput.setAttribute("name", "Filepath") ;
+        pathInput.setAttribute("value", textpath);
+        postForm.appendChild(pathInput);
+
+        document.body.appendChild(postForm) ;
+        postForm.submit() ;
+    }
+
+    function upSW(){
+        var textpath=document.getElementById("path").innerHTML;
+        var SWname=textpath.substring(textpath.lastIndexOf("/")+1);
+        SWname=SWname.replace(".sh","");
+        var postForm = document.createElement("form");//表单对象
+        postForm.method="post" ;
+        postForm.action = '/subswname' ;
+
+        var pathInput = document.createElement("input") ;
+        pathInput.setAttribute("name", "swname") ;
+        pathInput.setAttribute("value", SWname);
+        postForm.appendChild(pathInput);
+
+        document.body.appendChild(postForm) ;
+        postForm.submit() ;
+    }
+
+    function Refresh(){
+        var textpath=document.getElementById("path").innerHTML;
+        var postForm = document.createElement("form");//表单对象
+        postForm.method="post" ;
+        postForm.action = '/topostScript' ;
+
+        var pathInput = document.createElement("input") ;
+        pathInput.setAttribute("name", "swSCpath") ;
+        pathInput.setAttribute("value", textpath);
+        postForm.appendChild(pathInput);
+
+        document.body.appendChild(postForm) ;
+        postForm.submit() ;
+    }
+
+    document.onkeydown=function (e) {
+        event=event||window.event;
+        var currKey=0, e=e||event||window.event;
+        currKey = e.keyCode||e.which||e.charCode;
+        //检测按下哪个键，作相应处理
+        if((e.ctrlKey||e.metaKey) && currKey == 83){
+            submit();
+            return false;
+        }else  if((e.ctrlKey||e.metaKey) && currKey == 66){
+            OpenFile();
+            return false;
+        }else  if((e.ctrlKey||e.metaKey) &&(e.altKey||e.metaKey) &&  currKey == 90){
+            Refresh();
+            return false;
+        }
+        else{
+            return true;
+        }
+
+    };
+</script>
+
+</html>

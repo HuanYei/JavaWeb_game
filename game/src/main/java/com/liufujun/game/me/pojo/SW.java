@@ -13,6 +13,7 @@ public class SW {
     String 软件客制化名称;
     String 软件色温文件路径;
     PQ PQ数据=new PQ();
+    Panel panel=new Panel();
     String 屏名;
     String 按键数量;
 
@@ -30,7 +31,7 @@ public class SW {
                 ",\n 屏名='" + 屏名 + '\'' +
                 ",\n 按键数量='" + 按键数量 + '\'' +
                 ",\n 软件客制化名称='" + 软件客制化名称 + '\'' +
-                '}'+PQ数据.toString();
+                '}'+PQ数据.toString()+"\n"+panel.toString();
     }
 
     public PQ getPQ数据() {
@@ -133,5 +134,13 @@ public class SW {
 
     public void set软件logo前端(String 软件logo前端) {
         this.软件logo前端 = 软件logo前端;
+    }
+
+    public Panel getPanel() {
+        return panel;
+    }
+
+    public void setPanel(Panel panel) {
+        this.panel = panel;
     }
 }

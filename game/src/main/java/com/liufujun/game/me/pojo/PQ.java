@@ -1,15 +1,15 @@
 package com.liufujun.game.me.pojo;
 
 public class PQ {
-    String WarmR;
-    String WarmG;
-    String WarmB;
-    String CoolR;
-    String CoolG;
-    String CoolB;
-    String StandardR;
-    String StandardG;
-    String StandardB;
+     String WarmR;
+     String WarmG;
+     String WarmB;
+     String CoolR;
+     String CoolG;
+     String CoolB;
+     String StandardR;
+     String StandardG;
+     String StandardB;
 
     @Override
     public String toString() {

@@ -19,16 +19,16 @@ public class Main {
     public static User user = new User();
     static Scanner scanner=new Scanner(System.in);
     public static String 脚本名;
-    public static void main(String[] args) {
-//        Country.语言("英语法语俄语阿拉伯语波斯语土耳其语","狗语");
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("请输入pdf路径");
-        pdfpath = scanner.nextLine();
-        System.out.println("请输入参考脚本路径");
-        jbpath = scanner.nextLine();
-        pdf(pdfpath, jbpath);
-
-    }
+//    public static void main(String[] args) {
+////        Country.语言("英语法语俄语阿拉伯语波斯语土耳其语","狗语");
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("请输入pdf路径");
+//        pdfpath = scanner.nextLine();
+//        System.out.println("请输入参考脚本路径");
+//        jbpath = scanner.nextLine();
+//        pdf(pdfpath, jbpath);
+//
+//    }
     static String  打印="";
     public static String pdf(String pdfsrc, String jbsrc) {/*创建PdfDocument实例*/
         打印="";

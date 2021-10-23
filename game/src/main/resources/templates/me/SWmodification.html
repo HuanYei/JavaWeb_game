@@ -1,37 +1,69 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<body onload="myFunction()">
 <div style="width: 100%">
     <a href="/" style="font-size: 150%">主页</a>
+    <a href="/toMeworkbench" style="font-size: 100%">返回软件查找界面</a>
 </div>
 <div style="margin-left: 20px">
     <h1>软件信息</h1>
-    <p><b>脚本：<a href="/toColor">修改</a></b></p>
+    <p><b>脚本：<a th:href="${'/toScript?swSCpath='}+${SW.getFull_name_of_software_path}">编辑脚本</a></b></p>
     <div style="margin-left: 30px">
-        <span th:text="${SW.software_name}"></span>
+        <input id="ScName" type="text" th:value=" ${SW.software_name}" style=" width: 90% ;height:20px" ;></input><br>
+        <button onclick="rmScName()">重命名脚本</button>
+        <button onclick="newSc()">创建新脚本</button>
     </div>
-    <p><b>logo：<a href="/toColor">更改</a></b></p>
+    <p><b>客制化文件夹：<a onclick="openfile()" href="#">打开目录</a></b></p>
     <div style="margin-left: 30px">
-        <span th:text="${SW.software_logo_name}"></span><br>
+        <input type="text" id="CuDir" th:value="${SW.software_customization_name}" style=" width: 60%;height: 20px"></input><br>
+        <button onclick="rmDir()">重命名文件夹</button>
+        <button onclick="newDir()">创建新文件夹</button>
+        <span style="color: red;">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>
+    </div>
+    <p><b>logo：<a onclick="openfile2()" href="#">打开目录</a></b></p>
+    <div style="margin-left: 30px">
         <a th:href="${SW.logoweb}">
             <img style="height: 180px;width: 320px;" th:src="${SW.logoweb}">
         </a>
+        <br>
+        <input id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 20%;height: 20px" ></input><button onclick="UPlogo()" style="height: 30px;">更换logo</button>
     </div>
 
     <p>
-        <b>屏： <a href="/toColor">修改</a></b>
+        <b>屏： <a onclick="openfile3()" href="#">打开目录</a></b>
     <div style="margin-left: 30px">
-        <span th:text="${SW.screen_name}"></span><br>
-        Ti Mode: <span></span>
+        屏参文件名：<input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;"></input><button onclick="UPPanel()" style="height: 30px;">更换屏参</button><br><br>
+        <form action="#" th:action="@{/Panel}" method="post" th:object="${SW}">
+            工厂菜单显示名:
+            <input type="text"  th:field="*{panel.M_PNAME}"/>
+            <br>
+            Ti Mode:
+            <input name="Ti" onclick="Timodeon()" th:checked="*{panel.getTi_MODE() == 1} ? true : false"  type="radio" >on
+            <input name="Ti" onclick="Timodeoff()"  th:checked="*{panel.getTi_MODE() == 0} ? true : false"  type="radio" >off
+            <br>
+            Swap Mode:
+            <input name="SWAP"  onclick="Swapdeon()" th:checked="*{panel.getSwap_MODE() eq '1'} ? true : false"  type="radio" >on
+            <input name="SWAP"  onclick="Swapdeoff()" th:checked="*{panel.getSwap_MODE() eq '0'} ? true : false"  type="radio" >off
+            <br>
+            <input type="submit"  value="提交修改">
+            <br>
+            <input style="visibility: hidden"  type="text" th:field="*{panel.Ti_MODE}"/>
+            <input style="visibility: hidden"  type="text" th:field="*{panel.Swap_MODE}"/>
+            <input style="visibility: hidden" type="text" th:field="*{software_name}"/>
+            <input style="visibility: hidden" type="text" th:field="*{full_name_of_software_screen_parameter_name_path}"/>
+
+
+        </form>
+
     </div>
     </p>
 
-    <b>色温： <a href="/Color">修改</a> </b>
-    <form action="/subswname" method="post" enctype="multipart/form-data" th:object="${SW}">
+    <b>色温:</b>
+    <form action="#" th:action="@{/Color}" method="post" th:object="${SW}">
         <table style="margin-left: 30px">
             <tr>
                 <th></th>
@@ -41,24 +73,272 @@
             </tr>
             <tr>
                 <th>R</th>
-                <td><input type="text" th:value="*{PQ_data.getStandardR()}"/></td>
-                <td><input type="text" th:value="*{PQ_data.getCoolR()}"/></td>
-                <td><input type="text" th:value="*{PQ_data.getWarmR()}"/></td>
+                <td><input type="text" th:field="*{PQ_data.StandardR}"/></td>
+                <td><input type="text" th:field="*{PQ_data.CoolR}"/></td>
+                <td><input type="text" th:field="*{PQ_data.WarmR}"/></td>
             </tr>
             <tr>
                 <th>G</th>
-                <td><input type="text" th:value="*{PQ_data.getStandardG()}"/></td>
-                <td><input type="text" th:value="*{PQ_data.getCoolG()}"/></td>
-                <td><input type="text" th:value="*{PQ_data.getWarmG()}"/></td>
+                <td><input type="text" th:field="*{PQ_data.StandardG}"/></td>
+                <td><input type="text" th:field="*{PQ_data.CoolG}"/></td>
+                <td><input type="text" th:field="*{PQ_data.WarmG}"/></td>
             </tr>
             <tr>
                 <th>B</th>
-                <td><input type="text" th:value="*{PQ_data.getStandardB()}"/></td>
-                <td><input type="text" th:value="*{PQ_data.getCoolB()}"/></td>
-                <td><input type="text" th:value="*{PQ_data.getWarmB()}"/></td>
+                <td><input type="text" th:field="*{PQ_data.StandardB}"/></td>
+                <td><input type="text" th:field="*{PQ_data.CoolB}"/></td>
+                <td><input type="text" th:field="*{PQ_data.WarmB}"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <th>
+                    <input type="submit" value="提交修改">
+                </th>
+                <td></td>
             </tr>
         </table>
+        <input style="visibility: hidden" type="text" th:field="*{software_color_temperature_file_path}"/>
+        <input style="visibility: hidden" type="text" th:field="*{software_name}"/>
     </form>
 </div>
+<script type="text/javascript" th:inline="javascript">
+    function myFunction() {
+        var msg = [[${msg}]];
+        if (msg.length > 1) {
+            alert(msg);
+        }
+    }
+    function Timodeon() {
+        document.getElementById("panel.Ti_MODE").value=1;
+    }
+    function Timodeoff() {
+        document.getElementById("panel.Ti_MODE").value=0;
+    }
+    function Swapdeon() {
+        document.getElementById("panel.Swap_MODE").value=1;
+    }
+    function Swapdeoff() {
+        document.getElementById("panel.Swap_MODE").value=0;
+    }
+    function rmScName() {
+        var oldScname = [[${SW.full_name_of_software_path}]];
+        var newScname = document.getElementById("ScName").value;
+        var old=[[${SW.software_name}]];
+        if (old==newScname) {
+            alert("请在上方输入框更改脚本名");
+        } else {
+            var postForm = document.createElement("form");//表单对象
+            postForm.method = "post";
+            postForm.action = '/RmScname';
+
+            var oldScnameInput = document.createElement("input");
+            oldScnameInput.setAttribute("name", "oldScname");
+            oldScnameInput.setAttribute("value", oldScname);
+            postForm.appendChild(oldScnameInput);
+
+            var newScnameInput = document.createElement("input");
+            newScnameInput.setAttribute("name", "newScname");
+            newScnameInput.setAttribute("value", newScname);
+            postForm.appendChild(newScnameInput);
+
+            document.body.appendChild(postForm);
+            postForm.submit();
+        }
+    }
+
+    function newSc() {
+        var oldScname = [[${SW.full_name_of_software_path}]];
+        var newScname = document.getElementById("ScName").value;
+        var old=[[${SW.software_name}]];
+        if (old==newScname) {
+
+            alert("请在上方输入框更改脚本名");
+        } else {
+            var postForm = document.createElement("form");//表单对象
+            postForm.method = "post";
+            postForm.action = '/newSc';
+
+            var oldScnameInput = document.createElement("input");
+            oldScnameInput.setAttribute("name", "oldScname");
+            oldScnameInput.setAttribute("value", oldScname);
+            postForm.appendChild(oldScnameInput);
+
+            var newScnameInput = document.createElement("input");
+            newScnameInput.setAttribute("name", "newScname");
+            newScnameInput.setAttribute("value", newScname);
+            postForm.appendChild(newScnameInput);
+
+            document.body.appendChild(postForm);
+            postForm.submit();
+        }
+    }
+
+    function rmDir() {
+        var oldScname = [[${SW.full_name_of_software_customization_path}]];
+        var newScname = document.getElementById("CuDir").value;
+        var SwName=[[${SW.software_name}]];
+        var old=[[${SW.software_customization_name}]];
+        if (old==newScname) {
+            alert("请在上方输入框更改客制化名");
+        } else {
+            var postForm = document.createElement("form");//表单对象
+            postForm.method = "post";
+            postForm.action = '/rmDir';
+
+            var oldScnameInput = document.createElement("input");
+            oldScnameInput.setAttribute("name", "oldScname");
+            oldScnameInput.setAttribute("value", oldScname);
+            postForm.appendChild(oldScnameInput);
+
+            var SwNameInput = document.createElement("input");
+            SwNameInput.setAttribute("name", "SwName");
+            SwNameInput.setAttribute("value", SwName);
+            postForm.appendChild(SwNameInput);
+
+            var newScnameInput = document.createElement("input");
+            newScnameInput.setAttribute("name", "newScname");
+            newScnameInput.setAttribute("value", newScname);
+            postForm.appendChild(newScnameInput);
+
+            document.body.appendChild(postForm);
+            postForm.submit();
+        }
+    }
+
+    function newDir() {
+        var oldScname = [[${SW.full_name_of_software_customization_path}]];
+        var newScname = document.getElementById("CuDir").value;
+        var SwName=[[${SW.software_name}]];
+        var old=[[${SW.software_customization_name}]];
+        if (old==newScname) {
+            alert("请在上方输入框更改客制化名");
+        } else {
+            var postForm = document.createElement("form");//表单对象
+            postForm.method = "post";
+            postForm.action = '/newDir';
+
+            var oldScnameInput = document.createElement("input");
+            oldScnameInput.setAttribute("name", "oldScname");
+            oldScnameInput.setAttribute("value", oldScname);
+            postForm.appendChild(oldScnameInput);
+
+            var SwNameInput = document.createElement("input");
+            SwNameInput.setAttribute("name", "SwName");
+            SwNameInput.setAttribute("value", SwName);
+            postForm.appendChild(SwNameInput);
+
+            var newScnameInput = document.createElement("input");
+            newScnameInput.setAttribute("name", "newScname");
+            newScnameInput.setAttribute("value", newScname);
+            postForm.appendChild(newScnameInput);
+
+            document.body.appendChild(postForm);
+            postForm.submit();
+        }
+
+    }
+
+    function UPlogo() {
+        var oldScname = [[${SW.software_logo_name}]];
+        var newScname = document.getElementById("logo").value;
+        var SwName=[[${SW.software_name}]];
+
+        if (oldScname==newScname) {
+            alert("请在输入框更改logo");
+        } else {
+            var postForm = document.createElement("form");//表单对象
+            postForm.method = "post";
+            postForm.action = '/UPlogo';
+
+            var oldScnameInput = document.createElement("input");
+            oldScnameInput.setAttribute("name", "oldScname");
+            oldScnameInput.setAttribute("value", oldScname);
+            postForm.appendChild(oldScnameInput);
+
+            var SwNameInput = document.createElement("input");
+            SwNameInput.setAttribute("name", "SwName");
+            SwNameInput.setAttribute("value", SwName);
+            postForm.appendChild(SwNameInput);
+
+            var newScnameInput = document.createElement("input");
+            newScnameInput.setAttribute("name", "newScname");
+            newScnameInput.setAttribute("value", newScname);
+            postForm.appendChild(newScnameInput);
+
+            document.body.appendChild(postForm);
+            postForm.submit();
+        }
+    }
+
+    function UPPanel() {
+        var oldScname = [[${SW.software_logo_name}]];
+        var newScname = document.getElementById("panelName").value;
+        var SwName=[[${SW.software_name}]];
+
+        if (oldScname==newScname) {
+            alert("请在输入框更改屏参名");
+        } else {
+            var postForm = document.createElement("form");//表单对象
+            postForm.method = "post";
+            postForm.action = '/UPlogo';
+
+            var oldScnameInput = document.createElement("input");
+            oldScnameInput.setAttribute("name", "oldScname");
+            oldScnameInput.setAttribute("value", oldScname);
+            postForm.appendChild(oldScnameInput);
+
+            var SwNameInput = document.createElement("input");
+            SwNameInput.setAttribute("name", "SwName");
+            SwNameInput.setAttribute("value", SwName);
+            postForm.appendChild(SwNameInput);
+
+            var newScnameInput = document.createElement("input");
+            newScnameInput.setAttribute("name", "newScname");
+            newScnameInput.setAttribute("value", newScname);
+            postForm.appendChild(newScnameInput);
+
+            document.body.appendChild(postForm);
+            postForm.submit();
+        }
+    }
+
+    function openfile() {
+        var postForm = document.createElement("form");//表单对象
+        postForm.method = "post";
+        postForm.action = '/OpenFile';
+        var oldScnameInput = document.createElement("input");
+        oldScnameInput.setAttribute("name", "Filepath");
+        oldScnameInput.setAttribute("value", [[${SW.full_name_of_software_customization_path}]] + '|' + [[${SW.software_name}]]);
+        postForm.appendChild(oldScnameInput);
+        document.body.appendChild(postForm);
+        postForm.submit();
+    }
+    function openfile2() {
+        var postForm = document.createElement("form");//表单对象
+        postForm.method = "post";
+        postForm.action = '/OpenFile';
+        var oldScnameInput = document.createElement("input");
+        oldScnameInput.setAttribute("name", "Filepath");
+        oldScnameInput.setAttribute("value", [[${SW.full_name_of_software_logo_path}]] + '|' + [[${SW.software_name}]]);
+        postForm.appendChild(oldScnameInput);
+        document.body.appendChild(postForm);
+        postForm.submit();
+    }
+    function openfile3() {
+        var postForm = document.createElement("form");//表单对象
+        postForm.method = "post";
+        postForm.action = '/OpenFile';
+        var oldScnameInput = document.createElement("input");
+        oldScnameInput.setAttribute("name", "Filepath");
+        oldScnameInput.setAttribute("value", [[${SW.full_name_of_software_screen_parameter_name_path}]] + '|' + [[${SW.software_name}]]);
+        postForm.appendChild(oldScnameInput);
+        document.body.appendChild(postForm);
+        postForm.submit();
+    }
+</script>
+<script defer="defer">
+
+</script>
 </body>
 </html>
