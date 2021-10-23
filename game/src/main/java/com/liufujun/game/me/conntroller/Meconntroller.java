@@ -7,9 +7,15 @@ import com.liufujun.game.pdf.util.Fileprocessing;
 import com.liufujun.game.util.Colortemperature;
 import com.liufujun.game.util.EditorstyleUtil;
 import com.liufujun.game.util.PlanUtil;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
 
 @Controller
 public class Meconntroller {
@@ -132,10 +138,27 @@ public class Meconntroller {
         String SwType= PlanUtil.PlanType(swname);
         model.addAttribute("SwType",SwType);
         SwEnglish swE=new SwEnglish(sw);
+        potopath=sw.get软件logo路径全称();
         model.addAttribute("SW",swE);
         model.addAttribute("msg","");
         return "me/SWmodification";
     }
+
+    String potopath="";
+    @RequestMapping(value = "/image/{image_name}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getImage(@PathVariable("image_name") String image_name) throws Exception{
+
+        byte[] imageContent ;
+        String path = potopath;
+        imageContent = Fileprocessing.fileToByte(new File(path));
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        return new ResponseEntity<>(imageContent, headers, HttpStatus.OK);
+    }
+
+
+
 
     public Model Tosc(Model model,String swSCpath){
         System.out.println(swSCpath);
@@ -146,4 +169,5 @@ public class Meconntroller {
         model.addAttribute("row",EditorstyleUtil.row);
         return model;
     }
+
 }
