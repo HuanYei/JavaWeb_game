@@ -14,10 +14,13 @@ public class PlanUtil {
             return"2851";
         }else if (swname.indexOf("9632")!=-1){
             return"9632";
-        }else {
+        }else if (swname.indexOf("6681")!=-1){
+            return"6681";
+        } else {
             return "未识别到方案";
         }
     }
+
     public static String SW脚本路径(String swname){
 
         if (swname.indexOf("368")!=-1){
@@ -25,20 +28,14 @@ public class PlanUtil {
         }else if (swname.indexOf("9255")!=-1){
             return 服务器使用路径.脚本路径368+swname+".sh";
         }else if (swname.indexOf("2851")!=-1){
-            return"2851";
+            return 服务器使用路径.脚本路径2851+swname+".sh";
         }else if (swname.indexOf("9632")!=-1){
-            return"9632";
-        }else {
+            return 服务器使用路径.脚本路径9632+swname+".sh";
+        }else if (swname.indexOf("6681")!=-1){
+            return 服务器使用路径.脚本路径6681+swname+".sh";
+        } else {
             return "未识别到方案";
         }
-    }
-    public static SW SW属性(String swname){
-        SW sw=new SW();
-        if (PlanType(swname).equals("368")){
-
-        }
-            return sw;
-
     }
 
 }

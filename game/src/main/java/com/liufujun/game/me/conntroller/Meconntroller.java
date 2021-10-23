@@ -131,6 +131,7 @@ public class Meconntroller {
     public String pdfupload(@RequestParam("swname") String swname, Model model) {
         SW sw=new SW();
         sw.set软件名称(swname);
+        sw.set方案(PlanUtil.PlanType(swname));
         sw.set软件路径全称(PlanUtil.SW脚本路径(swname));
         sw=SwDao.读取软件所有属性(sw.get软件路径全称(),sw);
         System.out.println(sw.toString());

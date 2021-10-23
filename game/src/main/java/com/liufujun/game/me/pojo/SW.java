@@ -16,10 +16,14 @@ public class SW {
     Panel panel=new Panel();
     String 屏名;
     String 按键数量;
+    String 客户名缩写;
+    String 方案;
 
     @Override
     public String toString() {
         return "SW{" +
+                "\n方案='" + 方案 + '\'' +
+                "\n客户名缩写='" + 客户名缩写 + '\'' +
                 "\n软件名称='" + 软件名称 + '\'' +
                 ",\n 软件路径全称='" + 软件路径全称 + '\'' +
                 ",\n 软件logo名='" + 软件logo名 + '\'' +
@@ -143,5 +147,21 @@ public class SW {
 
     public void setPanel(Panel panel) {
         this.panel = panel;
+    }
+
+    public String get客户名缩写() {
+        return 客户名缩写;
+    }
+
+    public void set客户名缩写(String 客户名缩写) {
+        this.客户名缩写 = 客户名缩写;
+    }
+
+    public String get方案() {
+        return 方案;
+    }
+
+    public void set方案(String 方案) {
+        this.方案 = 方案;
     }
 }

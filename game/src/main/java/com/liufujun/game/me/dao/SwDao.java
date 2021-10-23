@@ -12,14 +12,33 @@ public class SwDao {
     public static SW 读取软件所有属性(String swpath,SW sw){
         String e脚本内容= Fileprocessing.readTxtFile(swpath);
         Stringshu=e脚本内容.split("\n");
-        //368
-        sw.set软件logo名(e脚本宏查值("bootlogo_file"));
-        sw.set软件客制化名称(e脚本宏查值("customer_folder=$toptech_path/customer/$cus_id/"));
-        sw.set屏名(e脚本宏查值("panelname"));
-        sw.set按键数量(e脚本宏查值("keypad_file"));
-        sw=PlanType(sw);
-        sw=Pq赋值(sw);
-        sw=Panel赋值(sw);
+
+        if (sw.get方案().equals("2851")){
+            //RTK
+            sw.set软件logo名(e脚本宏查值("config_bootlogo_name"));
+            sw.set屏名(e脚本宏查值("config_panel_name").replace("\"",""));
+            sw.set按键数量(e脚本宏查值("config_keypad_name"));
+            sw.set客户名缩写(e脚本宏查值("config_customer_name").replace("\"",""));
+            sw.set软件客制化名称(e脚本宏查值("config_customer_folder_name").replace("\"",""));
+            sw=PlanType(sw);
+        }else {
+            //MTK
+            sw.set软件logo名(e脚本宏查值("bootlogo_file"));
+            sw.set屏名(e脚本宏查值("panelname"));
+            sw.set按键数量(e脚本宏查值("keypad_file"));
+            sw.set客户名缩写(e脚本宏查值("cus_id").replace("\"",""));
+            if (sw.get方案().equals("368")){
+                sw.set软件客制化名称(e脚本宏查值("customer_folder=$toptech_path/customer/$cus_id/"));
+            }else if (sw.get方案().equals("9632")){
+                sw.set软件客制化名称(e脚本宏查值("customer_folder=$toptech_path/customer/9632/$cus_id/"));
+            }else if (sw.get方案().equals("6681")){
+                sw.set软件客制化名称(e脚本宏查值("customer_folder=$toptech_path/customer/6681/$cus_id/"));
+            }
+            sw=PlanType(sw);
+            sw=Pq赋值(sw);
+            sw=Panel赋值(sw);
+        }
+
         return sw;
     }
 
@@ -95,7 +114,7 @@ public class SwDao {
     private static String e脚本宏查值( String e宏) {
         for (String a:Stringshu){
             if (a.indexOf(e宏)!=-1){
-                return a.replace(e宏,"").replace("=","");
+                return a.replace(e宏,"").replace("=","").replace("export ","");
             }
         }
         return "未识别到这个宏";
@@ -108,9 +127,11 @@ public class SwDao {
         }else if (swname.indexOf("9255")!=-1){
             return 赋值368(sw);
         }else if (swname.indexOf("2851")!=-1){
-
+            return 赋值2851(sw);
         }else if (swname.indexOf("9632")!=-1){
-
+            return 赋值9632(sw);
+        }else if (swname.indexOf("6681")!=-1){
+            return 赋值6681(sw);
         }
         return sw;
     }
@@ -118,13 +139,35 @@ public class SwDao {
     private static SW 赋值368(SW sw) {
         sw.set软件logo路径全称(服务器使用路径.LOGO路径368+sw.get软件logo名()+".jpg");
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径368+sw.get屏名());
-        sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径368+sw.get软件客制化名称()+"/");
+        sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径368+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
         sw.set软件色温文件路径(sw.get软件客制化路径全称()+"default_ini/OsdMapping.ini");
         sw.set软件logo前端(sw.get软件logo路径全称().substring(3));
-
         return sw;
     }
 
+    private static SW 赋值9632(SW sw) {
+        sw.set软件logo路径全称(服务器使用路径.LOGO路径9632+sw.get软件logo名()+".jpg");
+        sw.set软件屏参名路径全称(服务器使用路径.屏参路径9632+sw.get屏名());
+        sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径9632+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
+        sw.set软件色温文件路径(sw.get软件客制化路径全称()+"default_ini/OsdMapping.ini");
+        sw.set软件logo前端(sw.get软件logo路径全称().substring(3));
+        return sw;
+    }
+    private static SW 赋值6681(SW sw) {
+        sw.set软件logo路径全称(服务器使用路径.LOGO路径6681+sw.get软件logo名()+".jpg");
+        sw.set软件屏参名路径全称(服务器使用路径.屏参路径6681+sw.get屏名());
+        sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径6681+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
+        sw.set软件色温文件路径(sw.get软件客制化路径全称()+"default_ini/OsdMapping.ini");
+        sw.set软件logo前端(sw.get软件logo路径全称().substring(3));
+        return sw;
+    }
+
+    private static SW 赋值2851(SW sw) {
+        sw.set软件logo路径全称(服务器使用路径.LOGO路径2851+sw.get软件logo名()+".raw");
+        sw.set软件屏参名路径全称(服务器使用路径.屏参路径2851+sw.get屏名());
+        sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2851+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
+        return sw;
+    }
     public static void SW宏修改(String swname,String 客制化){
         if ( PlanUtil.PlanType(swname).equals("368")){
             if (客制化.indexOf("bootlogo")!=-1){
