@@ -5,6 +5,7 @@ import com.liufujun.game.me.pojo.SwEnglish;
 import com.liufujun.game.pdf.Main;
 import com.liufujun.game.pdf.util.Fileprocessing;
 import com.liufujun.game.util.PlanUtil;
+import com.liufujun.game.util.RAWUtils;
 import com.liufujun.game.util.服务器使用路径;
 
 public class SwDao {
@@ -21,6 +22,7 @@ public class SwDao {
             sw.set客户名缩写(e脚本宏查值("config_customer_name").replace("\"",""));
             sw.set软件客制化名称(e脚本宏查值("config_customer_folder_name").replace("\"",""));
             sw=PlanType(sw);
+            sw=PanelDao.PanelRTK赋值(sw);
         }else {
             //MTK
             sw.set软件logo名(e脚本宏查值("bootlogo_file"));
@@ -36,57 +38,16 @@ public class SwDao {
             }
             sw=PlanType(sw);
             sw=Pq赋值(sw);
-            sw=Panel赋值(sw);
-        }
-
-        return sw;
-    }
-
-    private static SW Panel赋值(SW sw) {
-        String PanelString=Fileprocessing.readTxtFile(sw.get软件屏参名路径全称());
-        String[] e屏数组=PanelString.split("\n");
-        for (int i = 0; i <e屏数组.length ; i++) {
-            if (e屏数组[i].indexOf("m_bPanelLVDS_TI_MODE")!=-1){
-                String Ti= Main.replaceBlank(e屏数组[i]);
-                Ti=Ti.replace("m_bPanelLVDS_TI_MODE=","").substring(0,1);
-                sw.getPanel().setTi_MODE(Integer.parseInt(Ti));
-            }else if (e屏数组[i].indexOf("m_pPanelName")!=-1){
-                String Name=Main.replaceBlank(e屏数组[i]);
-                Name=Name.replace("m_pPanelName=","").replace(";","");
-                sw.getPanel().setM_PNAME(Name);
-            }else if (e屏数组[i].indexOf("m_bPanelSwapPort")!=-1){
-                String SWAP=Main.replaceBlank(e屏数组[i]);
-                SWAP=SWAP.replace("m_bPanelSwapPort=","").substring(0,1);
-                sw.getPanel().setSwap_MODE(SWAP);
-            }
+            sw=PanelDao.PanelMTK赋值(sw);
         }
 
         return sw;
     }
 
 
-    public static void Panel修改(SwEnglish sw) {
-        System.out.println(sw.getFull_name_of_software_screen_parameter_name_path()+"SSSSSSSSS");
-        String PanelString=Fileprocessing.readTxtFile(sw.getFull_name_of_software_screen_parameter_name_path());
-        String[] e屏数组=PanelString.split("\n");
-        for (int i = 0; i <e屏数组.length ; i++) {
-            if (e屏数组[i].indexOf("m_bPanelLVDS_TI_MODE")!=-1){
-                String a=e屏数组[i].substring(0,e屏数组[i].indexOf(";"));
-                e屏数组[i]=e屏数组[i].replace(a,a.substring(0,a.length()-2)+" "+sw.getPanel().getTi_MODE());
-            }else if (e屏数组[i].indexOf("m_pPanelName")!=-1){
-                String a=e屏数组[i].substring(0,e屏数组[i].indexOf("=")+1);
-                e屏数组[i]=a+"   "+sw.getPanel().getM_PNAME()+";";
-            }else if (e屏数组[i].indexOf("m_bPanelSwapPort")!=-1){
-                String a=e屏数组[i].substring(0,e屏数组[i].indexOf(";"));
-                e屏数组[i]=e屏数组[i].replace(a,a.substring(0,a.length()-2)+" "+sw.getPanel().getSwap_MODE());
-            }
-        }
-        PanelString="";
-        for (int i = 0; i < e屏数组.length; i++) {
-            PanelString+=e屏数组[i]+"\n";
-        }
-        Fileprocessing.updateFile(sw.getFull_name_of_software_screen_parameter_name_path(),PanelString);
-    }
+
+
+
 
     private static SW Pq赋值(SW sw) {
         String 色温String=Fileprocessing.readTxtFile(sw.get软件色温文件路径());
@@ -163,8 +124,9 @@ public class SwDao {
     }
 
     private static SW 赋值2851(SW sw) {
-        sw.set软件logo路径全称(服务器使用路径.LOGO路径2851+sw.get软件logo名()+".raw");
-        sw.set软件屏参名路径全称(服务器使用路径.屏参路径2851+sw.get屏名());
+
+        sw.set软件logo路径全称(服务器使用路径.LOGO路径2851+sw.get软件logo名());
+        sw.set软件屏参名路径全称(服务器使用路径.屏参路径2851+sw.get屏名()+".h");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2851+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
         return sw;
     }
@@ -182,7 +144,20 @@ public class SwDao {
             String customer_folder ="$toptech_path/customer/$cus_id/"+客制化;
             String jb =Stringmacro("customer_folder",customer_folder,Fileprocessing.readTxtFile(服务器使用路径.脚本路径368+swname+".sh"));
             Fileprocessing.updateFile(服务器使用路径.脚本路径368+swname+".sh",jb);
-
+        }else if (PlanUtil.PlanType(swname).equals("2851")){
+            if (客制化.indexOf(".raw")!=-1){
+                String jb =Stringmacro("config_bootlogo_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2851+swname+".sh"));
+                Fileprocessing.updateFile(服务器使用路径.脚本路径2851+swname+".sh",jb);
+                return;
+            }else if (客制化.indexOf("2851")!=-1){
+                客制化="\""+客制化+"\"";
+                String jb =Stringmacro("config_customer_folder_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2851+swname+".sh"));
+                Fileprocessing.updateFile(服务器使用路径.脚本路径2851+swname+".sh",jb);
+                return;
+            }
+            客制化="\""+客制化+"\"";
+            String jb =Stringmacro("config_panel_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2851+swname+".sh"));
+            Fileprocessing.updateFile(服务器使用路径.脚本路径2851+swname+".sh",jb);
         }
     }
 

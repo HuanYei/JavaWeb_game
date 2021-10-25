@@ -15,7 +15,7 @@ public class SwEnglish {
   String number_of_keys;
   String logoweb;
   Panel Panel;
-
+  String Plan;
  public SwEnglish(SW sw){
 
       software_name=sw.get软件名称();
@@ -32,6 +32,7 @@ public class SwEnglish {
       number_of_keys=sw.get按键数量();
       logoweb=sw.软件logo前端;
       Panel=sw.getPanel();
+      Plan=sw.get方案();
  }
     public SwEnglish() {
 

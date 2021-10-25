@@ -74,6 +74,7 @@ public class Fileprocessing {
     }
 
     public static void newFile(String srcPathStr, String desPathStr) {
+        System.out.println("srcPathStr = [" + srcPathStr + "], desPathStr = [" + desPathStr + "]");
         try {
             FileInputStream fis = new FileInputStream(srcPathStr);//创建输入流对象
             FileOutputStream fos = new FileOutputStream(desPathStr); //创建输出流对象
@@ -93,6 +94,7 @@ public class Fileprocessing {
     }
 
     public static void copy(String path, String copyPath) {
+        System.out.println("path = [" + path + "], copyPath = [" + copyPath + "]");
         try {
             File filePath = new File(path);
             DataInputStream read;

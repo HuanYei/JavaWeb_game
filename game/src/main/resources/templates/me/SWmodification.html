@@ -19,7 +19,8 @@
     </div>
     <p><b>客制化文件夹：<a onclick="openfile()" href="#">打开目录</a></b></p>
     <div style="margin-left: 30px">
-        <input type="text" id="CuDir" th:value="${SW.software_customization_name}" style=" width: 60%;height: 20px"></input><br>
+        <input type="text" id="CuDir" th:value="${SW.software_customization_name}"
+               style=" width: 60%;height: 20px"></input><br>
         <button onclick="rmDir()">重命名文件夹</button>
         <button onclick="newDir()">创建新文件夹</button>
         <span style="color: red;">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>
@@ -30,33 +31,59 @@
             <img style="height: 180px;width: 320px;" th:src="@{/image/${image_name}}">
         </a>
         <br>
-        <input id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 20%;height: 20px" ></input><button onclick="UPlogo()" style="height: 30px;">更换logo</button>
+        <input id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 20%;height: 20px"></input>
+        <button onclick="UPlogo()" style="height: 30px;">更换logo</button>
     </div>
 
     <p>
         <b>屏： <a onclick="openfile3()" href="#">打开目录</a></b>
     <div style="margin-left: 30px">
-        屏参文件名：<input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;"></input><button onclick="UPPanel()" style="height: 30px;">更换屏参</button><br><br>
+        屏参文件名：<input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;"></input>
+        <button onclick="UPPanel()" style="height: 30px;">更换屏参</button>
+        <br><br>
         <form action="#" th:action="@{/Panel}" method="post" th:object="${SW}">
             工厂菜单显示名:
-            <input type="text"  th:field="*{panel.M_PNAME}"/>
+            <input type="text" th:field="*{panel.M_PNAME}"/>
             <br>
-            Ti Mode:
-            <input name="Ti" onclick="Timodeon()" th:checked="*{panel.getTi_MODE() == 1} ? true : false"  type="radio" >on
-            <input name="Ti" onclick="Timodeoff()"  th:checked="*{panel.getTi_MODE() == 0} ? true : false"  type="radio" >off
-            <br>
-            Swap Mode:
-            <input name="SWAP"  onclick="Swapdeon()" th:checked="*{panel.getSwap_MODE() eq '1'} ? true : false"  type="radio" >on
-            <input name="SWAP"  onclick="Swapdeoff()" th:checked="*{panel.getSwap_MODE() eq '0'} ? true : false"  type="radio" >off
-            <br>
-            <input type="submit"  value="提交修改">
-            <br>
-            <input style="visibility: hidden"  type="text" th:field="*{panel.Ti_MODE}"/>
-            <input style="visibility: hidden"  type="text" th:field="*{panel.Swap_MODE}"/>
-            <input style="visibility: hidden" type="text" th:field="*{software_name}"/>
-            <input style="visibility: hidden" type="text" th:field="*{full_name_of_software_screen_parameter_name_path}"/>
 
-
+            <div id="TiMode">
+                Ti Mode:
+                <input name="Ti" onclick="Timodeon()" th:checked="*{panel.getTi_MODE() eq '1'} ? true : false"
+                       type="radio">on
+                <input name="Ti" onclick="Timodeoff()" th:checked="*{panel.getTi_MODE()  eq '0'} ? true : false"
+                       type="radio">off
+            </div>
+            <div  id="SwapMode">
+                Swap Mode:
+                <input name="SWAP" onclick="Swapdeon()" th:checked="*{panel.getSwap_MODE() eq '1'} ? true : false"
+                       type="radio"/>on
+                <input name="SWAP" onclick="Swapdeoff()" th:checked="*{panel.getSwap_MODE() eq '0'} ? true : false"
+                       type="radio"/>off
+             </div>
+            <div  id="DualMode">
+                Dual Mode:
+                <input name="Dual" onclick="Dualdeon()" th:checked="*{panel.getDual_MODE() eq '1'} ? true : false"
+                       type="radio"/>off
+                <input name="Dual" onclick="Dualdeoff()" th:checked="*{panel.getDual_MODE() eq '2'} ? true : false"
+                       type="radio"/>on
+            </div>
+            <div  id="MirrorMode">
+                Mirror Mode:
+                <input name="Mirror" onclick="Mirrordeon()" th:checked="*{panel.getMirror_MODE() eq '1'} ? true : false"
+                       type="radio"/>MIRROR
+                <input name="Mirror" onclick="Mirrordeoff()" th:checked="*{panel.getMirror_MODE() eq '0'} ? true : false"
+                       type="radio"/>NORMAL
+            </div>
+                    <br>
+                    <input type="submit" value="提交修改">
+                    <br>
+                    <input style="visibility: hidden" type="text" th:field="*{panel.Ti_MODE}"/>
+                    <input style="visibility: hidden" type="text" th:field="*{panel.Swap_MODE}"/>
+                    <input style="visibility: hidden" type="text" th:field="*{panel.Dual_MODE}"/>
+                    <input style="visibility: hidden" type="text" th:field="*{panel.Mirror_MODE}"/>
+                    <input style="visibility: hidden" type="text" th:field="*{software_name}"/>
+                    <input style="visibility: hidden" type="text"
+                           th:field="*{full_name_of_software_screen_parameter_name_path}"/>
         </form>
 
     </div>
@@ -109,23 +136,56 @@
             alert(msg);
         }
     }
+
+    window.onload=function() {
+        if ([[${SW.getPanel().getTi_MODE()}]] == null) {
+            document.getElementById("TiMode").style.visibility = "hidden";
+        }
+        if ([[${SW.getPanel().getSwap_MODE()}]] == null) {
+            document.getElementById("SwapMode").style.visibility = "hidden";
+        }
+        if ([[${SW.getPanel().getMirror_MODE()}]] == null) {
+            document.getElementById("MirrorMode").style.visibility = "hidden";
+        }
+        if ([[${SW.getPanel().getDual_MODE()}]] == null) {
+            document.getElementById("DualMode").style.visibility = "hidden";
+        }
+    }
     function Timodeon() {
-        document.getElementById("panel.Ti_MODE").value=1;
+        document.getElementById("panel.Ti_MODE").value = 1;
     }
+
     function Timodeoff() {
-        document.getElementById("panel.Ti_MODE").value=0;
+        document.getElementById("panel.Ti_MODE").value = 0;
     }
+
     function Swapdeon() {
-        document.getElementById("panel.Swap_MODE").value=1;
+        document.getElementById("panel.Swap_MODE").value = 1;
     }
+
     function Swapdeoff() {
-        document.getElementById("panel.Swap_MODE").value=0;
+        document.getElementById("panel.Swap_MODE").value = 0;
+    }
+    function Mirrordeon() {
+        document.getElementById("panel.Mirror_MODE").value = 1;
+    }
+
+    function Mirrordeoff() {
+        document.getElementById("panel.Mirror_MODE").value = 0;
+    }
+
+    function Dualdeon() {
+        document.getElementById("panel.Dual_MODE").value = 1;
+    }
+
+    function Dualdeoff() {
+        document.getElementById("panel.Dual_MODE").value = 2;
     }
     function rmScName() {
         var oldScname = [[${SW.full_name_of_software_path}]];
         var newScname = document.getElementById("ScName").value;
-        var old=[[${SW.software_name}]];
-        if (old==newScname) {
+        var old = [[${SW.software_name}]];
+        if (old == newScname) {
             alert("请在上方输入框更改脚本名");
         } else {
             var postForm = document.createElement("form");//表单对象
@@ -150,8 +210,8 @@
     function newSc() {
         var oldScname = [[${SW.full_name_of_software_path}]];
         var newScname = document.getElementById("ScName").value;
-        var old=[[${SW.software_name}]];
-        if (old==newScname) {
+        var old = [[${SW.software_name}]];
+        if (old == newScname) {
 
             alert("请在上方输入框更改脚本名");
         } else {
@@ -177,9 +237,9 @@
     function rmDir() {
         var oldScname = [[${SW.full_name_of_software_customization_path}]];
         var newScname = document.getElementById("CuDir").value;
-        var SwName=[[${SW.software_name}]];
-        var old=[[${SW.software_customization_name}]];
-        if (old==newScname) {
+        var SwName = [[${SW.software_name}]];
+        var old = [[${SW.software_customization_name}]];
+        if (old == newScname) {
             alert("请在上方输入框更改客制化名");
         } else {
             var postForm = document.createElement("form");//表单对象
@@ -209,9 +269,9 @@
     function newDir() {
         var oldScname = [[${SW.full_name_of_software_customization_path}]];
         var newScname = document.getElementById("CuDir").value;
-        var SwName=[[${SW.software_name}]];
-        var old=[[${SW.software_customization_name}]];
-        if (old==newScname) {
+        var SwName = [[${SW.software_name}]];
+        var old = [[${SW.software_customization_name}]];
+        if (old == newScname) {
             alert("请在上方输入框更改客制化名");
         } else {
             var postForm = document.createElement("form");//表单对象
@@ -242,9 +302,9 @@
     function UPlogo() {
         var oldScname = [[${SW.software_logo_name}]];
         var newScname = document.getElementById("logo").value;
-        var SwName=[[${SW.software_name}]];
+        var SwName = [[${SW.software_name}]];
 
-        if (oldScname==newScname) {
+        if (oldScname == newScname) {
             alert("请在输入框更改logo");
         } else {
             var postForm = document.createElement("form");//表单对象
@@ -274,9 +334,9 @@
     function UPPanel() {
         var oldScname = [[${SW.software_logo_name}]];
         var newScname = document.getElementById("panelName").value;
-        var SwName=[[${SW.software_name}]];
+        var SwName = [[${SW.software_name}]];
 
-        if (oldScname==newScname) {
+        if (oldScname == newScname) {
             alert("请在输入框更改屏参名");
         } else {
             var postForm = document.createElement("form");//表单对象
@@ -314,6 +374,7 @@
         document.body.appendChild(postForm);
         postForm.submit();
     }
+
     function openfile2() {
         var postForm = document.createElement("form");//表单对象
         postForm.method = "post";
@@ -325,6 +386,7 @@
         document.body.appendChild(postForm);
         postForm.submit();
     }
+
     function openfile3() {
         var postForm = document.createElement("form");//表单对象
         postForm.method = "post";

@@ -1,5 +1,6 @@
 package com.liufujun.game.me.conntroller;
 
+import com.liufujun.game.me.dao.PanelDao;
 import com.liufujun.game.me.dao.SwDao;
 import com.liufujun.game.me.pojo.SW;
 import com.liufujun.game.me.pojo.SwEnglish;
@@ -7,6 +8,7 @@ import com.liufujun.game.pdf.util.Fileprocessing;
 import com.liufujun.game.util.Colortemperature;
 import com.liufujun.game.util.EditorstyleUtil;
 import com.liufujun.game.util.PlanUtil;
+import com.liufujun.game.util.RAWUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -123,7 +125,7 @@ public class Meconntroller {
     }
     @PostMapping("/Panel")
     public String Panel(@ModelAttribute SwEnglish sw,Model model){
-        SwDao.Panel修改(sw);
+        PanelDao.Panel修改(sw);
         model.addAttribute("msg","屏参修改成功");
         return "forward:/subswname?swname="+sw.getSoftware_name();
     }
@@ -151,8 +153,11 @@ public class Meconntroller {
 
         byte[] imageContent ;
         String path = potopath;
-        imageContent = Fileprocessing.fileToByte(new File(path));
-
+        if (path.indexOf("2851")!=-1){
+            imageContent =  RAWUtils.rawtshow(path,1920,1080);
+        }else {
+            imageContent = Fileprocessing.fileToByte(new File(path));
+        }
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
         return new ResponseEntity<>(imageContent, headers, HttpStatus.OK);

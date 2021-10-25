@@ -3,7 +3,7 @@ package com.liufujun.game.me.pojo;
 public class Panel {
     String Dual_MODE;
     String Mirror_MODE;
-    int Ti_MODE;
+    String Ti_MODE;
     String Swap_MODE;
     String Bit_MODE;
     String M_PNAME;
@@ -44,11 +44,11 @@ public class Panel {
         Mirror_MODE = mirror_MODE;
     }
 
-    public int getTi_MODE() {
+    public String getTi_MODE() {
         return Ti_MODE;
     }
 
-    public void setTi_MODE(int ti_MODE) {
+    public void setTi_MODE(String ti_MODE) {
         Ti_MODE = ti_MODE;
     }
 
