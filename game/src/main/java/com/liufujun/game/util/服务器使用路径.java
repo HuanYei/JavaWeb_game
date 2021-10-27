@@ -35,8 +35,14 @@ public class 服务器使用路径 {
     public static String  屏参路径2851;
     public static String  客制化文件夹路径2851;
 
+    //2842
+    public static String  脚本路径2842;
+    public static String  LOGO路径2842;
+    public static String  屏参路径2842;
+    public static String  客制化文件夹路径2842;
+
     static {
-        String PathContent= Fileprocessing.readTxtFile("路径配置.config");
+        String PathContent= Fileprocessing.readTxtFile("路径配置.config").replace("\\","/");
         String PathContentarray[]=PathContent.split("\n");
         for (int i = 0; i <PathContentarray.length ; i++) {
             if (PathContentarray[i].indexOf("368")!=-1){
@@ -74,5 +80,11 @@ public class 服务器使用路径 {
         LOGO路径2851=RTK2851PATH+"customer/bootlogo/";
         屏参路径2851=RTK2851PATH+"bootcode/uboot/arch/arm/include/asm/arch-rtd285o/panel/toptech/";
         客制化文件夹路径2851=RTK2851PATH+"customer/customers/";
+
+        //2842
+        脚本路径2842=RTK2851PATH+"kernel/system/buildsettings/2842/";
+        LOGO路径2842=RTK2851PATH+"customer/bootlogo/";
+        屏参路径2842=RTK2851PATH+"bootcode/uboot/arch/arm/include/asm/arch-rtd285o/panel/toptech_2842/";
+        客制化文件夹路径2842=RTK2851PATH+"customer/customers/";
     }
 }

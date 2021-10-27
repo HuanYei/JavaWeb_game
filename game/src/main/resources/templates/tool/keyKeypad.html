@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div style="width: 100%" >
+    <a href="/" style="font-size: 150%">主页</a>
+</div>
+<h1>修改按键顺序</h1>
+请输入源文件,下列为 DEMO_7KEY,若不是配公版，请清空重新输入源。<br />
+<textarea style="width: 100%;height: 200px;" id="text">
+
+		</textarea>
+<br /><br />
+实际：
+<input type="text" id="t1" value="PWR" /><input type="text" id="t2" value="UP" /><input type="text" id="t3" value="DOWN" />
+<input type="text" id="t4" value="LEFT" /><input type="text" id="t5" value="RIGHT" /><input type="text" id="t6" value="MENU" /><input type="text" id="t7" value="SOURCE" /><br />
+要求：
+<input type="text" id="t8" value="PWR" /><input type="text" id="t9" value="UP" /><input type="text" id="t10" value="DOWN" />
+<input type="text" id="t11" value="LEFT" /><input type="text" id="t12" value="RIGHT" /><input type="text" id="t13" value="MENU" /><input type="text" id="t14" value="SOURCE" /><br />
+<br />
+<button onclick="run1()">生成修改</button>
+<br /><br />
+下方为生成的修改内容<br />
+<textarea style="width: 100%;height: 200px;" id="text2">
+
+		</textarea>
+</body>
+<script type="text/javascript">
+    window.onload = function () {
+        document.getElementById("text").value= "#define PIN_KEYPAD_LEFT\t\t\tRTD285O_BGA_PIN_U14_LSADC_VOLTAGE_0(150,10)|((unsigned long long)KEY_CODE_LEFT << 48)\t//1.94V\n" +
+            "#define PIN_KEYPAD_RIGHT\t\tRTD285O_BGA_PIN_U14_LSADC_VOLTAGE_0(69,10)|((unsigned long long)KEY_CODE_RIGHT << 48)\t//0.9v\n" +
+            "#define PIN_KEYPAD_DOWN\t\t\tRTD285O_BGA_PIN_U14_LSADC_VOLTAGE_0(216,10)|((unsigned long long)KEY_CODE_DOWN << 48) \t//2.8v  keypad down\n" +
+            "\n" +
+            "#define PIN_KEYPAD_PWR\t\t\tRTD285O_BGA_PIN_U14_LSADC_VOLTAGE_0(0, 10)|((unsigned long long)KEY_CODE_PWR << 48) // 0v\tkeypad pwr\n" +
+            "#define PIN_KEYPAD_UP\t\t\tRTD285O_BGA_PIN_U14_LSADC_VOLTAGE_0(185, 10)|((unsigned long long)KEY_CODE_UP << 48)// 2.4v keypad up\n" +
+            "#define PIN_KEYPAD_SOURCE\t\tRTD285O_BGA_PIN_U14_LSADC_VOLTAGE_0(35, 10)|((unsigned long long)KEY_CODE_SOURCE << 48) //0.46v keypad select\n" +
+            "\n" +
+            "#define PIN_KEYPAD_MENU\t\t\tRTD285O_BGA_PIN_U14_LSADC_VOLTAGE_0(108, 10)|((unsigned long long)KEY_CODE_MENU << 48)\t//1.4v";
+    }
+    function run1(){
+        // alert("arr[0]");
+
+        var text=document.getElementById("text").value;
+        var arr=text.split("\n");
+        // alert(arr[0]);
+
+        var t1=document.getElementById("t1").value;var t2=document.getElementById("t2").value;var t3=document.getElementById("t3").value
+        var t4=document.getElementById("t4").value;var t5=document.getElementById("t5").value;var t6=document.getElementById("t6").value
+        var t7=document.getElementById("t7").value;var t8=document.getElementById("t8").value;var t9=document.getElementById("t9").value
+        var t10=document.getElementById("t10").value;var t11=document.getElementById("t11").value;var t12=document.getElementById("t12").value
+        var t13=document.getElementById("t13").value;var t14=document.getElementById("t14").value;
+
+        for (var i = 0; i < arr.length; i++) {
+
+            if(arr[i].indexOf(t1)!=-1){
+                var reg = "/"+t1+"/g";
+                arr[i]= arr[i].replace(eval(reg), t8);
+            }else if(arr[i].indexOf(t2)!=-1){
+                var reg = "/"+t2+"/g";
+                arr[i]= arr[i].replace(eval(reg), t9);
+            }else if(arr[i].indexOf(t3)!=-1){
+                var reg = "/"+t3+"/g";
+                arr[i]= arr[i].replace(eval(reg), t10);
+            }else if(arr[i].indexOf(t4)!=-1){
+                var reg = "/"+t4+"/g";
+                arr[i]= arr[i].replace(eval(reg), t11);
+            }else if(arr[i].indexOf(t5)!=-1){
+                var reg = "/"+t5+"/g";
+                arr[i]= arr[i].replace(eval(reg), t12);
+            }else if(arr[i].indexOf(t6)!=-1){
+                var reg = "/"+t6+"/g";
+                arr[i]= arr[i].replace(eval(reg), t13);
+            }else if(arr[i].indexOf(t7)!=-1){
+                var reg = "/"+t7+"/g";
+                arr[i]= arr[i].replace(eval(reg), t14);
+            }
+        }
+
+        var text2="";
+        for (var i = 0; i < arr.length; i++) {
+            text2+=arr[i]+"\n";
+        }
+
+        document.getElementById("text2").value=text2;
+
+    }
+</script>
+</html>

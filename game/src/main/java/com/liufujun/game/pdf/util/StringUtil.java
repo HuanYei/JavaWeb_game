@@ -16,5 +16,14 @@ public class StringUtil {
         return 源字符.replace(需删除字符1,"").replace(需删除字符2,"").replace(需删除字符3,"");
     }
 
+    public static String 提取文件路径(String 源路径全称){
+        int a= 源路径全称.lastIndexOf("/")+1;
+        return 源路径全称.substring(0,a);
+    }
+    public static String 提取文件名(String 源路径全称){
+        int a= 源路径全称.lastIndexOf("/")+1;
+        return 源路径全称.substring(a);
+    }
+
 
 }

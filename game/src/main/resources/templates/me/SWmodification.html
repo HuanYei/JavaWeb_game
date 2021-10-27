@@ -25,7 +25,7 @@
         <button onclick="newDir()">创建新文件夹</button>
         <span style="color: red;">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>
     </div>
-    <p><b>logo：<a onclick="openfile2()" href="#">打开目录</a></b></p>
+    <p><b>logo：<a onclick="openfile2()" href="#">打开目录</a>|<a id="clogo"  href="/toRAWLOGO">制作logo</a></b></p>
     <div style="margin-left: 30px">
         <a th:href="@{/image/${image_name}}">
             <img style="height: 180px;width: 320px;" th:src="@{/image/${image_name}}">
@@ -53,104 +53,128 @@
                 <input name="Ti" onclick="Timodeoff()" th:checked="*{panel.getTi_MODE()  eq '0'} ? true : false"
                        type="radio">off
             </div>
-            <div  id="SwapMode">
+            <div id="SwapMode">
                 Swap Mode:
                 <input name="SWAP" onclick="Swapdeon()" th:checked="*{panel.getSwap_MODE() eq '1'} ? true : false"
                        type="radio"/>on
                 <input name="SWAP" onclick="Swapdeoff()" th:checked="*{panel.getSwap_MODE() eq '0'} ? true : false"
                        type="radio"/>off
-             </div>
-            <div  id="DualMode">
+            </div>
+            <div id="DualMode">
                 Dual Mode:
                 <input name="Dual" onclick="Dualdeon()" th:checked="*{panel.getDual_MODE() eq '1'} ? true : false"
                        type="radio"/>off
                 <input name="Dual" onclick="Dualdeoff()" th:checked="*{panel.getDual_MODE() eq '2'} ? true : false"
                        type="radio"/>on
             </div>
-            <div  id="MirrorMode">
+            <div id="MirrorMode">
                 Mirror Mode:
                 <input name="Mirror" onclick="Mirrordeon()" th:checked="*{panel.getMirror_MODE() eq '1'} ? true : false"
                        type="radio"/>MIRROR
-                <input name="Mirror" onclick="Mirrordeoff()" th:checked="*{panel.getMirror_MODE() eq '0'} ? true : false"
+                <input name="Mirror" onclick="Mirrordeoff()"
+                       th:checked="*{panel.getMirror_MODE() eq '0'} ? true : false"
                        type="radio"/>NORMAL
             </div>
-                    <br>
-                    <input type="submit" value="提交修改">
-                    <br>
-                    <input style="visibility: hidden" type="text" th:field="*{panel.Ti_MODE}"/>
-                    <input style="visibility: hidden" type="text" th:field="*{panel.Swap_MODE}"/>
-                    <input style="visibility: hidden" type="text" th:field="*{panel.Dual_MODE}"/>
-                    <input style="visibility: hidden" type="text" th:field="*{panel.Mirror_MODE}"/>
-                    <input style="visibility: hidden" type="text" th:field="*{software_name}"/>
-                    <input style="visibility: hidden" type="text"
-                           th:field="*{full_name_of_software_screen_parameter_name_path}"/>
+            <div id="BitsMode">
+                Bits Mode:
+                <input name="Bits" onclick="Bitsde1()" th:checked="*{panel.getBit_MODE() eq '0'} ? true : false" type="radio"/>6bit
+                <input name="Bits" onclick="Bitsde2()" th:checked="*{panel.getBit_MODE() eq '1'} ? true : false" type="radio"/>8bit
+                <input name="Bits" onclick="Bitsde3()" th:checked="*{panel.getBit_MODE() eq '2'} ? true : false" type="radio"/>10bit
+            </div>
+
+            <br>
+            <input type="submit" value="提交修改">
+            <br>
+            <input  style="display: none;" type="text" th:field="*{panel.Ti_MODE}"/>
+            <input  style="display: none;" type="text" th:field="*{panel.Swap_MODE}"/>
+            <input  style="display: none;" type="text" th:field="*{panel.Dual_MODE}"/>
+            <input  style="display: none;" type="text" th:field="*{panel.Mirror_MODE}"/>
+            <input  style="display: none;" type="text" th:field="*{panel.Bit_MODE}"/>
+            <input  style="display: none;" type="text" th:field="*{software_name}"/>
+            <input  style="display: none;" type="text"
+                   th:field="*{full_name_of_software_screen_parameter_name_path}"/>
         </form>
 
     </div>
     </p>
-
-    <b>色温:</b>
-    <form action="#" th:action="@{/Color}" method="post" th:object="${SW}">
-        <table style="margin-left: 30px">
-            <tr>
-                <th></th>
-                <th>Standard</th>
-                <th>COOL</th>
-                <th>Warm</th>
-            </tr>
-            <tr>
-                <th>R</th>
-                <td><input type="text" th:field="*{PQ_data.StandardR}"/></td>
-                <td><input type="text" th:field="*{PQ_data.CoolR}"/></td>
-                <td><input type="text" th:field="*{PQ_data.WarmR}"/></td>
-            </tr>
-            <tr>
-                <th>G</th>
-                <td><input type="text" th:field="*{PQ_data.StandardG}"/></td>
-                <td><input type="text" th:field="*{PQ_data.CoolG}"/></td>
-                <td><input type="text" th:field="*{PQ_data.WarmG}"/></td>
-            </tr>
-            <tr>
-                <th>B</th>
-                <td><input type="text" th:field="*{PQ_data.StandardB}"/></td>
-                <td><input type="text" th:field="*{PQ_data.CoolB}"/></td>
-                <td><input type="text" th:field="*{PQ_data.WarmB}"/></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <th>
-                    <input type="submit" value="提交修改">
-                </th>
-                <td></td>
-            </tr>
-        </table>
-        <input style="visibility: hidden" type="text" th:field="*{software_color_temperature_file_path}"/>
-        <input style="visibility: hidden" type="text" th:field="*{software_name}"/>
-    </form>
+    <div id="colordiv">
+        <b>色温:</b>
+        <form action="#" th:action="@{/Color}" method="post" th:object="${SW}">
+            <table style="margin-left: 30px">
+                <tr>
+                    <th></th>
+                    <th>Standard</th>
+                    <th>COOL</th>
+                    <th>Warm</th>
+                </tr>
+                <tr>
+                    <th>R</th>
+                    <td><input type="text" th:field="*{PQ_data.StandardR}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.CoolR}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.WarmR}"/></td>
+                </tr>
+                <tr>
+                    <th>G</th>
+                    <td><input type="text" th:field="*{PQ_data.StandardG}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.CoolG}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.WarmG}"/></td>
+                </tr>
+                <tr>
+                    <th>B</th>
+                    <td><input type="text" th:field="*{PQ_data.StandardB}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.CoolB}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.WarmB}"/></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <th>
+                        <input type="submit" value="提交修改">
+                    </th>
+                    <td></td>
+                </tr>
+            </table>
+            <input  style="display: none;" type="text" th:field="*{software_color_temperature_file_path}"/>
+            <input  style="display: none;" type="text" th:field="*{software_name}"/>
+        </form>
+    </div>
 </div>
 <script type="text/javascript" th:inline="javascript">
-    function myFunction() {
+    // function myFunction() {
+    //     var msg = [[${msg}]];
+    //     if (msg.length > 1) {
+    //         alert(msg);
+    //     }
+    // }
+
+    window.onload = function () {
         var msg = [[${msg}]];
         if (msg.length > 1) {
             alert(msg);
         }
-    }
 
-    window.onload=function() {
         if ([[${SW.getPanel().getTi_MODE()}]] == null) {
-            document.getElementById("TiMode").style.visibility = "hidden";
+            document.getElementById("TiMode").style.display = "none";
         }
         if ([[${SW.getPanel().getSwap_MODE()}]] == null) {
-            document.getElementById("SwapMode").style.visibility = "hidden";
+            document.getElementById("SwapMode").style.display = "none";
         }
         if ([[${SW.getPanel().getMirror_MODE()}]] == null) {
-            document.getElementById("MirrorMode").style.visibility = "hidden";
+            document.getElementById("MirrorMode").style.display = "none";
+        }
+        if ([[${SW.getPanel().getBit_MODE()}]] == null) {
+            document.getElementById("BitsMode").style.display = "none";
         }
         if ([[${SW.getPanel().getDual_MODE()}]] == null) {
-            document.getElementById("DualMode").style.visibility = "hidden";
+            document.getElementById("DualMode").style.display = "none";
         }
+        if ([[${SW.getPQ_data().getStandardB()}]] == null) {
+            document.getElementById("colordiv").style.display = "none";
+        }
+
+
     }
+
     function Timodeon() {
         document.getElementById("panel.Ti_MODE").value = 1;
     }
@@ -166,6 +190,7 @@
     function Swapdeoff() {
         document.getElementById("panel.Swap_MODE").value = 0;
     }
+
     function Mirrordeon() {
         document.getElementById("panel.Mirror_MODE").value = 1;
     }
@@ -174,13 +199,24 @@
         document.getElementById("panel.Mirror_MODE").value = 0;
     }
 
+    function Dualdeoff() {
+        document.getElementById("panel.Dual_MODE").value = 2;
+    }
     function Dualdeon() {
         document.getElementById("panel.Dual_MODE").value = 1;
     }
 
-    function Dualdeoff() {
-        document.getElementById("panel.Dual_MODE").value = 2;
+    function Bitsde1() {
+        document.getElementById("panel.Bit_MODE").value = 0;
     }
+    function Bitsde2() {
+        document.getElementById("panel.Bit_MODE").value = 1;
+    }
+    function Bitsde3() {
+        document.getElementById("panel.Bit_MODE").value = 2;
+    }
+
+
     function rmScName() {
         var oldScname = [[${SW.full_name_of_software_path}]];
         var newScname = document.getElementById("ScName").value;

@@ -142,19 +142,23 @@ public class Meconntroller {
         model.addAttribute("SwType",SwType);
         SwEnglish swE=new SwEnglish(sw);
         potopath=sw.get软件logo路径全称();
+        Plan=sw.get方案();
         model.addAttribute("SW",swE);
         model.addAttribute("msg","");
         return "me/SWmodification";
     }
 
     String potopath="";
+    String Plan="";
     @RequestMapping(value = "/image/{image_name}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable("image_name") String image_name) throws Exception{
 
         byte[] imageContent ;
         String path = potopath;
-        if (path.indexOf("2851")!=-1){
+        if (Plan.equals("2851")){
             imageContent =  RAWUtils.rawtshow(path,1920,1080);
+        }else if (Plan.equals("2842")){
+            imageContent =  RAWUtils.rawtshow(path,1280,720);
         }else {
             imageContent = Fileprocessing.fileToByte(new File(path));
         }
