@@ -1,5 +1,6 @@
 package com.liufujun.game.me.dao;
 
+import com.liufujun.game.me.pojo.PQ;
 import com.liufujun.game.me.pojo.SW;
 import com.liufujun.game.me.pojo.SwEnglish;
 import com.liufujun.game.pdf.Main;
@@ -7,6 +8,8 @@ import com.liufujun.game.pdf.util.Fileprocessing;
 import com.liufujun.game.util.PlanUtil;
 import com.liufujun.game.util.RAWUtils;
 import com.liufujun.game.util.服务器使用路径;
+
+import java.io.File;
 
 public class SwDao {
     static  String Stringshu[];
@@ -21,10 +24,12 @@ public class SwDao {
             sw.set按键数量(e脚本宏查值("config_keypad_name"));
             sw.set客户名缩写(e脚本宏查值("config_customer_name").replace("\"","").substring(0,4));
             sw.set软件客制化名称(e脚本宏查值("config_customer_folder_name").replace("\"",""));
-
+            sw.setIsrtk(1);
             sw=PlanType(sw);
             sw=PanelDao.PanelRTK赋值(sw);
+            sw.setPQ数据(RtkpqDao.PQDate(sw.get软件色温文件路径(),new PQ()));
         }else {
+            sw.setIsrtk(0);
             //MTK
             sw.set软件logo名(e脚本宏查值("bootlogo_file"));
             sw.set屏名(e脚本宏查值("panelname"));
@@ -131,6 +136,13 @@ public class SwDao {
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2851+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2851+sw.get屏名()+".h");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2851+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
+        String 软件色温文件夹=sw.get软件客制化路径全称()+"pq/";
+        File file=new File(软件色温文件夹);
+        if (file.exists()) {
+            sw.set软件色温文件路径(Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0));
+        }else {
+            sw.set软件色温文件路径(服务器使用路径.RTK2851PATH+"customer/pq/vip_default_osd.cpp");
+        }
         return sw;
     }
     private static SW 赋值2842(SW sw) {
@@ -141,7 +153,7 @@ public class SwDao {
         return sw;
     }
     public static void SW宏修改(String swname,String 客制化){
-        if ( PlanUtil.PlanType(swname).equals("368")||PlanUtil.PlanType(swname).equals("6681")){
+        if ( PlanUtil.PlanType(swname).equals("368")){
             if (客制化.indexOf("bootlogo")!=-1){
                 String jb =Stringmacro("bootlogo_file",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径368+swname+".sh"));
                 Fileprocessing.updateFile(服务器使用路径.脚本路径368+swname+".sh",jb);
@@ -164,9 +176,22 @@ public class SwDao {
                 Fileprocessing.updateFile(服务器使用路径.脚本路径9632+swname+".sh",jb);
                 return;
             }
-            String customer_folder ="$toptech_path/customer/$cus_id/"+客制化;
+            String customer_folder ="$toptech_path/customer/9632/$cus_id/"+客制化;
             String jb =Stringmacro("customer_folder",customer_folder,Fileprocessing.readTxtFile(服务器使用路径.脚本路径9632+swname+".sh"));
             Fileprocessing.updateFile(服务器使用路径.脚本路径9632+swname+".sh",jb);
+        }else if (PlanUtil.PlanType(swname).equals("6681")){
+            if (客制化.indexOf("bootlogo")!=-1){
+                String jb =Stringmacro("bootlogo_file",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径6681+swname+".sh"));
+                Fileprocessing.updateFile(服务器使用路径.脚本路径6681+swname+".sh",jb);
+                return;
+            }else if (客制化.indexOf(".ini")!=-1){
+                String jb =Stringmacro("panelname",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径6681+swname+".sh"));
+                Fileprocessing.updateFile(服务器使用路径.脚本路径6681+swname+".sh",jb);
+                return;
+            }
+            String customer_folder ="$toptech_path/customer/6681/$cus_id/"+客制化;
+            String jb =Stringmacro("customer_folder",customer_folder,Fileprocessing.readTxtFile(服务器使用路径.脚本路径6681+swname+".sh"));
+            Fileprocessing.updateFile(服务器使用路径.脚本路径6681+swname+".sh",jb);
         }else if (PlanUtil.PlanType(swname).equals("6681")){
             if (客制化.indexOf("bootlogo")!=-1){
                 String jb =Stringmacro("bootlogo_file",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径6681+swname+".sh"));

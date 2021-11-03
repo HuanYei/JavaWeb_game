@@ -58,15 +58,16 @@ public class ImagesUtils {
         os.close();
         return os;
     }
-    public static void main(String[] args) {
-        try {
-            InputStream is = new FileInputStream(new File("img/C001_VEGA_1920x1080_bootfile.jpg"));
-            OutputStream os = new FileOutputStream(new File("img/C001_VEGA_1920x1080_bootfile2.jpg"));
-            resizeImage(is, os, 1280, "jpg");
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+
+//    public static void main(String[] args) {
+//        try {
+//            InputStream is = new FileInputStream(new File("img/C001_VEGA_1920x1080_bootfile.jpg"));
+//            OutputStream os = new FileOutputStream(new File("img/C001_VEGA_1920x1080_bootfile2.jpg"));
+//            resizeImage(is, os, 1280, "jpg");
+//        } catch (Exception e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//    }
 
 }

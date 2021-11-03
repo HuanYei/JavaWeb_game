@@ -1,6 +1,7 @@
 package com.liufujun.game.me.conntroller;
 
 import com.liufujun.game.me.dao.PanelDao;
+import com.liufujun.game.me.dao.RtkpqDao;
 import com.liufujun.game.me.dao.SwDao;
 import com.liufujun.game.me.pojo.SW;
 import com.liufujun.game.me.pojo.SwEnglish;
@@ -118,7 +119,7 @@ public class Meconntroller {
 
     @PostMapping("/Color")
     public String COLOR(@ModelAttribute SwEnglish sw,Model model){
-        Colortemperature.Colortupdate(sw);
+        PQ(sw);
         System.out.println(sw.getSoftware_name());
         model.addAttribute("msg","色温修改成功");
         return "forward:/subswname?swname="+sw.getSoftware_name();
@@ -180,4 +181,23 @@ public class Meconntroller {
         return model;
     }
 
+    private void PQ(SwEnglish sw){
+        if (sw.getIsRTK()==1){
+            if (sw.getSoftware_color_temperature_file_path().indexOf("vip_default_osd.cpp")!=-1){
+                String name="";
+                if (sw.getPlan().equals("2851"))
+                    name="pq";
+                else
+                    name="pq_RTK2842P";
+                File file=new File(sw.getFull_name_of_software_customization_path()+name+"/");
+                file.mkdir();
+                Fileprocessing.newFile(sw.getSoftware_color_temperature_file_path(),sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp");
+                RtkpqDao.PQ_OSDUpdate(sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp",sw.getPQ_data());
+            }else {
+                RtkpqDao.PQ_OSDUpdate(sw.getSoftware_color_temperature_file_path(),sw.getPQ_data());
+            }
+        }else {
+            Colortemperature.Colortupdate(sw);
+        }
+    }
 }

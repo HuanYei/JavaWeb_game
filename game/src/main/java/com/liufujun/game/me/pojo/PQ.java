@@ -10,6 +10,9 @@ public class PQ {
      String StandardR;
      String StandardG;
      String StandardB;
+     String UserR;
+     String UserG;
+     String UserB;
 
     @Override
     public String toString() {
@@ -23,8 +26,36 @@ public class PQ {
                 ", StandardR='" + StandardR + '\'' +
                 ", StandardG='" + StandardG + '\'' +
                 ", StandardB='" + StandardB + '\'' +
+                ", UserR='" + UserR + '\'' +
+                ", UserG='" + UserG + '\'' +
+                ", UserB='" + UserB + '\'' +
                 '}';
     }
+
+    public String getUserR() {
+        return UserR;
+    }
+
+    public void setUserR(String userR) {
+        UserR = userR;
+    }
+
+    public String getUserG() {
+        return UserG;
+    }
+
+    public void setUserG(String userG) {
+        UserG = userG;
+    }
+
+    public String getUserB() {
+        return UserB;
+    }
+
+    public void setUserB(String userB) {
+        UserB = userB;
+    }
+
 
     public String getWarmR() {
         return WarmR;

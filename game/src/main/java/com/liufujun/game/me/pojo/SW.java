@@ -18,6 +18,7 @@ public class SW {
     String 按键数量;
     String 客户名缩写;
     String 方案;
+    int isrtk;
 
     @Override
     public String toString() {
@@ -163,5 +164,13 @@ public class SW {
 
     public void set方案(String 方案) {
         this.方案 = 方案;
+    }
+
+    public int getIsrtk() {
+        return isrtk;
+    }
+
+    public void setIsrtk(int isrtk) {
+        this.isrtk = isrtk;
     }
 }

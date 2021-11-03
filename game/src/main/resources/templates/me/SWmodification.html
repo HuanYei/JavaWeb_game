@@ -25,7 +25,7 @@
         <button onclick="newDir()">创建新文件夹</button>
         <span style="color: red;">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>
     </div>
-    <p><b>logo：<a onclick="openfile2()" href="#">打开目录</a>|<a id="clogo"  href="/toRAWLOGO">制作logo</a></b></p>
+    <p><b>logo：<a onclick="openfile2()" href="#">打开目录</a><span id="toRAWlogo">|<a id="clogo"  href="/toRAWLOGO">制作logo</a></span></b></p>
     <div style="margin-left: 30px">
         <a th:href="@{/image/${image_name}}">
             <img style="height: 180px;width: 320px;" th:src="@{/image/${image_name}}">
@@ -103,24 +103,28 @@
             <table style="margin-left: 30px">
                 <tr>
                     <th></th>
+                    <th id="ColorUserTh">User</th>
                     <th>Standard</th>
                     <th>COOL</th>
                     <th>Warm</th>
                 </tr>
                 <tr>
                     <th>R</th>
+                    <td id="ColorUserTd1"><input type="text" th:field="*{PQ_data.UserR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmR}"/></td>
                 </tr>
                 <tr>
                     <th>G</th>
+                    <td id="ColorUserTd2"><input type="text" th:field="*{PQ_data.UserG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmG}"/></td>
                 </tr>
                 <tr>
                     <th>B</th>
+                    <td id="ColorUserTd3"><input type="text" th:field="*{PQ_data.UserB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmB}"/></td>
@@ -134,8 +138,12 @@
                     <td></td>
                 </tr>
             </table>
+            
             <input  style="display: none;" type="text" th:field="*{software_color_temperature_file_path}"/>
             <input  style="display: none;" type="text" th:field="*{software_name}"/>
+            <input  style="display: none;" type="text" th:field="*{isRTK}"/>
+            <input  style="display: none;" type="text" th:field="*{full_name_of_software_customization_path}"/>
+            <input  style="display: none;" type="text" th:field="*{Plan}"/>
         </form>
     </div>
 </div>
@@ -168,8 +176,12 @@
         if ([[${SW.getPanel().getDual_MODE()}]] == null) {
             document.getElementById("DualMode").style.display = "none";
         }
-        if ([[${SW.getPQ_data().getStandardB()}]] == null) {
-            document.getElementById("colordiv").style.display = "none";
+        if ([[${SW.getIsRTK()}]] == 0) {
+            document.getElementById("toRAWlogo").style.display = "none";
+            document.getElementById("ColorUserTh").style.display = "none";
+            document.getElementById("ColorUserTd1").style.display = "none";
+            document.getElementById("ColorUserTd2").style.display = "none";
+            document.getElementById("ColorUserTd3").style.display = "none";
         }
 
 

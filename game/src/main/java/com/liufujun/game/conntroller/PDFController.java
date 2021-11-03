@@ -58,8 +58,9 @@ public class PDFController {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return "/pdfJG";
+        return "pdfJG";
     }
+
 
     @RequestMapping("/jbdownload")
     public void jbdownload(HttpServletResponse response)throws Exception{

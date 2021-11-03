@@ -3,13 +3,21 @@ package com.liufujun.game.util;
 import com.liufujun.game.pdf.util.Fileprocessing;
 
 public class 服务器使用路径 {
-    public static String 彩讯订单PDF文件存储路径="D:/work/Customer documents/file210716/服务器路径/订单pdf文件/";
-    public static String 彩讯订单参考脚本文件存储路径="D:/work/Customer documents/file210716/服务器路径/参考脚本文件/";
-    public static String 彩讯订单脚本生成路径="D:/work/Customer documents/file210716/服务器路径/生成脚本文件/";
-    public static String RTK脚本="D:/work/Customer documents/file210716/服务器路径/RTK脚本文件/";
+
+    public static String ip="172.168.1.230";
+    public static int port = 22;
+    public static String user = "liufujun";
+    public static String password = "123422343HY";
+    public static String rtk2851_pq_Linux="/media/workspace0/liufujun/2851/rtk2851_pq/rtk2851/libvip/LibvipOSD";
+    public static String rtk2851_pq_Windows="Z:/2851/rtk2851_pq/rtk2851/libvip/LibvipOSD/";
+
+    public static String 彩讯订单PDF文件存储路径="pdf/订单pdf文件/";
+    public static String 彩讯订单参考脚本文件存储路径="pdf/参考脚本文件/";
+    public static String 彩讯订单脚本生成路径="pdf/生成脚本文件/";
+    public static String RTK脚本="pdf/RTK脚本文件/";
 
     //368
-    public static String  MTK368PATH="Z:/9255/New9255/MTK368P/";
+    public static String  MTK368PATH="Z:/9255/MTK368P/";
     public static String  脚本路径368;
     public static String  LOGO路径368;
     public static String  屏参路径368;

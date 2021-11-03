@@ -25,5 +25,14 @@ public class StringUtil {
         return 源路径全称.substring(a);
     }
 
-
+    public static int 统计字符出现次数(String 字符串,char 字符){
+        char[] chars=字符串.toCharArray();
+        int ci=0;
+        for (int i = 0; i <chars.length ; i++) {
+            if (chars[i]==字符){
+                ci++;
+            }
+        }
+        return ci;
+    };
 }

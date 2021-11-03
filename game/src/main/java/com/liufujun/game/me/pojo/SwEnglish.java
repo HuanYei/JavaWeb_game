@@ -16,6 +16,7 @@ public class SwEnglish {
   String logoweb;
   Panel Panel;
   String Plan;
+  int isRTK;
  public SwEnglish(SW sw){
 
       software_name=sw.get软件名称();
@@ -33,6 +34,7 @@ public class SwEnglish {
       logoweb=sw.软件logo前端;
       Panel=sw.getPanel();
       Plan=sw.get方案();
+      isRTK=sw.getIsrtk();
  }
     public SwEnglish() {
 
@@ -148,5 +150,21 @@ public class SwEnglish {
 
     public void setLogoweb(String logoweb) {
         this.logoweb = logoweb;
+    }
+
+    public int getIsRTK() {
+        return isRTK;
+    }
+
+    public void setIsRTK(int isRTK) {
+        this.isRTK = isRTK;
+    }
+
+    public String getPlan() {
+        return Plan;
+    }
+
+    public void setPlan(String plan) {
+        Plan = plan;
     }
 }

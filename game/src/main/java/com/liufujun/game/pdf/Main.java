@@ -191,7 +191,10 @@ public class Main {
                 }else if (pcb_board_type.equals("pcbname")){
                     旧版型=yuan;
                 }
-                Stringshu[i] = Stringshu[i].replace(yuan, pcb_board_type1);
+                if (yuan.indexOf(pcb_board_type1)==-1){
+                    Stringshu[i] = Stringshu[i].replace(yuan, pcb_board_type1);
+                }
+
             }
         }
         jbString="";

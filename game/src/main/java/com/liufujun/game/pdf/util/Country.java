@@ -23,6 +23,8 @@ public class Country {
                 return "it_IT";
             case "德":
                 return "de_DE";
+            case "塞尔维亚":
+                return "sr_Latn_RS";
             default:
                 return yu;
         }
@@ -62,6 +64,8 @@ public class Country {
                 return "SA";
             case "阿联酋":
                 return "AE";
+            case "塞尔维亚":
+                return "RS";
             default:
                 return gu;
         }
@@ -81,6 +85,8 @@ public class Country {
                 return "SAUDI_ARABIA";
             case "AE":
                 return "ARE";
+            case "RS":
+                return "SERBIA";
             default:
                 return gu;
         }

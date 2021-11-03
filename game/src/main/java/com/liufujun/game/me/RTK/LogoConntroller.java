@@ -1,6 +1,5 @@
-package com.liufujun.game.me.RTKLogo;
+package com.liufujun.game.me.RTK;
 
-import com.liufujun.game.pdf.Main;
 import com.liufujun.game.pdf.util.Fileprocessing;
 import com.liufujun.game.pdf.util.StringUtil;
 import com.liufujun.game.util.ImagesUtils;
@@ -19,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Controller

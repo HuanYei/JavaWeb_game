@@ -4,9 +4,11 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 
 public class Fileprocessing {
     public static String readTxtFile(String filePath) {
+        System.out.println("读取文件路径："+filePath);
         String map = "";
         try {
             String encoding = "UTF-8";
@@ -89,8 +91,42 @@ public class Fileprocessing {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String a="k";
 
+    }
+
+//    public static void main(String[] args) {
+//        File file=new File("C:/Users/Administrator/Desktop/ssdsd/");
+//        file.mkdir();
+//        newFile("Z:/2851/2851_all/customer/bootlogo/BOE.raw","C:/Users/Administrator/Desktop/ssdsd/555.raw");
+//
+//    }
+
+    public static ArrayList<String> lookupwai(String path,String 关键字){
+        fileList=new ArrayList<String>();
+        lookup(path,关键字);
+        return fileList;
+    }
+    private static ArrayList fileList;
+    private static void lookup(String path,String 关键字){
+
+        try {
+            File filePath = new File(path);
+            if (filePath.isDirectory()) {
+                File[] list = filePath.listFiles();
+                for (int i = 0; i < list.length; i++) {
+                    String newPath = path  + list[i].getName();
+                    lookup(newPath, 关键字);
+                }
+            } else if (filePath.isFile()) {
+                if (StringUtil.提取文件名(path).indexOf(关键字)!=-1){
+                    fileList.add(path);
+                }
+            } else {
+                System.out.println("请输入正确的文件名或路径名");
+            }
+        } catch (Exception e) {
+            System.out.println("请输入正确的文件名或路径名");
+        }
     }
 
     public static void copy(String path, String copyPath) {
@@ -111,16 +147,7 @@ public class Fileprocessing {
                     copy(newPath, newCopyPath);
                 }
             } else if (filePath.isFile()) {
-                read = new DataInputStream(
-                        new BufferedInputStream(new FileInputStream(path)));
-                write = new DataOutputStream(
-                        new BufferedOutputStream(new FileOutputStream(copyPath)));
-                byte[] buf = new byte[1024 * 512];
-                while (read.read(buf) != -1) {
-                    write.write(buf);
-                }
-                read.close();
-                write.close();
+                newFile(path,copyPath);
             } else {
                 System.out.println("请输入正确的文件名或路径名");
             }

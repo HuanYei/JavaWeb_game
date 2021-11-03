@@ -30,8 +30,19 @@ public class EditorstyleUtil {
                .replace("<br>","\n")
                .replace("&lt;","<")
                .replace("<font color=\"#d3af62\">","")
+               .replace("<span style=\"color: rgb(162, 162, 162);\">","")
+               .replace("<span style=\"color: rgb(162, 22, 22);\">","")
+               .replace("<span style=\"color: rgb(211, 175, 98);\">","")
                .replace("</font>","")
+               .replace("<div style=\"color: rgb(211, 175, 98);\">","")
+               .replace("</div>","\n")
+               .replace("<div>","")
+               .replace("style=\"color: rgb(211, 175, 98);\"","")
+               .replace("style=\"color: rgb(162, 162, 162);\"","")
+               .replace("style=\"color: rgb(162, 22, 22);\"","")
                .replace("&gt;",">");
+
         return newtext;
     }
+
 }
