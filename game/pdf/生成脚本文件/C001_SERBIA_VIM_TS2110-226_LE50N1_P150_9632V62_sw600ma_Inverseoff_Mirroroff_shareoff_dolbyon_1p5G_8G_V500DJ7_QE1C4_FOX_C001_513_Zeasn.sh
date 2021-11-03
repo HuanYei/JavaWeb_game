@@ -31,7 +31,7 @@ pcb_board_type=Toptech_PCB_BOARD_P150_9632V62
 #Toptech_PCB_BOARD_P150_9632V62A:AV IN, mini YPBPR
 #Toptech_PCB_BOARD_P150_9632V62B:SCART, mini AV IN
 #Toptech_PCB_BOARD_P150_9632V62C:AV IN
-config_pcb_varient=Toptech_PCB_BOARD_P150_9632V62
+config_pcb_varient=Toptech_PCB_BOARD_P150_9632V62C
 # string, customer short name
 cus_id="C001"
 # string, product full name
@@ -94,7 +94,7 @@ panelname=V500DJ7_QE1C4.ini
 # Panel backlight related params #
 ##################################
 #pwm_invert=off         #off:NON_INVERSE on:INVERSE
-#pwm_max_current=600ma
+#pwm_max_current=600ma  #DC-->current backlight PWM-->max backlight
 #pwm_min_current=135ma  #min backlight
 #pwm_frequency=47000    #DC-->47000     PWM-->183
 #current_control=sw     #DC-->sw        PWM-->hw

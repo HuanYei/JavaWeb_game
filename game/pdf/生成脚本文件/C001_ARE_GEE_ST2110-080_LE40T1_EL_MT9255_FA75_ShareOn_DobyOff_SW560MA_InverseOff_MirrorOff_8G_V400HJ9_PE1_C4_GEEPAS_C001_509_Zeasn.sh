@@ -52,7 +52,7 @@ pcb_board_type=Toptech_PCB_BOARD_EL_MT9255_FA75
 cus_id="C001"
 # string, product full name
 # this value will include into OTA package name
-cus_pro_id="LE40T1_EL_MT9255_FA75_TZ2109-165"
+cus_pro_id="LE40T1_EL_MT9255_FA75_ST2110-080"
 # string, software revision
 software_revision="V1.0.01"
 # string pcb name
@@ -94,7 +94,7 @@ R842_SHARE_XTAL=1
 dtv_type_support_list=0x00
 
 #customer_folder
-customer_folder=$toptech_path/customer/$cus_id/TZ2109-165_ARE_LE40T1_EL_MT9255_FA75_V400HJ6_PE1_C3_CX509_GEEPAS
+customer_folder=$toptech_path/customer/$cus_id/ST2110-080_ARE_LE40T1_EL_MT9255_FA75_V400HJ9_PE1_C4_CX509_GEEPAS
 
 mboot_version="01-2L-SM-00-20200210"
 
@@ -102,7 +102,7 @@ mboot_version="01-2L-SM-00-20200210"
 #AU20_T200XW02.ini
 #M190A1.ini(1400*900)
 #FullHD_CMO216_H1L01_OSD_720P.ini
-panelname=V400HJ6_PE1C3.ini
+panelname=V400HJ9_PE1_C4.ini
 
 ##################################
 # Panel backlight related params #

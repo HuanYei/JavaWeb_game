@@ -3,14 +3,18 @@
 echo "#------------------------------------------------------------------------------"
 echo "# start customer's script compiling..."
 
+############################################
+source $android_path/vendor/toptech/scripts/init_var.sh
+############################################
+
 #PATH Define#
 ######################################
 ######################################
 
 # Product Device Name
-customer_device_name="Smart"
+#customer_device_name=""
 # Product Model Name
-customer_model_name="Smart"
+#customer_model_name=""
 
 # 368 > 1G: mt5862 512M: mt5862_512m 
 build_product="mt5862"
@@ -40,18 +44,19 @@ mboot_bin_path=MT5862-M1V1-N2
 # Toptech_PCB_BOARD_P50_368_TV80 
 # Toptech_PCB_BOARD_P50_368_DV50 
 # Toptech_PCB_BOARD_P75_368_TV90
-pcb_board_type=Toptech_PCB_BOARD_P50_368V50 
-config_pcb_varient=Toptech_PCB_BOARD_P50_368V50_A
+# Toptech_PCB_BOARD_EL_MT9255_FA48
+# Toptech_PCB_BOARD_EL_MT9255_FA75
+pcb_board_type=Toptech_PCB_BOARD_EL_MT9255_FA75
 
 # string, customer short name
 cus_id="C001"
 # string, product full name
 # this value will include into OTA package name
-cus_pro_id="P50_368_V50_1G8G_SKT_TS2006-057"
+cus_pro_id="LE40T1_EL_MT9255_FA75_ST2110-080"
 # string, software revision
 software_revision="V1.0.01"
 # string pcb name
-pcbname="P50_368_V50"
+pcbname="EL_MT9255_FA75"
 
 #ddr_type 0:512M    1:1G
 ddr_type=1
@@ -89,7 +94,7 @@ R842_SHARE_XTAL=1
 dtv_type_support_list=0x00
 
 #customer_folder
-customer_folder=$toptech_path/customer/$cus_id/TS2006-057_SKT_P50_368_V50_ST3151A07_2_CXSKT_SKYTECH
+customer_folder=$toptech_path/customer/$cus_id/ST2110-080_ARE_LE40T1_EL_MT9255_FA75_V400HJ9_PE1_C4_CX509_
 
 mboot_version="01-2L-SM-00-20200210"
 
@@ -97,19 +102,19 @@ mboot_version="01-2L-SM-00-20200210"
 #AU20_T200XW02.ini
 #M190A1.ini(1400*900)
 #FullHD_CMO216_H1L01_OSD_720P.ini
-panelname=ST3151A07_2.ini
+panelname=V400HJ9_PE1_C4.ini
 
 ##################################
 # Panel backlight related params #
 ##################################
 #u32PeriodPWM=0x100      #DC-->0x100    PWM-->0xFFFF
-#u32DutyPWM=0x6D         #DC-->0x7F     PWM-->0xF000
+#u32DutyPWM=0xCB         #DC-->0x7F     PWM-->0xF000
 #bPolPWM=0               #0:NON_INVERSE 1:INVERSE
-#u16MaxPWMvalue=0x6D     #DC-->0xFF(MAX)PWM-->0xFFFF
+#u16MaxPWMvalue=0xCB     #DC-->0xFF(MAX)PWM-->0xFFFF
 #u16MinPWMvalue=0x00
 
 pwm_invert=off
-pwm_max_current=300ma
+pwm_max_current=560ma
 pwm_min_current=100ma
 pwm_frequency=47000
 current_control=sw
@@ -118,7 +123,7 @@ current_control=sw
 lcd_density=240
 
 #set mirror(0:Rotate 0, 1:Rotate 180)
-mirror_on=1
+mirror_on=0
 
 #set mirror type
 # 0:normal type.  1:Horizontal-mirror only.  2:Vertical-mirror only.3:HV-mirror.(default:3)
@@ -130,13 +135,13 @@ mirror_type=3
 VolumeCurve=0
 
 #ir option ,select from vendor/mediatek/proprietary_tv/open/system/customer/common/ir/
-ir_file=C001_SKT
+ir_file=C001_509
 
 #keypad option ,select from vendor/mediatek/proprietary_tv/open/system//customer/common/keypad/
 keypad_file=keypad_ToptechPublic_oneKey
 
-#bootlogo ,select from vendor/toptech/customer/common/bootlogo
-bootlogo_file=bootlogo_C001_SKYTECH
+#bootlogo ,select from vendor/mediatek/proprietary_tv/open/system/customer/common/bootlogo/
+bootlogo_file=bootlogo_C001_GEEPAS
 
 #bootanimation/bootvideo
 
@@ -147,8 +152,8 @@ bootlogo_file=bootlogo_C001_SKYTECH
 #hi_IN hr_HR hu_HU in_ID iw_IL lt_LT lv_LV ro_RO sk_SK sl_SI sr_RS uk_UA tl_PH ar_EG 
 #fa_IR th_TH sw_TZ ms_MY af_ZA zu_ZA am_ET hi_IN en_XA ar_XB fr_CA km_KH lo_LA ne_NP si_LK mn_MN hy_AM az_AZ ka_GE no_NO
 #es_CO vi_VN
-language_list="tr_TR en_US fr_FR es_ES it_IT ru_RU de_DE ar_EG"
-timezone="Europe/Istanbul"
+language_list="en_US fr_FR ru_RU de_DE es_ES ar_EG pt_PT fa_IR it_IT"
+timezone="Asia/Dubai"
 
 #tuning country and dtv factory option
 #AD:ANDORRA  AU:AUSTRALIA  AT:AUSTRIA  BE:BELGIUM  BW:BOTSWANA  BR:BRAZIL  CA:CANADA  CN:CHINA  HR:CROATIA
@@ -162,19 +167,19 @@ timezone="Europe/Istanbul"
 #EG:EGYPT  ET:ETHIOPIA  GH:GHANA  GT:GUATEMALA  HN:HONDURAS  IQ:IRAQ  KW:KUWAIT  LV:LATVIA  ME:MONTENEGRO  NI:NICARAGUA
 #PK:PAKISTAN  PA:PANAMA  PY:PARAGUAY  PE:PERU  QA:QATAR  RU:RUSSIA  SV:SALVADOR  SA:SAUDI_ARABIA  RS:SERBIA  SY:SYRIA
 #UA:UKRAINE  UY:URUGUAY  VE:VENEZUELA  AZ:AZERBAIJAN  DO:DOMINICAN
-default_country=TR
+default_country=AE
 
 #preinstall apk and remove apk
 #preinstall_apk: Third-party applications
 #remove_apk: such as PinyinIME.apk
-preinstall_apk="ZeasnApp_SKT EShare GMS"
+preinstall_apk="ZeasnApp EShare GMS"
 remove_apk=""
 
 #ota info
 
 #####zeasn properties start
-zeasn_devicetype=TopTechMTK368_TURKEYUI
-zeasn_country=TURKEY
+zeasn_devicetype=TopTechMTK368
+zeasn_country=ARE
 #####zeasn properties end
 
 #default system volume
@@ -219,10 +224,12 @@ dolby_enable=0
 #set Bluetoot enable, 1: on    0:off
 BluetoothEnable=0
 #ATV enable 1:on 0:off
-ATV_enable=0
+ATV_enable=1
 
 color_system=pal
 sound_system=BG
+#Virtual key position
+config_str_keypad_position=below
 #...
 #...
 ###
@@ -233,13 +240,11 @@ config_default_menu_style="PublicTheme"
 config_blue_screen_visible=true
 config_hotel_visible=true
 config_hdmi_mode_visible=true
-config_hotel_scan_lock_visible=false
-config_bootvideo_name=video_SKYTECH.ts
 #ECO MODE
 config_shopmode_change_to_ecomode=true
 config_shopmode_visible=true
-config_shopmode_enabled=false
-config_shopmode_backlight=70
+config_shopmode_backlight=58
+config_default_backlight=85
 #电子屏贴
 config_sticker_visible=false
 config_sticker_enabled=false
@@ -247,10 +252,6 @@ config_sticker_location="start"
 config_fac_reset_standby=true
 config_ttx_language_visible=true
 config_ttx_language_default=57
-config_default_input=24
-config_input_source_sort="5,2,8"
-config_skt_project_mode=true
-config_hdmi1_input_type=2
 config_bootlogo_upgrade_enable=true
 config_bootvideo_upgrade_enable=true
 config_exit_aging_keycodes="KEYCODE_MENU,KEYCODE_FACTORY_EXIT_AGING,KEYCODE_POWER,KEYCODE_KEYPAD_ONEKEY"
