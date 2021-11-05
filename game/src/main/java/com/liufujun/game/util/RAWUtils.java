@@ -20,77 +20,12 @@ public class RAWUtils {
 		String rawPath = jpgPath.substring(0, index) + ".raw";
 		
 		BufferedImage im = ImageIO.read(new File(jpgPath));
+		im=toRGB(im);
 		ImageIO.write(im, "raw", new File(rawPath));
 		
 		return rawPath;
 	}
-	
-	public static String raw2Jpg(String rawPath) throws IOException {
-		int index = rawPath.lastIndexOf(".");
-		String jpgPath = rawPath.substring(0, index) + ".jpg";
-		
-		File rawFile = new File(rawPath);
-		File jpgFile = new File(jpgPath);
-		raw2Jpg(rawFile, jpgFile, null);
-		
-		return jpgPath;
-	}
-	
-	public static String raw2Jpg(String rawPath, int width, int height) throws IOException {
-		int index = rawPath.lastIndexOf(".");
-		String jpgPath = rawPath.substring(0, index) + ".jpg";
 
-		File rawFile = new File(rawPath);
-		File jpgFile = new File(jpgPath);
-		Dimension dimension = new Dimension(width, height);
-		raw2Jpg(rawFile, jpgFile, dimension);
-
-		return jpgPath;
-	}
-
-	public static String rawtoJpg(String rawPath,String jpgPath,  int width, int height) throws IOException {
-		File rawFile = new File(rawPath);
-		File jpgFile = new File(jpgPath);
-		Dimension dimension = new Dimension(width, height);
-		raw2Jpg(rawFile, jpgFile, dimension);
-
-		return jpgPath;
-	}
-
-	private static void raw2Jpg(File rawFile, File jpgFile, Dimension dimension) throws IOException {
-		Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("raw");
-		ImageInputStream iis = null;
-		RawImageInputStream ris = null;
-		try {
-	        ImageReader reader = readers.next();
-	        
-	        iis = ImageIO.createImageInputStream(rawFile);
-	        ImageTypeSpecifier type =  ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_3BYTE_BGR);
-	        long[] index = {0};
-	        if(dimension == null) {
-	        	dimension = guess(iis.length());
-	        }
-	        Dimension[] dimensions = {dimension};
-	        ris = new RawImageInputStream(iis, type, index, dimensions);
-	        reader.setInput(ris, true);
-			BufferedImage image=reader.read(0);
-			
-			ImageIO.write(image, "jpg", jpgFile);
-		} finally {
-			if(ris != null) {
-				try {
-					ris.close();
-				} catch (IOException e) {
-				}
-			}
-			if(iis != null) {
-				try {
-					iis.close();
-				} catch (IOException e) {
-				}
-			}
-		}
-	}
 	
 	private static Dimension guess(long length) {
 		long wh = length / 3;
@@ -119,6 +54,7 @@ public class RAWUtils {
 				File rawFile = new File(rawPath);
 				Dimension dimension = new Dimension(width, height);
 				BufferedImage bi = rawdate(rawFile, dimension);
+				bi=toRGB(bi);
 				ImageIO.write(bi, "png", baos);
 				ImageIO.write(bi, "jpg", jpgFile);
 			}else {
@@ -167,5 +103,23 @@ public class RAWUtils {
 				}
 			}
 		}
+	}
+	private static BufferedImage toRGB(BufferedImage bufferedImage){
+		int width = bufferedImage.getWidth();
+		int height = bufferedImage.getHeight();
+		// 获取图片中每一个rgb像素的int类型表示
+		int[] rgbPixels = bufferedImage.getRGB(0, 0, width, height, null, 0, width);
+		int[] bgrPixels = new int[rgbPixels.length];
+		for (int i = 0; i < rgbPixels.length; i++) {
+			int color = rgbPixels[i];
+			int red = ((color & 0x00FF0000) >> 16);
+			int green = ((color & 0x0000FF00) >> 8);
+			int blue = color & 0x000000FF;
+			// 将rgb三个通道的数值合并为一个int数值，同时调换b通道和r通道
+			bgrPixels[i] = (red & 0x000000FF) | (green << 8 & 0x0000FF00) | (blue << 16 & 0x00FF0000);
+		}
+		bufferedImage.setRGB(0, 0, width, height, bgrPixels, 0, width);
+
+		return bufferedImage;
 	}
 }

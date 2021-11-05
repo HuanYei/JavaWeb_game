@@ -13,8 +13,13 @@ import java.io.InputStreamReader;
 public class ConnectLinux {
 
     private static int port = 22;
-    public static void execComm(String cmd) {
+    public static void main(String[] args) {
 
+    }
+    public static void execComm(String cmd) {
+        System.out.println("ip:"+服务器使用路径.ip);
+        System.out.println("user:"+服务器使用路径.user);
+        System.out.println("password:"+服务器使用路径.password);
         try {
             //先创建一个连接，传入IP地址和端口
             Connection conn = new Connection(服务器使用路径.ip,port);
@@ -46,8 +51,6 @@ public class ConnectLinux {
             conn.close();
         } catch (IOException e) {
             e.printStackTrace();
-            //退出
-            System.exit(2);
         }
     }
 

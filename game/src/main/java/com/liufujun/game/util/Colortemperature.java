@@ -201,7 +201,7 @@ public class Colortemperature {
             fos = new FileOutputStream(sw.getSoftware_color_temperature_file_path(),false);//为false
             String s  = "";
             for (int i = 0; i < list.size(); i++) {
-                s+=list.get(i)+"\n";
+                s+=list.get(i)+"\r\n";
             }
             byte[] bytes = s.getBytes("UTF-8");  // 将字符串按指定编码集编码--》将信息转成二进制数
             fos.write(bytes);  // 这样写入的数据，会将文件中的原数据覆盖

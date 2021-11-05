@@ -59,9 +59,24 @@ public class 服务器使用路径 {
             }if (PathContentarray[i].indexOf("9632")!=-1){
                 MTK9632PATH=PathContentarray[i].substring(PathContentarray[i].indexOf("=")+1);
                 System.out.println(MTK9632PATH);
-            }if (PathContentarray[i].indexOf("2851")!=-1){
+            }if (PathContentarray[i].indexOf("2851&&2842")!=-1){
                 RTK2851PATH=PathContentarray[i].substring(PathContentarray[i].indexOf("=")+1);
                 System.out.println(RTK2851PATH);
+            }if (PathContentarray[i].indexOf("user")!=-1){
+                user=PathContentarray[i].substring(PathContentarray[i].indexOf("=")+1);
+                System.out.println(user);
+            }if (PathContentarray[i].indexOf("password")!=-1){
+                password=PathContentarray[i].substring(PathContentarray[i].indexOf("=")+1);
+                System.out.println(password);
+            }if (PathContentarray[i].indexOf("2851PQ_LinuxPath")!=-1){
+                rtk2851_pq_Linux=PathContentarray[i].substring(PathContentarray[i].indexOf("=")+1);
+                System.out.println(rtk2851_pq_Linux);
+            }if (PathContentarray[i].indexOf("2851PQ_Windows")!=-1){
+                rtk2851_pq_Windows=PathContentarray[i].substring(PathContentarray[i].indexOf("=")+1);
+                System.out.println(rtk2851_pq_Windows);
+            }if (PathContentarray[i].indexOf("LinuxIP")!=-1){
+                ip=PathContentarray[i].substring(PathContentarray[i].indexOf("=")+1);
+                System.out.println(ip);
             }
         }
 

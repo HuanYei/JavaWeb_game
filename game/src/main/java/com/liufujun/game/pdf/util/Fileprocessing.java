@@ -104,6 +104,9 @@ public class Fileprocessing {
     public static ArrayList<String> lookupwai(String path,String 关键字){
         fileList=new ArrayList<String>();
         lookup(path,关键字);
+        if (fileList.size()==0){
+            fileList.add("无");
+        }
         return fileList;
     }
     private static ArrayList fileList;

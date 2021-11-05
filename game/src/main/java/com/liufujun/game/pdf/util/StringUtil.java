@@ -35,4 +35,11 @@ public class StringUtil {
         }
         return ci;
     };
+
+    public static String 截取到第一次出现(String 字符串,String 字符){
+        return 删除字符(字符串.substring(0,字符串.indexOf(字符))," ","\t");
+    };
+    public static void main(String[] args) {
+      System.out.println(截取到第一次出现("104,//_BRIGHTNESS_25,",","))  ;
+    }
 }

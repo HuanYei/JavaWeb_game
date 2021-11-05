@@ -137,8 +137,7 @@ public class SwDao {
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2851+sw.get屏名()+".h");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2851+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
         String 软件色温文件夹=sw.get软件客制化路径全称()+"pq/";
-        File file=new File(软件色温文件夹);
-        if (file.exists()) {
+        if (!Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0).equals("无")) {
             sw.set软件色温文件路径(Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0));
         }else {
             sw.set软件色温文件路径(服务器使用路径.RTK2851PATH+"customer/pq/vip_default_osd.cpp");
@@ -150,6 +149,13 @@ public class SwDao {
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2842+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2842+sw.get屏名()+".h");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2842+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
+        String 软件色温文件夹=sw.get软件客制化路径全称()+"pq_RTK2842P/";
+        File file=new File(软件色温文件夹);
+        if (file.exists()) {
+            sw.set软件色温文件路径(Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0));
+        }else {
+            sw.set软件色温文件路径(服务器使用路径.RTK2851PATH+"customer/pq_RTK2842P/vip_default_osd.cpp");
+        }
         return sw;
     }
     public static void SW宏修改(String swname,String 客制化){

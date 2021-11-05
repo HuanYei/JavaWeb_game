@@ -16,6 +16,7 @@
         <input id="ScName" type="text" th:value=" ${SW.software_name}" style=" width: 90% ;height:20px" ;></input><br>
         <button onclick="rmScName()">重命名脚本</button>
         <button onclick="newSc()">创建新脚本</button>
+        <span style="color: red;" class="zhushi">*请先创建新脚本在创建新客制化文件夹</span>
     </div>
     <p><b>客制化文件夹：<a onclick="openfile()" href="#">打开目录</a></b></p>
     <div style="margin-left: 30px">
@@ -23,16 +24,19 @@
                style=" width: 60%;height: 20px"></input><br>
         <button onclick="rmDir()">重命名文件夹</button>
         <button onclick="newDir()">创建新文件夹</button>
-        <span style="color: red;">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>
+        <span style="color: red;" class="zhushi">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>
     </div>
-    <p><b>logo：<a onclick="openfile2()" href="#">打开目录</a><span id="toRAWlogo">|<a id="clogo"  href="/toRAWLOGO">制作logo</a></span></b></p>
+    <p><b>logo：<a onclick="openfile2()" href="#">打开目录</a><span id="toRAWlogo">|<a id="clogo"  href="/toRAWLOGO">制作logo</a></span></b>
+        <span style="color: red;" class="zhushi">*打开目录或其他操作都会刷新页面，请确保已修改数据已提交。</span></p>
+
     <div style="margin-left: 30px">
         <a th:href="@{/image/${image_name}}">
-            <img style="height: 180px;width: 320px;" th:src="@{/image/${image_name}}">
+            <img style="height: 180px;width: 320px;" title="点击LOGO,可查看大图" th:src="@{/image/${image_name}}">
         </a>
         <br>
         <input id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 20%;height: 20px"></input>
         <button onclick="UPlogo()" style="height: 30px;">更换logo</button>
+        <span style="color: red;" class="zhushi">*请打开logo目录，复制你要修改的logo名称，填入输入框更换logo。</span>
     </div>
 
     <p>
@@ -40,6 +44,7 @@
     <div style="margin-left: 30px">
         屏参文件名：<input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;"></input>
         <button onclick="UPPanel()" style="height: 30px;">更换屏参</button>
+    <span style="color: red;" class="zhushi">*请打开目录，复制你要修改的屏文件名称，填入输入框更换配屏</span>
         <br><br>
         <form action="#" th:action="@{/Panel}" method="post" th:object="${SW}">
             工厂菜单显示名:
@@ -84,6 +89,7 @@
 
             <br>
             <input type="submit" value="提交修改">
+            <span style="color: red;" class="zhushi">*提交修改后，会直接修改屏参文件，请注意检查。</span>
             <br>
             <input  style="display: none;" type="text" th:field="*{panel.Ti_MODE}"/>
             <input  style="display: none;" type="text" th:field="*{panel.Swap_MODE}"/>
@@ -97,9 +103,12 @@
 
     </div>
     </p>
+    <br>
+    <br>
     <div id="colordiv">
+        <h1>PQ信息</h1>
         <b>色温:</b>
-        <form action="#" th:action="@{/Color}" method="post" th:object="${SW}">
+        <form id="pqfrom" action="#" th:action="@{/Color}" method="post" th:object="${SW}">
             <table style="margin-left: 30px">
                 <tr>
                     <th></th>
@@ -132,19 +141,86 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <th>
-                        <input type="submit" value="提交修改">
-                    </th>
+                    <th><input id="mtksub" type="submit" value="提交修改"  ></th>
                     <td></td>
                 </tr>
             </table>
-
+            <br>
+            <b id="rtktit">Non-linear(OSD_50):</b>
+            <table style="margin-left: 30px" id="rtkcl">
+                <tr>
+                    <th></th>
+                    <th>ATV</th>
+                    <th>DTV</th>
+                    <th>AV</th>
+                    <th>YPBPR</th>
+                    <th >HDMI</th>
+                    <th>VGA</th>
+                    <th>USB</th>
+                </tr>
+                <tr>
+                    <th>Brightness</th>
+                    <td ><input type="text" th:field="*{PQ_data.ATVBrightness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.DTVBrightness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.AVBrightness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.YPBPRBrightness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.HDMIBrightness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.VGABrightness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.USBBrightness}"/></td>
+                </tr>
+                <tr>
+                    <th>Contrast</th>
+                    <td ><input type="text" th:field="*{PQ_data.ATVContrast}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.DTVContrast}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.AVContrast}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.YPBPRContrast}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.HDMIContrast}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.VGAContrast}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.USBContrast}"/></td>
+                </tr>
+                <tr>
+                    <th>Saturation</th>
+                    <td ><input type="text" th:field="*{PQ_data.ATVSaturation}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.DTVSaturation}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.AVSaturation}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.YPBPRSaturation}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.HDMISaturation}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.VGASaturation}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.USBSaturation}"/></td>
+                </tr>
+                <tr>
+                    <th>Sharpness</th>
+                    <td ><input type="text" th:field="*{PQ_data.ATVSharpness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.DTVSharpness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.AVSharpness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.YPBPRSharpness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.HDMISharpness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.VGASharpness}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.USBSharpness}"/></td>
+                </tr>
+                <tr>
+                    <th>Hue</th>
+                    <td ><input type="text" th:field="*{PQ_data.ATVHue}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.DTVHue}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.AVHue}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.YPBPRHue}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.HDMIHue}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.VGAHue}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.USBHue}"/></td>
+                </tr>
+            </table>
+            <br>
+            <input id="rtksub" type="button" value="提交修改" style=" font-size: 50px;" onclick="tijiao()">
+            <span style="color: red;" class="zhushi">*提交修改后，会直接修改PQ文件，2851和2842会编译成bin文件并生成在客制化文件夹中，请检查。</span>
             <input  style="display: none;" type="text" th:field="*{software_color_temperature_file_path}"/>
             <input  style="display: none;" type="text" th:field="*{software_name}"/>
             <input  style="display: none;" type="text" th:field="*{isRTK}"/>
             <input  style="display: none;" type="text" th:field="*{full_name_of_software_customization_path}"/>
             <input  style="display: none;" type="text" th:field="*{Plan}"/>
         </form>
+    </div>
+    <div style="height: 400px">
+
     </div>
 </div>
 <script type="text/javascript" th:inline="javascript">
@@ -182,11 +258,20 @@
             document.getElementById("ColorUserTd1").style.display = "none";
             document.getElementById("ColorUserTd2").style.display = "none";
             document.getElementById("ColorUserTd3").style.display = "none";
+            document.getElementById("rtkcl").style.display = "none";
+            document.getElementById("rtksub").style.display = "none";
+            document.getElementById("rtktit").style.display = "none";
+        }else {
+            document.getElementById("mtksub").style.display = "none";
         }
 
 
     }
 
+    function tijiao() {
+        document.getElementById("pqfrom").submit();
+        alert("按下确认后提交，请耐心等待修改完成！请勿重复提交。");
+    }
     function Timodeon() {
         document.getElementById("panel.Ti_MODE").value = 1;
     }
