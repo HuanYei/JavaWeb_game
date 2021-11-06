@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
+
+</head>
+<body>
+<div style="width: 100%" >
+    <a href="/" style="font-size: 150%">主页</a>
+</div>
+<h1>RTK2851 添加遥控器</h1>
+<br>
+<h2>JPG 转 RAW</h2>
+<form id="form1" action="/LOGOupload" method="post" enctype="multipart/form-data" style="font-size: 150%;">
+    选择参考遥控器.config文件:<input type="file" style="font-size: 100%;" name="file"><span style="color: red;font-size: 50%;">*为空则为AT073.config。</span><br><br>
+    重新命名：<input type="text" name="logoname" style="height: 30px"><span style="color: red;font-size: 50%;">*无需带后缀名,不能为空。</span>
+    <br>
+    请输入用户码:<input type="text" name="logoname" style="height: 30px" value="20df"><span style="color: red;font-size: 50%;"></span>
+    <br>
+    请在下方输入遥控器按键值和遥控器功能值，请用空格隔开。
+    <br>
+    <div style="height: 420px;overflow:auto">
+        <div  style="float: left;margin-left: 20px;">
+            <input id="key_chasiying" type="text" placeholder="请输入遥控按键丝印名">
+            <input type="button" onclick="loadDoc()" value="查找按键"><br>
+            <textarea id="key_gn_textarea"  placeholder=""style="width: 60%;height: 100px;resize: none;">
+按键功能值会在这
+        </textarea>
+            <br><br>
+            <input id="key_shurusiy" type="text" placeholder="请输入遥控按键丝印名"><br>
+            <input id="key_shurukey" type="text" placeholder="请输入按键功能值"><br>
+            <input onclick="jiakey()" value="提交" type="button"><span id="tishi" style="color: red"></span>
+        </div>
+    <div style="float: left;margin-left: 20px;">
+    <textarea style="width: 80%;height: 400px;resize: none;">
+f4 KEY_POWER
+eb KEY_MUTE
+bd KEY_1
+    </textarea>
+    </div>
+
+    </div>
+    <div style="overflow:hidden">
+    <br><br>
+    <button onclick="xiazai()" style="font-size: 100%;" >下载 .config 文件</button>
+    <button onclick="crearte()" style="font-size: 100%;" >生成.config和.c在2851仓库IR目录</button>
+    </div>
+</form>
+<br>
+</body>
+
+<script type="text/javascript" >
+
+    function xiazai() {
+        document.getElementById("down").value= 0;
+        document.getElementById("form1").submit();
+    }
+    function crearte() {
+        document.getElementById("down").value= 1;
+        document.getElementById("form1").submit();
+    }
+
+    function loadDoc() {
+        var siying=document.getElementById("key_chasiying").value;
+            $.ajax({
+                type:"post",
+                url:"/chakey",
+                data:siying,
+                contentType: 'application/json',
+                success: function (data1) {
+                    $("#key_gn_textarea").val(data1);
+
+                }
+            });
+    }
+
+    function jiakey() {
+        var siying=document.getElementById("key_shurusiy").value;
+        var siying2=document.getElementById("key_shurukey").value;
+        siying+="\n"+siying2;
+        $.ajax({
+            type:"post",
+            url:"/jiakey",
+            data:siying,
+            contentType: 'application/json',
+            success: function (data1) {
+                document.getElementById("tishi").innerHTML=data1;
+            }
+        });
+    }
+    // $(document).ready(function(){
+    //     $("button").click(function(){
+    //         $("p").hide();
+    //     });
+    // });
+</script>
+</html>
