@@ -10,6 +10,7 @@ public class 服务器使用路径 {
     public static String password = "123422343HY";
     public static String rtk2851_pq_Linux="/media/workspace0/liufujun/2851/rtk2851_pq/rtk2851/libvip/LibvipOSD";
     public static String rtk2851_pq_Windows="Z:/2851/rtk2851_pq/rtk2851/libvip/LibvipOSD/";
+    public static String rtk2851_Linux="/media/workspace0/liufujun/2851/2851_all";
 
     public static String 彩讯订单PDF文件存储路径="pdf/订单pdf文件/";
     public static String 彩讯订单参考脚本文件存储路径="pdf/参考脚本文件/";

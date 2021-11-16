@@ -88,6 +88,7 @@ public class Main {
         jbname=jbname.replace(电流,user.get屏背光电流());
         jbname=jbname.replace(屏名logo遥控器智像,new屏名logo遥控器智像);
         jbname=jbname.replace(旧国家,Country.国家(user.get国家()));
+        System.out.println(旧国家+"::"+user.get国家());
         jbname=jbname.replace(旧客户名,user.get客户缩写());
         if (jbname.indexOf("Mirror")==-1){
             jbname=jbname.replace(new屏名logo遥控器智像,旧Mirror+new屏名logo遥控器智像);

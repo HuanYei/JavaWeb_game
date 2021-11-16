@@ -16,27 +16,43 @@ public class ConnectLinux {
     public static void main(String[] args) {
 
     }
-    public static void execComm(String cmd) {
+    static  Connection conn;
+    static InputStream stdout;
+    static BufferedReader br;
+    public static void Connect(){
         System.out.println("ip:"+服务器使用路径.ip);
         System.out.println("user:"+服务器使用路径.user);
         System.out.println("password:"+服务器使用路径.password);
         try {
             //先创建一个连接，传入IP地址和端口
-            Connection conn = new Connection(服务器使用路径.ip,port);
+            conn = new Connection(服务器使用路径.ip, port);
             conn.connect();
             //然后传入用户名密码
-            boolean b = conn.authenticateWithPassword( 服务器使用路径.user, 服务器使用路径.password);
-            if(b==false){
+            boolean b = conn.authenticateWithPassword(服务器使用路径.user, 服务器使用路径.password);
+            if (b == false) {
                 throw new IOException("连接失败！");
             }
+        }catch (Exception e){
+
+        }
+    }
+    public static void close(){
+        //关闭会话和连接
+
+        conn.close();
+    }
+
+    public static void execComm(String cmd) {
+        try {
+
             //需要连接 首先先创建一个通话
             Session session = conn.openSession();
             //然后输入需要执行的命令 这里的命令是去触发我们写的脚本的
             session.execCommand(cmd);
             //然后将返回的结果转化为输入流对象
-            InputStream stdout = new StreamGobbler(session.getStdout());
+             stdout = new StreamGobbler(session.getStdout());
             //然后将流对象读取出来
-            BufferedReader br = new BufferedReader(new InputStreamReader(stdout));
+             br = new BufferedReader(new InputStreamReader(stdout));
 
             while (true){
                 String line  = br.readLine();
@@ -46,9 +62,7 @@ public class ConnectLinux {
                 //打印到控制台
                 System.out.println(line);
             }
-            //关闭会话和连接
             session.close();
-            conn.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

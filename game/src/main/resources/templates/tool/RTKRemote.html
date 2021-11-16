@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -11,48 +11,57 @@
     <a href="/" style="font-size: 150%">主页</a>
 </div>
 <h1>RTK2851 添加遥控器</h1>
-<br>
-<h2>JPG 转 RAW</h2>
-<form id="form1" action="/LOGOupload" method="post" enctype="multipart/form-data" style="font-size: 150%;">
-    选择参考遥控器.config文件:<input type="file" style="font-size: 100%;" name="file"><span style="color: red;font-size: 50%;">*为空则为AT073.config。</span><br><br>
-    重新命名：<input type="text" name="logoname" style="height: 30px"><span style="color: red;font-size: 50%;">*无需带后缀名,不能为空。</span>
+
+<form id="form1" action="/Remoteupload" method="post" enctype="multipart/form-data" style="font-size: 150%;">
+    选择参考遥控器.config文件:<span style="color: red;font-size: 50%;">*为空则为AT073.config。</span>
     <br>
-    请输入用户码:<input type="text" name="logoname" style="height: 30px" value="20df"><span style="color: red;font-size: 50%;"></span>
+    <input type="file" style="font-size: 100%;" name="file"><br><br>
+    重新命名文件:<input type="text" name="remotename" style="height: 20px"><span style="color: red;font-size: 50%;">*无需带后缀名,不能为空。</span>
     <br>
-    请在下方输入遥控器按键值和遥控器功能值，请用空格隔开。
+    请输入用户码:<input type="text" name="Customercode"  style="height: 20px"  value="20df"><span style="color: red;font-size: 50%;"></span>
     <br>
-    <div style="height: 420px;overflow:auto">
+
+    <div style="height: 620px;overflow:auto">
         <div  style="float: left;margin-left: 20px;">
-            <input id="key_chasiying" type="text" placeholder="请输入遥控按键丝印名">
-            <input type="button" onclick="loadDoc()" value="查找按键"><br>
+            <h5>按键功能查找</h5>
+            <input style="height: 20px" id="key_chasiying" type="text" placeholder="请输入遥控按键丝印名">
+            <input   type="button" onclick="loadDoc()" value="查找按键"><br>
             <textarea id="key_gn_textarea"  placeholder=""style="width: 60%;height: 100px;resize: none;">
 按键功能值会在这
         </textarea>
-            <br><br>
-            <input id="key_shurusiy" type="text" placeholder="请输入遥控按键丝印名"><br>
-            <input id="key_shurukey" type="text" placeholder="请输入按键功能值"><br>
+            <h5>丝印功能映射添加</h5>
+            <input style="height: 20px" id="key_shurusiy" type="text" placeholder="请输入遥控按键丝印名"><br>
+            <input style="height: 20px" id="key_shurukey" type="text" placeholder="请输入按键功能值"><br>
             <input onclick="jiakey()" value="提交" type="button"><span id="tishi" style="color: red"></span>
+
         </div>
     <div style="float: left;margin-left: 20px;">
-    <textarea style="width: 80%;height: 400px;resize: none;">
-f4 KEY_POWER
-eb KEY_MUTE
-bd KEY_1
+        <br>
+        请在下方输入遥控器按键值和遥控器功能值，请用空格隔开。
+    <textarea style="width: 80%;height: 400px;resize: none;" name="keycode">
+0b KEY_POWER
+14 KEY_MUTE
+42 KEY_1
     </textarea>
+        <br>
+        <button onclick="xiazai()" style="font-size: 100%;" >下载 .config 文件</button>
+        <button onclick="crearte()" style="font-size: 100%;" >生成.config和.c在2851仓库IR目录</button>
     </div>
-
     </div>
     <div style="overflow:hidden">
     <br><br>
-    <button onclick="xiazai()" style="font-size: 100%;" >下载 .config 文件</button>
-    <button onclick="crearte()" style="font-size: 100%;" >生成.config和.c在2851仓库IR目录</button>
-    </div>
+    <input type="text" name="do" id="down" style="display: none;">
 </form>
 <br>
 </body>
 
-<script type="text/javascript" >
-
+<script type="text/javascript" th:inline="javascript">
+    window.onload = function () {
+        var msg = [[${msg}]];
+        if (msg.length > 1) {
+            alert(msg);
+        }
+    }
     function xiazai() {
         document.getElementById("down").value= 0;
         document.getElementById("form1").submit();

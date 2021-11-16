@@ -25,6 +25,8 @@ public class Country {
                 return "de_DE";
             case "塞尔维亚":
                 return "sr_Latn_RS";
+            case "希伯来":
+                return "iw_IL";
             default:
                 return yu;
         }
@@ -45,6 +47,8 @@ public class Country {
                 return "Asia/Riyadh";
             case "AE":
                 return "Asia/Dubai";
+            case "IL":
+                return "Asia/Jerusalem";
             default:
                 return gu;
         }
@@ -66,6 +70,8 @@ public class Country {
                 return "AE";
             case "塞尔维亚":
                 return "RS";
+            case "以色列":
+                return "IL";
             default:
                 return gu;
         }
@@ -87,6 +93,8 @@ public class Country {
                 return "ARE";
             case "RS":
                 return "SERBIA";
+            case "IL":
+                return "ISRAEL";
             default:
                 return gu;
         }
