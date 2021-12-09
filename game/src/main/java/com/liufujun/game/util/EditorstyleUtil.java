@@ -37,6 +37,8 @@ public class EditorstyleUtil {
                .replace("<div style=\"color: rgb(211, 175, 98);\">","")
                .replace("</div>","\n")
                .replace("<div>","")
+               .replace("&amp;","&")
+               .replace("&nbsp;"," ")
                .replace("style=\"color: rgb(211, 175, 98);\"","")
                .replace("style=\"color: rgb(162, 162, 162);\"","")
                .replace("style=\"color: rgb(162, 22, 22);\"","")

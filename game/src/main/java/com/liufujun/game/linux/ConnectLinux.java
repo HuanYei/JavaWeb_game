@@ -19,6 +19,7 @@ public class ConnectLinux {
     static  Connection conn;
     static InputStream stdout;
     static BufferedReader br;
+    public static String endString;
     public static void Connect(){
         System.out.println("ip:"+服务器使用路径.ip);
         System.out.println("user:"+服务器使用路径.user);
@@ -44,7 +45,6 @@ public class ConnectLinux {
 
     public static void execComm(String cmd) {
         try {
-
             //需要连接 首先先创建一个通话
             Session session = conn.openSession();
             //然后输入需要执行的命令 这里的命令是去触发我们写的脚本的
@@ -61,6 +61,7 @@ public class ConnectLinux {
                 }
                 //打印到控制台
                 System.out.println(line);
+                endString=line;
             }
             session.close();
         } catch (IOException e) {

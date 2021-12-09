@@ -55,14 +55,7 @@ public class Main {
         sc=jbString;
 
         jbname=jbNameString(jbname);
-        try {/*将StringBuilder对象中的文本写入到文本文件*/
-            writer = new FileWriter(服务器使用路径.彩讯订单脚本生成路径+jbname);
-            writer.write(sc);
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        doc.close();
+        Fileprocessing.updateFile(服务器使用路径.彩讯订单脚本生成路径+jbname,sc);
         脚本名=jbname;
         return 打印;
     }

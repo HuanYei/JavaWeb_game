@@ -132,6 +132,9 @@ public class Meconntroller {
     }
     @PostMapping("/subswname")
     public String pdfupload(@RequestParam("swname") String swname, Model model) {
+        if (swname.indexOf(".sh")!=-1){
+            swname=swname.replace(".sh","");
+        }
         SW sw=new SW();
         sw.set软件名称(swname);
         sw.set方案(PlanUtil.PlanType(swname));
@@ -180,6 +183,9 @@ public class Meconntroller {
         model.addAttribute("row",EditorstyleUtil.row);
         return model;
     }
+
+
+
 
     private void PQ(SwEnglish sw){
         if (sw.getIsRTK()==1){

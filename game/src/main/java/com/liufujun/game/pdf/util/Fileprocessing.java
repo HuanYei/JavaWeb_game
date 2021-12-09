@@ -32,6 +32,23 @@ public class Fileprocessing {
         return map;
     }
 
+    public static String getFileContent(String filePath) {
+
+        StringBuilder result = new StringBuilder();
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"));
+            String s = null;
+            while((s = br.readLine())!=null){
+                result.append(System.lineSeparator()+s);
+            }
+            br.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return result.toString();
+
+    }
+
     public static boolean updateFile(String path, String content) {
         FileOutputStream fos;
         try {
@@ -124,8 +141,6 @@ public class Fileprocessing {
                 if (StringUtil.提取文件名(path).indexOf(关键字)!=-1){
                     fileList.add(path);
                 }
-            } else {
-                System.out.println("请输入正确的文件名或路径名");
             }
         } catch (Exception e) {
             System.out.println("请输入正确的文件名或路径名");

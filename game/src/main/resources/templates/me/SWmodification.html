@@ -211,7 +211,7 @@
             </table>
             <br>
             <input id="rtksub" type="button" value="提交修改" style=" font-size: 50px;" onclick="tijiao()">
-            <span style="color: red;" class="zhushi">*提交修改后，会直接修改PQ文件，2851和2842会编译成bin文件并生成在客制化文件夹中，请检查。</span>
+            <span id="rtksubzs" style="color: red;" class="zhushi">*提交修改后，会直接修改PQ文件，2851和2842会编译成bin文件并生成在客制化文件夹中，请检查。</span>
             <input  style="display: none;" type="text" th:field="*{software_color_temperature_file_path}"/>
             <input  style="display: none;" type="text" th:field="*{software_name}"/>
             <input  style="display: none;" type="text" th:field="*{isRTK}"/>
@@ -260,6 +260,7 @@
             document.getElementById("ColorUserTd3").style.display = "none";
             document.getElementById("rtkcl").style.display = "none";
             document.getElementById("rtksub").style.display = "none";
+            document.getElementById("rtksubzs").style.display = "none";
             document.getElementById("rtktit").style.display = "none";
         }else {
             document.getElementById("mtksub").style.display = "none";

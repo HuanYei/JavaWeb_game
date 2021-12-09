@@ -3,16 +3,12 @@ package com.liufujun.game.me.RTK.remote;
 import com.liufujun.game.linux.ConnectLinux;
 import com.liufujun.game.pdf.util.Fileprocessing;
 import com.liufujun.game.util.服务器使用路径;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
 
 public class RemoteDao {
 
@@ -40,8 +36,6 @@ public class RemoteDao {
         String packagePath=服务器使用路径.RTK2851PATH+"/image_file_creator/components/packages/package7/customer/tv001/ir_table.config";
 
         String outpath=服务器使用路径.RTK2851PATH+"kernel/linux/linux-4.14/drivers/rtk_kdriver/ir/ir_table/ir_table_default.c";
-        File file=new File(outpath);
-        long t1=file.lastModified();
 
         Fileprocessing.newFile("IR/" + remotename+ ".config",packagePath);
         String mi1="cd "+服务器使用路径.rtk2851_Linux+"/image_file_creator",
@@ -51,11 +45,8 @@ public class RemoteDao {
         for (int i = 0; i < 3; i++) {
             ConnectLinux.execComm(mi1+"\n"+mi3);
         }
-        file=new File(outpath);
-        long t2=file.lastModified();
-        System.out.println(t1);
-        System.out.println(t2);
-        if (t1==t2){
+
+        if (ConnectLinux.endString.indexOf("kernel/linux/linux-4.14/drivers/rtk_kdriver/ir/ir_table/ir_table_default.c")==-1){
             return "生成失败，请检查输入值是否合法";
         }else {
             Fileprocessing.newFile("IR/" + remotename+ ".config", filePath);

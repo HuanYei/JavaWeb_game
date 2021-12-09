@@ -54,12 +54,10 @@ public class LogoConntroller {
         System.out.println("file = [" + file + "], logoname = [" + logoname + "], plan1 = [" + plan1 + "], model = [" + model + "]");
         try {
             Files.write(Paths.get("img/" + "test" + ".jpg"), file.getBytes());
-            InputStream is = new FileInputStream(new File("img/" + "test" + ".jpg"));
-            OutputStream os = new FileOutputStream(new File("img/" + logoname + ".jpg"));
             if (plan1.equals("2842")) {
-                ImagesUtils.meImage(is, os, 1280, 720, "jpg");
+                ImagesUtils.reduceImg("img/" + "test" + ".jpg", "img/" + logoname + ".jpg", 1280, 720);
             }else if (plan1.equals("2851")){
-                ImagesUtils.meImage(is, os, 1920, 1080, "jpg");
+                ImagesUtils.reduceImg("img/" + "test" + ".jpg", "img/" + logoname + ".jpg",  1920, 1080);
             }
             RAWUtils.jpg2Raw("img/" + logoname + ".jpg");
         } catch (Exception e) {
