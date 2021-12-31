@@ -75,8 +75,13 @@ public class Main {
         String 屏名logo遥控器智像=v(jbname,"_8G_",".");
 
         String new订单机型板卡=user.get客户订单号()+"_"+user.get机型()+"_"+user.get版型();
-
-        String new屏名logo遥控器智像=user.get屏名()+"_"+user.get开机logo()+"_C001_"+user.get遥控器名()+"_Zeasn";
+        String 遥控器名="";
+        if (user.get版型().indexOf("9632")!=-1&&user.get遥控器名().equals("509")){
+            遥控器名="_C001_"+user.get遥控器名()+"_T2";
+        }else {
+            遥控器名="_C001_"+user.get遥控器名();
+        }
+        String new屏名logo遥控器智像=user.get屏名()+"_"+user.get开机logo()+遥控器名+"_Zeasn";
         jbname=jbname.replace(订单机型板卡,new订单机型板卡);
         jbname=jbname.replace(电流,user.get屏背光电流());
         jbname=jbname.replace(屏名logo遥控器智像,new屏名logo遥控器智像);
@@ -162,7 +167,7 @@ public class Main {
         String timezone="\""+Country.时区(user.get国家())+"\"";
         Stringmacro("timezone",timezone);
 
-        String default_country=user.get国家();
+        String default_country=Country.国家368(user.get国家());
         Stringmacro("default_country",default_country);
 
         String zeasn_country=Country.国家(user.get国家());
@@ -173,6 +178,20 @@ public class Main {
 
         String config_sticker_visible=user.get屏贴();
         Stringmacro("config_sticker_visible",config_sticker_visible);
+
+        String config_ttx_language_default;
+        if(user.get版型().indexOf("9632")!=-1){
+            config_ttx_language_default=Country.to国家值(user.get国家(),7);
+        }else {
+            config_ttx_language_default=Country.to国家值(user.get国家(),8);
+        }
+        Stringmacro("config_ttx_language_default",config_ttx_language_default);
+
+        String color_system=Country.to国家值(user.get国家(),4).toLowerCase();
+        String sound_system=Country.to国家值(user.get国家(),5).toUpperCase();
+        Stringmacro("color_system",color_system);
+        Stringmacro("sound_system",sound_system);
+
     }
 
     private static void Stringmacro(String pcb_board_type, String pcb_board_type1) {
@@ -202,7 +221,7 @@ public class Main {
         user.set客户订单号(sc.substring(sc.indexOf("生产批号") + 4, sc.indexOf("生产批号") + 14));/*        System.out.println(sc.indexOf(")",sc.indexOf("共2页")));*/
         user.set机型(sc.substring(sc.indexOf(")", sc.indexOf("共2页")) + 1, sc.indexOf(")", sc.indexOf("共2页")) + 8).replace("-", ""));
         user.set版型(Country.returnBoard(v(sc,"DK","8G")));
-        user.set国家(Country.国家368(v(sc, "销售地区", "制式")));
+        user.set国家(v(sc, "销售地区", "制式"));
         if (user.get开机logo()==null||user.get开机logo().equals("")||user.get开机logo().equals("/")) {
             if (sc.indexOf("■丝印位置：") != -1)
                 user.set开机logo(v(sc, "商标1", "丝印").substring(0, v(sc, "商标1", "丝印").length() - 1).toUpperCase());
@@ -224,6 +243,8 @@ public class Main {
         user.set伴音及输出(v(sc,"伴音及输出","2021"));
         user.set附加功能(v(sc,"附加功能","能主板功能"));
         user.set客户缩写(sc.substring(sc.indexOf("客户名称")+4,sc.indexOf("客户名称")+7));
+        user.set图文语言(Country.图文语言(user.get国家()));
+        user.set手动搜台制式(Country.搜台制式(user.get国家()));
     }
 
     public static String v(String sc, String 初始, String 结束) {

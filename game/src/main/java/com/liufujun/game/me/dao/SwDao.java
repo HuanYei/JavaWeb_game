@@ -5,6 +5,7 @@ import com.liufujun.game.me.pojo.SW;
 import com.liufujun.game.me.pojo.SwEnglish;
 import com.liufujun.game.pdf.Main;
 import com.liufujun.game.pdf.util.Fileprocessing;
+import com.liufujun.game.pdf.util.StringUtil;
 import com.liufujun.game.util.PlanUtil;
 import com.liufujun.game.util.RAWUtils;
 import com.liufujun.game.util.服务器使用路径;
@@ -19,34 +20,54 @@ public class SwDao {
 
         if (sw.get方案().equals("2851")||sw.get方案().equals("2842")){
             //RTK
+            sw.getSWinfo().setIRname(e脚本宏查值("config_remote_name"));
+            sw.getSWinfo().setKEYboardName(e脚本宏查值("config_keypad_name"));
             sw.set软件logo名(e脚本宏查值("config_bootlogo_name"));
             sw.set屏名(e脚本宏查值("config_panel_name").replace("\"",""));
             sw.set按键数量(e脚本宏查值("config_keypad_name"));
             sw.set客户名缩写(e脚本宏查值("config_customer_name").replace("\"","").substring(0,4));
             sw.set软件客制化名称(e脚本宏查值("config_customer_folder_name").replace("\"",""));
+            sw.set智像DP(e脚本宏查值("config_devicetype_Zeasn"));
+            sw.setIs电子屏贴(e脚本宏查值("config_sticker_visible"));
+            if (sw.get智像DP().equals("未识别到这个宏")){
+                sw.set智像DP(StringUtil.提取config文件的值(服务器使用路径.RTK2851PATH+"customer/scripts/init.sh","config_devicetype_Zeasn"));
+            }
+            sw.set智像DP(sw.get智像DP()+"(country="+e脚本宏查值("config_default_country").replace("\"","")+")");
             sw.setIsrtk(1);
-            sw=PlanType(sw);
-            sw=PanelDao.PanelRTK赋值(sw);
+            PlanType(sw);
+            PanelDao.PanelRTK赋值(sw);
+
+            sw.getSWinfo().setKEYboardType(SWinfoDao.按键板类型(sw,0));
             sw.setPQ数据(RtkpqDao.PQDate(sw.get软件色温文件路径(),new PQ()));
+            sw.set电子屏贴路径(sw.get软件客制化路径全称()+"overlay/com.toptech.tvmenu/res/drawable-nodpi/sticker.png");
+
         }else {
             sw.setIsrtk(0);
             //MTK
+            sw.getSWinfo().setKEYboardName(e脚本宏查值("keypad_file"));
+            sw.getSWinfo().setIRname(e脚本宏查值("ir_file"));
             sw.set软件logo名(e脚本宏查值("bootlogo_file"));
             sw.set屏名(e脚本宏查值("panelname"));
             sw.set按键数量(e脚本宏查值("keypad_file"));
             sw.set客户名缩写(e脚本宏查值("cus_id").replace("\"","").substring(0,4));
+            sw.set智像DP(e脚本宏查值("zeasn_devicetype")+"(country="+e脚本宏查值("zeasn_country")+")");
             if (sw.get方案().equals("368")){
                 sw.set软件客制化名称(e脚本宏查值("customer_folder=$toptech_path/customer/$cus_id/"));
             }else if (sw.get方案().equals("9632")){
-                sw.set软件客制化名称(e脚本宏查值("customer_folder=$toptech_path/customer/9632/$cus_id/"));
+                sw.set软件客制化名称(e脚本宏查值("export customer_folder=$toptech_path/customer/9632/$cus_id/"));
             }else if (sw.get方案().equals("6681")){
                 sw.set软件客制化名称(e脚本宏查值("customer_folder=$toptech_path/customer/6681/$cus_id/"));
             }
-            sw=PlanType(sw);
-            sw=Pq赋值(sw);
-            sw=PanelDao.PanelMTK赋值(sw);
-        }
+            PlanType(sw);
+            Pq赋值(sw);
+            PanelDao.PanelMTK赋值(sw);
 
+
+            sw.getSWinfo().setKEYboardType(SWinfoDao.按键板类型(sw,1));
+            sw.setIs电子屏贴(e脚本宏查值("config_sticker_visible"));
+            sw.set电子屏贴路径(sw.get软件客制化路径全称()+"overlay/com.toptech.tvmenu/res/drawable-nodpi/sticker.png");
+        }
+        SWinfoDao.SWinfohandle(sw);
         return sw;
     }
 
@@ -78,9 +99,9 @@ public class SwDao {
         return sw;
     }
 
-    private static String e脚本宏查值( String e宏) {
+    public static String e脚本宏查值( String e宏) {
         for (String a:Stringshu){
-            if (a.indexOf(e宏)!=-1){
+            if (a.indexOf(e宏)==0){
                 return a.replace(e宏,"").replace("=","").replace("export ","");
             }
         }
@@ -106,6 +127,7 @@ public class SwDao {
     }
 
     private static SW 赋值368(SW sw) {
+        sw.setIRimgPath(服务器使用路径.MTK368PATH+"vendor/toptech/customer/common/ir/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径368+sw.get软件logo名()+".jpg");
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径368+sw.get屏名());
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径368+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
@@ -115,6 +137,7 @@ public class SwDao {
     }
 
     private static SW 赋值9632(SW sw) {
+        sw.setIRimgPath(服务器使用路径.MTK9632PATH+"vendor/toptech/customer/common/ir/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径9632+sw.get软件logo名()+".jpg");
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径9632+sw.get屏名());
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径9632+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
@@ -123,6 +146,7 @@ public class SwDao {
         return sw;
     }
     private static SW 赋值6681(SW sw) {
+        sw.setIRimgPath(服务器使用路径.MTK9632PATH+"vendor/toptech/customer/common/ir/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径6681+sw.get软件logo名()+".jpg");
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径6681+sw.get屏名());
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径6681+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
@@ -132,7 +156,7 @@ public class SwDao {
     }
 
     private static SW 赋值2851(SW sw) {
-
+        sw.setIRimgPath(服务器使用路径.RTK2851PATH+"customer/IR/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2851+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2851+sw.get屏名()+".h");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2851+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
@@ -145,7 +169,7 @@ public class SwDao {
         return sw;
     }
     private static SW 赋值2842(SW sw) {
-
+        sw.setIRimgPath(服务器使用路径.RTK2851PATH+"customer/IR/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2842+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2842+sw.get屏名()+".h");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2842+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");

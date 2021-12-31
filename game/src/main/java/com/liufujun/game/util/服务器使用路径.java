@@ -12,10 +12,10 @@ public class 服务器使用路径 {
     public static String rtk2851_pq_Windows="Z:/2851/rtk2851_pq/rtk2851/libvip/LibvipOSD/";
 
 
-    public static String 彩讯订单PDF文件存储路径="pdf/订单pdf文件/";
-    public static String 彩讯订单参考脚本文件存储路径="pdf/参考脚本文件/";
-    public static String 彩讯订单脚本生成路径="pdf/生成脚本文件/";
-    public static String RTK脚本="pdf/RTK脚本文件/";
+    public static String 彩讯订单PDF文件存储路径="res/pdf/订单pdf文件/";
+    public static String 彩讯订单参考脚本文件存储路径="res/pdf/参考脚本文件/";
+    public static String 彩讯订单脚本生成路径="res/pdf/生成脚本文件/";
+    public static String RTK脚本="res/pdf/RTK脚本文件/";
 
     //368
     public static String  MTK368PATH="Z:/9255/MTK368P/";
@@ -52,7 +52,7 @@ public class 服务器使用路径 {
     public static String  客制化文件夹路径2842="";
 
     static {
-        String PathContent= Fileprocessing.readTxtFile("路径配置.config").replace("\\","/");
+        String PathContent= Fileprocessing.readTxtFile("user.config").replace("\\","/");
         String PathContentarray[]=PathContent.split("\n");
         for (int i = 0; i <PathContentarray.length ; i++) {
             if (PathContentarray[i].indexOf("368")!=-1){

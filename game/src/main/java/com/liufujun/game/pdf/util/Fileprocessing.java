@@ -2,6 +2,9 @@ package com.liufujun.game.pdf.util;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
@@ -57,7 +60,6 @@ public class Fileprocessing {
             fos.write(bytes);  // 这样写入的数据，会将文件中的原数据覆盖
             fos.close();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return false;
         }
@@ -104,7 +106,7 @@ public class Fileprocessing {
                 fos.write(datas, 0, len);
             }
             fis.close();//释放资源
-            fis.close();//释放资源
+            fos.close();//释放资源
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -189,4 +191,5 @@ public class Fileprocessing {
         }
         return bytes;
     }
+
 }

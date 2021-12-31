@@ -3,48 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        a:link {color: #143fb0
+        } /* 未访问的链接 */
+        a:visited {color: #143fb0
+        } /* 已访问的链接 */
+        a:hover {color: #ff2516
+        } /* 当有鼠标悬停在链接上 */
+        a:active {color: #fcfaff
+        } /* 被选择的链接 */
+        #swdiv1{
+            float: left;
+        }
+        #swdiv2{
+            float: left;
+            margin-left: 20px;
+        }
+        .tit2{
+            margin-left: 30px;
+        }
+        #swdiv2 td{
+            padding-left: 20px;
+        }
+        #swdiv2 span{
+            color: #d82622;
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
+    <script type="text/javascript" src="js/vue.js"></script>
 </head>
-<body onload="myFunction()">
+<body onload="myFunction()" >
 <div style="width: 100%">
     <a href="/" style="font-size: 150%">主页</a>
-    <a href="/toMeworkbench" style="font-size: 100%">返回软件查找界面</a>
 </div>
 <div style="margin-left: 20px">
     <h1>软件信息</h1>
-    <p><b>脚本：<a th:href="${'/toScript?swSCpath='}+${SW.getFull_name_of_software_path}">编辑脚本</a></b></p>
+    <p><b>智像DP：</b><span th:text="${SW.getZeasn_devicetype()}"></span>&nbsp;&nbsp;<button onclick="copyDP()">点击复制</button></p>
+    <p><b>脚本：<a th:href="${'/toScript?swSCpath='}+${SW.getFull_name_of_software_path}">编辑脚本</a>|<a onclick="openfilejb()" href="#">打开目录</a></b></p>
     <div style="margin-left: 30px">
-        <input id="ScName" type="text" th:value=" ${SW.software_name}" style=" width: 90% ;height:20px" ;></input><br>
+        <input id="ScName" type="text" th:value=" ${SW.software_name}"></input><br>
         <button onclick="rmScName()">重命名脚本</button>
         <button onclick="newSc()">创建新脚本</button>
-        <span style="color: red;" class="zhushi">*请先创建新脚本在创建新客制化文件夹</span>
+<!--        <span style="color: red;" class="zhushi">*请先创建新脚本在创建新客制化文件夹</span>-->
     </div>
-    <p><b>客制化文件夹：<a onclick="openfile()" href="#">打开目录</a></b></p>
-    <div style="margin-left: 30px">
-        <input type="text" id="CuDir" th:value="${SW.software_customization_name}"
-               style=" width: 60%;height: 20px"></input><br>
-        <button onclick="rmDir()">重命名文件夹</button>
-        <button onclick="newDir()">创建新文件夹</button>
-        <span style="color: red;" class="zhushi">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>
-    </div>
-    <p><b>logo：<a onclick="openfile2()" href="#">打开目录</a><span id="toRAWlogo">|<a id="clogo"  href="/toRAWLOGO">制作logo</a></span></b>
-        <span style="color: red;" class="zhushi">*打开目录或其他操作都会刷新页面，请确保已修改数据已提交。</span></p>
+    <div style="display: flex;">
+        <div>
+            <p><b>客制化文件夹：<a onclick="openfile()" href="#">打开目录</a></b></p>
+            <div style="margin-left: 30px">
+                <input type="text" id="CuDir" th:value="${SW.software_customization_name}"></input><br>
+                <button onclick="rmDir()">重命名文件夹</button>
+                <button onclick="newDir()">创建新文件夹</button>
+                <!--        <span style="color: red;" class="zhushi">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>-->
+            </div>
+            <p><b>logo<span id="dzpt1">和电子屏贴</span>：<a onclick="openfile2()" href="#">打开LOGO目录</a><span  class="rtksty">|<a id="clogo"  href="/toRAWLOGO">制作logo</a></span><span id="dzpt3">|<a onclick="openfiledzpt()" href="#">打开电子屏贴目录</a></span></b>
 
-    <div style="margin-left: 30px">
-        <a th:href="@{/image/${image_name}}">
-            <img style="height: 180px;width: 320px;" title="点击LOGO,可查看大图" th:src="@{/image/${image_name}}">
-        </a>
-        <br>
-        <input id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 20%;height: 20px"></input>
-        <button onclick="UPlogo()" style="height: 30px;">更换logo</button>
-        <span style="color: red;" class="zhushi">*请打开logo目录，复制你要修改的logo名称，填入输入框更换logo。</span>
+            <div style="margin-left: 30px">
+                <a th:href="@{/image/logo}" style="text-decoration:none;">
+                    <img style="height: 180px;width: 320px;" border="3" title="点击可查看大图" th:src="@{/image/logo}">
+                </a>&nbsp;
+                <a href="/dzpt" id="dzpt2" style="text-decoration:none;">
+                    <img style="height: 180px;width: 320px;" border="3" title="点击可查看大图" th:src="@{/image/dzpt}">
+                </a>
+                <br>
+                <input id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 38%;height: 20px"></input>
+                <button onclick="UPlogo()" style="height: 30px;">更换logo</button>
+                <!--        <span style="color: red;" class="zhushi">*请打开logo目录，复制你要修改的logo名称，填入输入框更换logo。</span>-->
+            </div>
+        </div>
+        <div style="padding-left: 50px">
+            <p><b>遥控器丝印图：</b></p>
+            <a th:href="@{/image/ykq}" style="text-decoration:none;">
+            <img style="height: 300px;width: 366px;" border="1" title="点击可查看大图" th:src="@{/image/ykq}">
+            </a>
+        </div>
     </div>
-
     <p>
+        <div id="swdiv1">
         <b>屏： <a onclick="openfile3()" href="#">打开目录</a></b>
-    <div style="margin-left: 30px">
+    <div class="tit2">
         屏参文件名：<input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;"></input>
         <button onclick="UPPanel()" style="height: 30px;">更换屏参</button>
-    <span style="color: red;" class="zhushi">*请打开目录，复制你要修改的屏文件名称，填入输入框更换配屏</span>
+<!--    <span style="color: red;" class="zhushi">*请打开目录，复制你要修改的屏文件名称，填入输入框更换配屏</span>-->
         <br><br>
         <form action="#" th:action="@{/Panel}" method="post" th:object="${SW}">
             工厂菜单显示名:
@@ -89,7 +128,7 @@
 
             <br>
             <input type="submit" value="提交修改">
-            <span style="color: red;" class="zhushi">*提交修改后，会直接修改屏参文件，请注意检查。</span>
+<!--            <span style="color: red;" class="zhushi">*提交修改后，会直接修改屏参文件，请注意检查。</span>-->
             <br>
             <input  style="display: none;" type="text" th:field="*{panel.Ti_MODE}"/>
             <input  style="display: none;" type="text" th:field="*{panel.Swap_MODE}"/>
@@ -100,40 +139,85 @@
             <input  style="display: none;" type="text"
                    th:field="*{full_name_of_software_screen_parameter_name_path}"/>
         </form>
-
     </div>
+    </div>
+    <div id="swdiv2">
+      <b>软件基础配置：</b>
+        <div class="tit2">
+            <table>
+                <tr>
+                    <td>遥控器名：<span th:text="${SW.getSwinfo().getIRname()}"></span></td>
+                    <td>按键板名：XXXX</td>
+                    <td>按键板类型：<span th:text="${SW.getSwinfo().getKEYboardType()}"></span></td>
+                    <td>通道配置：<span th:text="${SW.getSwinfo().getSOURCE()}"></span></td>
+                </tr>
+                <tr>
+                    <td>板卡类型：XXXXXX</td>
+                    <td>板卡内存及存储：XXXXXX</td>
+                    <td>是否带CI：XXXXXX</td>
+                    <td>按键板名：<span th:text="${SW.getSwinfo().getKEYboardName()}"></span></td>
+                </tr>
+                <tr>
+                    <td>TV制式：XXXXXX</td>
+                    <td>ATV手动搜台制式：XXXXXX</td>
+                    <td>默认图文语言：XXXXXX</td>
+                    <td>ECO mode：XXXX XXXXX XXXXX XXXXX XXXX</td>
+                </tr>
+                <tr>
+                    <td>国家+默认语言：XXXXXX</td>
+                    <td>是否带杜比：XXXXXX</td>
+                    <td>是否带蓝牙：XXXXXX</td>
+                    <td>所有语言：XXXX XXXXX XXXXX XXXXX XXXX</td>
+                </tr>
+                <tr>
+                    <td>声音功率：XXXXXX</td>
+                    <td>背光电流：XXXXXX</td>
+                    <td>屏分辨率：XXXXXX</td>
+                    <td>内置应用：XXXX XXXXX XXXXX XXXXX XXXX</td>
+                </tr>
+                <tr>
+                    <td>是否包含智像：XXXXXX</td>
+                    <td>是否包含Eshare：XXXXXX</td>
+                    <td>升级软件名称：XXXXXX</td>
+                    <td>客户机型名：XXXX XXXXX XXXXX XXXXX XXXX</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
     </p>
-    <br>
-    <br>
-    <div id="colordiv">
+
+    <div id="colordiv" style="clear: both; ">
+        <br>
+        <br>
         <h1>PQ信息</h1>
         <b>色温:</b>
         <form id="pqfrom" action="#" th:action="@{/Color}" method="post" th:object="${SW}">
             <table style="margin-left: 30px">
                 <tr>
                     <th></th>
-                    <th id="ColorUserTh">User</th>
+                    <th class="rtksty">User</th>
                     <th>Standard</th>
                     <th>COOL</th>
                     <th>Warm</th>
                 </tr>
                 <tr>
                     <th>R</th>
-                    <td id="ColorUserTd1"><input type="text" th:field="*{PQ_data.UserR}"/></td>
+                    <td id="ColorUserTd1" class="rtksty"><input type="text" th:field="*{PQ_data.UserR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmR}"/></td>
                 </tr>
                 <tr>
                     <th>G</th>
-                    <td id="ColorUserTd2"><input type="text" th:field="*{PQ_data.UserG}"/></td>
+                    <td id="ColorUserTd2" class="rtksty"><input type="text" th:field="*{PQ_data.UserG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmG}"/></td>
                 </tr>
                 <tr>
                     <th>B</th>
-                    <td id="ColorUserTd3"><input type="text" th:field="*{PQ_data.UserB}"/></td>
+                    <td id="ColorUserTd3" class="rtksty"><input type="text" th:field="*{PQ_data.UserB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmB}"/></td>
@@ -146,8 +230,8 @@
                 </tr>
             </table>
             <br>
-            <b id="rtktit">Non-linear(OSD_50):</b>
-            <table style="margin-left: 30px" id="rtkcl">
+            <b id="rtktit" class="rtksty">Non-linear(OSD_50):</b>
+            <table style="margin-left: 30px"  class="rtksty">
                 <tr>
                     <th></th>
                     <th>ATV</th>
@@ -210,8 +294,8 @@
                 </tr>
             </table>
             <br>
-            <input id="rtksub" type="button" value="提交修改" style=" font-size: 50px;" onclick="tijiao()">
-            <span id="rtksubzs" style="color: red;" class="zhushi">*提交修改后，会直接修改PQ文件，2851和2842会编译成bin文件并生成在客制化文件夹中，请检查。</span>
+            <input id="rtksub" class="rtksty" type="button" value="提交修改" style=" font-size: 50px;" onclick="tijiao()">
+<!--            <span id="rtksubzs" style="color: red;" class="zhushi">*提交修改后，会直接修改PQ文件，2851和2842会编译成bin文件并生成在客制化文件夹中，请检查。</span>-->
             <input  style="display: none;" type="text" th:field="*{software_color_temperature_file_path}"/>
             <input  style="display: none;" type="text" th:field="*{software_name}"/>
             <input  style="display: none;" type="text" th:field="*{isRTK}"/>
@@ -224,19 +308,17 @@
     </div>
 </div>
 <script type="text/javascript" th:inline="javascript">
-    // function myFunction() {
-    //     var msg = [[${msg}]];
-    //     if (msg.length > 1) {
-    //         alert(msg);
-    //     }
-    // }
 
     window.onload = function () {
         var msg = [[${msg}]];
         if (msg.length > 1) {
             alert(msg);
         }
-
+        if ([[${SW.getIsdzpt()}]]!="true") {
+            document.getElementById("dzpt1").style.display = "none";
+            document.getElementById("dzpt2").style.display = "none";
+            document.getElementById("dzpt3").style.display = "none";
+        }
         if ([[${SW.getPanel().getTi_MODE()}]] == null) {
             document.getElementById("TiMode").style.display = "none";
         }
@@ -253,20 +335,20 @@
             document.getElementById("DualMode").style.display = "none";
         }
         if ([[${SW.getIsRTK()}]] == 0) {
-            document.getElementById("toRAWlogo").style.display = "none";
-            document.getElementById("ColorUserTh").style.display = "none";
-            document.getElementById("ColorUserTd1").style.display = "none";
-            document.getElementById("ColorUserTd2").style.display = "none";
-            document.getElementById("ColorUserTd3").style.display = "none";
-            document.getElementById("rtkcl").style.display = "none";
-            document.getElementById("rtksub").style.display = "none";
-            document.getElementById("rtksubzs").style.display = "none";
-            document.getElementById("rtktit").style.display = "none";
+            var a=document.querySelectorAll(".rtksty");
+            for (var i = 0; i < a.length; i++) {
+                a[i].style.display = "none";
+            }
         }else {
             document.getElementById("mtksub").style.display = "none";
         }
 
-
+        let input = document.getElementById("ScName");
+        const l = input.value.length;
+        input.style.width = (l+1) * 8 + "px";
+        let input2 = document.getElementById("CuDir");
+        const l2 = input2.value.length;
+        input2.style.width = (l2+1) * 9 + "px";
     }
 
     function tijiao() {
@@ -508,7 +590,17 @@
         document.body.appendChild(postForm);
         postForm.submit();
     }
-
+    function openfilejb() {
+        var postForm = document.createElement("form");//表单对象
+        postForm.method = "post";
+        postForm.action = '/OpenFile';
+        var oldScnameInput = document.createElement("input");
+        oldScnameInput.setAttribute("name", "Filepath");
+        oldScnameInput.setAttribute("value", [[${SW.full_name_of_software_path}]] + '|' + [[${SW.software_name}]]);
+        postForm.appendChild(oldScnameInput);
+        document.body.appendChild(postForm);
+        postForm.submit();
+    }
     function openfile2() {
         var postForm = document.createElement("form");//表单对象
         postForm.method = "post";
@@ -532,6 +624,29 @@
         document.body.appendChild(postForm);
         postForm.submit();
     }
+    function openfiledzpt() {
+        var postForm = document.createElement("form");//表单对象
+        postForm.method = "post";
+        postForm.action = '/OpenFile';
+        var oldScnameInput = document.createElement("input");
+        oldScnameInput.setAttribute("name", "Filepath");
+        oldScnameInput.setAttribute("value", [[${SW.dzptPath}]] + '|' + [[${SW.software_name}]]);
+        postForm.appendChild(oldScnameInput);
+        document.body.appendChild(postForm);
+        postForm.submit();
+    }
+    function copyDP() {
+        var Url2="DP:"+[[${SW.getZeasn_devicetype()}]];
+        var oInput = document.createElement('input');
+        oInput.value = Url2;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        oInput.style.display='none';
+    }
+
+
 </script>
 <script defer="defer">
 

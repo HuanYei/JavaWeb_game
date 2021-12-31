@@ -16,7 +16,11 @@ public class SwEnglish {
   String logoweb;
   Panel Panel;
   String Plan;
+  String zeasn_devicetype;
   int isRTK;
+  String isdzpt;
+  String dzptPath;
+  SWINFO swinfo;
  public SwEnglish(SW sw){
 
       software_name=sw.get软件名称();
@@ -35,6 +39,10 @@ public class SwEnglish {
       Panel=sw.getPanel();
       Plan=sw.get方案();
       isRTK=sw.getIsrtk();
+      zeasn_devicetype=sw.get智像DP();
+      isdzpt=sw.getIs电子屏贴();
+     dzptPath=sw.get电子屏贴路径();
+     swinfo=sw.getSWinfo();
  }
     public SwEnglish() {
 
@@ -62,6 +70,14 @@ public class SwEnglish {
 
     public void setFull_name_of_software_path(String full_name_of_software_path) {
         this.full_name_of_software_path = full_name_of_software_path;
+    }
+
+    public String getZeasn_devicetype() {
+        return zeasn_devicetype;
+    }
+
+    public void setZeasn_devicetype(String zeasn_devicetype) {
+        this.zeasn_devicetype = zeasn_devicetype;
     }
 
     public String getSoftware_logo_name() {
@@ -166,5 +182,29 @@ public class SwEnglish {
 
     public void setPlan(String plan) {
         Plan = plan;
+    }
+
+    public String getIsdzpt() {
+        return isdzpt;
+    }
+
+    public void setIsdzpt(String isdzpt) {
+        this.isdzpt = isdzpt;
+    }
+
+    public String getDzptPath() {
+        return dzptPath;
+    }
+
+    public void setDzptPath(String dzptPath) {
+        this.dzptPath = dzptPath;
+    }
+
+    public SWINFO getSwinfo() {
+        return swinfo;
+    }
+
+    public void setSwinfo(SWINFO swinfo) {
+        this.swinfo = swinfo;
     }
 }

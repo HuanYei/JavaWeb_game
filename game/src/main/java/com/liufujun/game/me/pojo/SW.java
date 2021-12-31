@@ -18,6 +18,11 @@ public class SW {
     String 按键数量;
     String 客户名缩写;
     String 方案;
+    String 智像DP;
+    String is电子屏贴;
+    String 电子屏贴路径;
+    SWINFO SWinfo=new SWINFO();
+    String IRimgPath;
     int isrtk;
 
     @Override
@@ -37,7 +42,9 @@ public class SW {
                 ",\n 按键数量='" + 按键数量 + '\'' +
                 ",\n 软件客制化名称='" + 软件客制化名称 + '\'' +
                 ",\n logo前端='" + 软件logo前端 + '\'' +
-                '}'+PQ数据.toString()+"\n"+panel.toString();
+                ",\n 是否包含电子屏贴='" + is电子屏贴 + '\'' +
+                ",\n 电子屏贴路径='" + 电子屏贴路径 + '\'' +
+                '}'+PQ数据.toString()+"\n"+panel.toString()+"\n"+SWinfo.toString();
     }
 
     public PQ getPQ数据() {
@@ -90,6 +97,14 @@ public class SW {
 
     public String get软件客制化路径全称() {
         return 软件客制化路径全称;
+    }
+
+    public String get智像DP() {
+        return 智像DP;
+    }
+
+    public void set智像DP(String 智像DP) {
+        this.智像DP = 智像DP;
     }
 
     public void set软件客制化路径全称(String 软件客制化路径全称) {
@@ -172,5 +187,37 @@ public class SW {
 
     public void setIsrtk(int isrtk) {
         this.isrtk = isrtk;
+    }
+
+    public String getIs电子屏贴() {
+        return is电子屏贴;
+    }
+
+    public void setIs电子屏贴(String is电子屏贴) {
+        this.is电子屏贴 = is电子屏贴;
+    }
+
+    public String get电子屏贴路径() {
+        return 电子屏贴路径;
+    }
+
+    public void set电子屏贴路径(String 电子屏贴路径) {
+        this.电子屏贴路径 = 电子屏贴路径;
+    }
+
+    public String getIRimgPath() {
+        return IRimgPath;
+    }
+
+    public void setIRimgPath(String IRimgPath) {
+        this.IRimgPath = IRimgPath;
+    }
+
+    public SWINFO getSWinfo() {
+        return SWinfo;
+    }
+
+    public void setSWinfo(SWINFO SWinfo) {
+        this.SWinfo = SWinfo;
     }
 }

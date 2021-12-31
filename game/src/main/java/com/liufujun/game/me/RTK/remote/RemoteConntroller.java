@@ -41,7 +41,7 @@ public class RemoteConntroller {
         System.out.println(key);
         RemoteDao.UPConfig(key,file,remotename);
         if (up.equals("0")) {
-            path = "IR/" + remotename + ".config";
+            path = "res/IR/" + remotename + ".config";
             return "forward:/downloadconfig";
         }else {
             String msg=RemoteDao.C(remotename);

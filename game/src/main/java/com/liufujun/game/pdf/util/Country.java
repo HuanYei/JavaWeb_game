@@ -2,102 +2,44 @@ package com.liufujun.game.pdf.util;
 
 public class Country {
     public static String 单个翻译语言(String yu){
-        switch (yu){
-            case "英":
-                return "en_US";
-            case "法":
-                return "fr_FR";
-            case "俄":
-                return "ru_RU";
-            case "阿拉伯":
-                return "ar_EG";
-            case "波斯":
-                return "fa_IR";
-            case "土耳其":
-                return "tr_TR";
-            case "葡萄牙":
-                return "pt_PT";
-            case "西班牙":
-                return "es_ES";
-            case "意大利":
-                return "it_IT";
-            case "德":
-                return "de_DE";
-            case "塞尔维亚":
-                return "sr_Latn_RS";
-            case "希伯来":
-                return "iw_IL";
-            default:
-                return yu;
+        yu=yu.replace("■","");
+        String nei=Fileprocessing.readTxtFile("res/config/语言.config");
+        String list[]=nei.split("\n");
+        for (String a:list) {
+            if (a.indexOf(yu)!=-1){
+                return a.replace(yu+"=","");
+            }
         }
-
+        return yu;
     }
 
     public static String 时区(String gu) {
-        switch (gu) {
-            case "NP":
-                return "Asia/Kathmandu";
-            case "IQ":
-                return "Asia/Baghdad";
-            case "EG":
-                return "Africa/Cairo";
-            case "TR":
-                return "Europe/Istanbul";
-            case "SA":
-                return "Asia/Riyadh";
-            case "AE":
-                return "Asia/Dubai";
-            case "IL":
-                return "Asia/Jerusalem";
-            default:
-                return gu;
-        }
+        return to国家值(gu,1);
     }
-
+    public static String 搜台制式(String gu) {
+        return to国家值(gu,4)+"/"+to国家值(gu,5);
+    }
+    public static String 图文语言(String gu) {
+        return to国家值(gu,6);
+    }
     public static String 国家368(String gu){
-        switch (gu){
-            case "尼泊尔":
-                return "NP";
-            case "伊拉克":
-                return "IQ";
-            case "埃及":
-                return "EG";
-            case "土耳其":
-                return "TR";
-            case "沙特阿拉伯":
-                return "SA";
-            case "阿联酋":
-                return "AE";
-            case "塞尔维亚":
-                return "RS";
-            case "以色列":
-                return "IL";
-            default:
-                return gu;
-        }
+        return to国家值(gu,2);
     }
 
     public static String 国家(String gu){
-        switch (gu){
-            case "NP":
-                return "NEPAL";
-            case "IQ":
-                return "IRAQ";
-            case "EG":
-                return "EGYPT";
-            case "TR":
-                return "TURKEY";
-            case "SA":
-                return "SAUDI_ARABIA";
-            case "AE":
-                return "ARE";
-            case "RS":
-                return "SERBIA";
-            case "IL":
-                return "ISRAEL";
-            default:
-                return gu;
+        return to国家值(gu,3);
+    }
+    public static String to国家值(String gu,int s){
+        gu=gu.replace("■","");
+        String nei=Fileprocessing.readTxtFile("res/config/国家.config");
+        String list[]=nei.split("\n");
+        for (String a:list) {
+            if (a.indexOf(gu)!=-1){
+                String sub[]=a.split("=");
+                return sub[s];
+            }
         }
+        return gu;
     }
     public static String returnBoard(String Board){
 

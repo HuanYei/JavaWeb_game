@@ -23,9 +23,13 @@ import java.io.File;
 @Controller
 public class Meconntroller {
 
-    @RequestMapping("/toMeworkbench")
+    @RequestMapping("/")
     public String  toMeworkbench(){
         return "me/meindex";
+    }
+    @RequestMapping("/dzpt")
+    public String  todzpt(){
+        return "me/dzpt";
     }
 
 
@@ -106,13 +110,11 @@ public class Meconntroller {
             int fjx=Filepath.indexOf("|");
             path=Filepath.substring(0,fjx);
             swname=Filepath.substring(fjx+1,Filepath.length());
-        }
-        if (Filepath.indexOf(".sh")!=-1){
-            Fileprocessing.openFile(Filepath);
-            return "forward:/topostScript?swSCpath="+Filepath;
-        }else {
             Fileprocessing.openFile(path);
             return "forward:/subswname?swname="+swname;
+        }else {
+            Fileprocessing.openFile(Filepath);
+            return "forward:/topostScript?swSCpath="+Filepath;
         }
 
     }
@@ -145,33 +147,56 @@ public class Meconntroller {
         String SwType= PlanUtil.PlanType(swname);
         model.addAttribute("SwType",SwType);
         SwEnglish swE=new SwEnglish(sw);
-        potopath=sw.get软件logo路径全称();
-        Plan=sw.get方案();
+        变量赋值(sw);
         model.addAttribute("SW",swE);
         model.addAttribute("msg","");
         return "me/SWmodification";
     }
 
-    String potopath="";
-    String Plan="";
-    @RequestMapping(value = "/image/{image_name}", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> getImage(@PathVariable("image_name") String image_name) throws Exception{
-
-        byte[] imageContent ;
-        String path = potopath;
-        if (Plan.equals("2851")){
-            imageContent =  RAWUtils.rawtshow(path,1920,1080);
-        }else if (Plan.equals("2842")){
-            imageContent =  RAWUtils.rawtshow(path,1280,720);
-        }else {
-            imageContent = Fileprocessing.fileToByte(new File(path));
-        }
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
-        return new ResponseEntity<>(imageContent, headers, HttpStatus.OK);
+    private void 变量赋值(SW sw) {
+        potopath=sw.get软件logo路径全称();
+        电子屏贴path=sw.get电子屏贴路径();
+        Plan=sw.get方案();
+        遥控器丝印图Path=sw.getIRimgPath();
     }
 
+    String potopath="";
+    String 电子屏贴path="";
+    String Plan="";
+    String 遥控器丝印图Path="";
+    @RequestMapping(value = "/image/{image_name}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> getImage(@PathVariable("image_name") String image_name) throws Exception{
+        if (image_name.equals("dzpt")){
+            return poto(电子屏贴path);
+        }else if (image_name.equals("ykq")){
+            return poto(遥控器丝印图Path);
+        } else {
+            byte[] imageContent ;
+            String path = potopath;
+            if (Plan.equals("2851")){
+                imageContent =  RAWUtils.rawtshow(path,1920,1080);
+            }else if (Plan.equals("2842")){
+                imageContent =  RAWUtils.rawtshow(path,1280,720);
+            }else {
+                imageContent = Fileprocessing.fileToByte(new File(path));
+            }
+            final HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_PNG);
+            return new ResponseEntity<>(imageContent, headers, HttpStatus.OK);
+        }
+    }
 
+    private ResponseEntity poto(String Path) throws Exception{
+        byte[] imageContent ;
+        File potoFile=new File(Path);
+        if (potoFile.exists()){
+            imageContent = Fileprocessing.fileToByte(potoFile);
+            final HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.IMAGE_PNG);
+            return new ResponseEntity<>(imageContent, headers, HttpStatus.OK);
+        }
+        return null;
+    }
 
 
     public Model Tosc(Model model,String swSCpath){

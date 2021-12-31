@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class index {
 
-    @RequestMapping("/")
+    @RequestMapping("/tool")
     public String indexs(){
         return "index";
     }

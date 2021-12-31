@@ -47,7 +47,7 @@ public class RAWUtils {
 		byte[] bytes = null;
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
-			String jpgPath="img/"+rawPath.substring(rawPath.lastIndexOf("/")).replace(".raw",".jpg");
+			String jpgPath="res/img/"+rawPath.substring(rawPath.lastIndexOf("/")).replace(".raw",".jpg");
 			File jpgFile = new File(jpgPath);
 			System.out.println("jpgPath = [" + jpgPath + "], width = [" );
 			if (!jpgFile.exists()) {

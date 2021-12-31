@@ -19,6 +19,8 @@ public class User {
 //    String 备注;
     String 开机logo;
     String 屏贴;
+    String 图文语言;
+    String 手动搜台制式;
 
 
 
@@ -43,6 +45,8 @@ public class User {
 //                ", \n备注='" + 备注 + '\'' +
                 ", \n开机logo='" + 开机logo + '\'' +
                 ", \n屏贴='" + 屏贴 + '\'' +
+                ", \n手动搜台制式='" + 手动搜台制式 + '\'' +
+                ", \n图文语言='" + 图文语言 + '\'' +
                 '}';
     }
 
@@ -181,11 +185,20 @@ public class User {
     public void set客户缩写(String 客户缩写) {
         this.客户缩写 = 客户缩写;
     }
-//    public String get备注() {
-//        return 备注;
-//    }
-//
-//    public void set备注(String 备注) {
-//        this.备注 = 备注;
-//    }
+
+    public String get图文语言() {
+        return 图文语言;
+    }
+
+    public void set图文语言(String 图文语言) {
+        this.图文语言 = 图文语言;
+    }
+
+    public String get手动搜台制式() {
+        return 手动搜台制式;
+    }
+
+    public void set手动搜台制式(String 手动搜台制式) {
+        this.手动搜台制式 = 手动搜台制式;
+    }
 }

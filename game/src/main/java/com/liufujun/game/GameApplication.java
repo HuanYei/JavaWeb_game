@@ -10,7 +10,7 @@ import com.liufujun.game.util.服务器使用路径;
 public class GameApplication {
     public static void main(String[] args) {
         服务器使用路径 fw=new 服务器使用路径();
-        ConnectLinux.Connect();
+//        ConnectLinux.Connect();
         SpringApplication.run(GameApplication.class, args);
     }
 

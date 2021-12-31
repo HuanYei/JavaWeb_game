@@ -1,6 +1,7 @@
 package com.liufujun.game.conntroller;
 
 import com.liufujun.game.pdf.Main;
+import com.liufujun.game.pdf.util.Fileprocessing;
 import com.liufujun.game.util.服务器使用路径;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
@@ -76,6 +78,24 @@ public class PDFController {
         ServletOutputStream os = response.getOutputStream();
         // 4.输入流复制给输出流
         FileCopyUtils.copy(is,os);
+    }
 
+    @RequestMapping("/jgdesktop")
+    public String jgdesktop(HttpServletResponse response)throws Exception{
+        String jbname=Main.脚本名;
+        String path =desktopPath()+Main.user.get客户订单号()+"/"+jbname;
+        File filedir=new File(desktopPath()+Main.user.get客户订单号()+"/");
+        if (!filedir.exists()){
+            filedir.mkdir();
+        }
+        // 1.去指定目录读取文件
+        Fileprocessing.newFile(服务器使用路径.彩讯订单脚本生成路径+jbname,path);
+        return "forward:/toPDF";
+    }
+
+    public static String desktopPath() {
+        File desktopDir = FileSystemView.getFileSystemView() .getHomeDirectory();
+        String desktopPath = desktopDir.getAbsolutePath();
+        return desktopPath.replace("\\","/")+"/";
     }
 }

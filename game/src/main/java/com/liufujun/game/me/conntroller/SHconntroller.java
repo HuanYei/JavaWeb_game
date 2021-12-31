@@ -32,7 +32,6 @@ public class SHconntroller {
     @RequestMapping(value = "/JBall", method = RequestMethod.POST)
     @ResponseBody
     public void JBall ( ) {
-        System.out.println("SSSS");
         JBAlllist.clear();
         if (!服务器使用路径.MTK368PATH.equals("null")) {
             File file368=new File(服务器使用路径.脚本路径368);

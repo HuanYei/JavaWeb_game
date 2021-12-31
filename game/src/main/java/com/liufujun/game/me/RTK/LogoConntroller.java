@@ -53,22 +53,22 @@ public class LogoConntroller {
 
         System.out.println("file = [" + file + "], logoname = [" + logoname + "], plan1 = [" + plan1 + "], model = [" + model + "]");
         try {
-            Files.write(Paths.get("img/" + "test" + ".jpg"), file.getBytes());
+            Files.write(Paths.get("res/img/" + "test" + ".jpg"), file.getBytes());
             if (plan1.equals("2842")) {
-                ImagesUtils.reduceImg("img/" + "test" + ".jpg", "img/" + logoname + ".jpg", 1280, 720);
+                ImagesUtils.reduceImg("res/img/" + "test" + ".jpg", "res/img/" + logoname + ".jpg", 1280, 720);
             }else if (plan1.equals("2851")){
-                ImagesUtils.reduceImg("img/" + "test" + ".jpg", "img/" + logoname + ".jpg",  1920, 1080);
+                ImagesUtils.reduceImg("res/img/" + "test" + ".jpg", "res/img/" + logoname + ".jpg",  1920, 1080);
             }
-            RAWUtils.jpg2Raw("img/" + logoname + ".jpg");
+            RAWUtils.jpg2Raw("res/img/" + logoname + ".jpg");
         } catch (Exception e) {
             e.printStackTrace();
         }
         if (up.equals("0")) {
-            path = "img/" + logoname + ".raw";
+            path = "res/img/" + logoname + ".raw";
             return "forward:/downloadlogo";
         }
         else {
-            Fileprocessing.newFile("img/" + logoname + ".raw",服务器使用路径.LOGO路径2842+logoname + ".raw");
+            Fileprocessing.newFile("res/img/" + logoname + ".raw",服务器使用路径.LOGO路径2842+logoname + ".raw");
         }
         model.addAttribute("msg","成功");
         return "tool/RawLogo";

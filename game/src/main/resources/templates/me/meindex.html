@@ -23,7 +23,7 @@
 </head>
 <body>
 <div style="width: 100%" >
-    <a href="/" style="font-size: 150%">主页</a>
+    <a href="/tool" style="font-size: 150%">其他工具</a>
 </div>
 <div align="center">
     <h1 style="margin-top: 150px;font-size: 80px">软件信息查找</h1>
@@ -73,6 +73,7 @@
                     }else {
                         var text=data1.split("|");
                         var ss="";
+                        oneJB=text[0];
                         for (var i = 0; i <text.length ; i++) {
                             ss+="<p>"+text[i]+"</p>"
                         }
@@ -84,6 +85,21 @@
             });
 
         });
-    })
+    });
+    var oneJB="";
+    document.onkeydown=function (e) {
+        event=event||window.event;
+        var currKey=0, e=e||event||window.event;
+        currKey = e.keyCode||e.which||e.charCode;
+        //检测按下哪个键，作相应处理
+        if(currKey == 13){
+            if(oneJB.length>2){
+                $("#text").val(oneJB);
+            }
+        }
+        else{
+            return true;
+        }
+    };
 </script>
 </html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="bodd" style="background-color: black">
+<button onclick="w()">白底</button><button onclick="b()">蓝底</button><button onclick="bl()">黑底</button><button onclick="r()">红底</button><button onclick="g()">绿底</button>
+<img  title="点击可查看大图" th:src="@{/image/dzpt}">
+</body>
+<script>
+    function w() {
+        document.getElementById("bodd").style.background="#F4F4F4";
+    }
+    function b() {
+        document.getElementById("bodd").style.background="#0700f4";
+    }
+    function bl() {
+        document.getElementById("bodd").style.background="#000000";
+    }
+    function r() {
+        document.getElementById("bodd").style.background="#f40014";
+    }
+    function g() {
+        document.getElementById("bodd").style.background="#25f400";
+    }
+</script>
+</html>
