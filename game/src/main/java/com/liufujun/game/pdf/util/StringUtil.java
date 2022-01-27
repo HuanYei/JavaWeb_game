@@ -63,6 +63,9 @@ public class StringUtil {
         return "未识别到字符";
     }
     public static String 截取到第一次出现(String 字符串,String 字符){
+        if (字符串.indexOf(字符)==-1){
+            return 字符串;
+        }
         return 删除字符(字符串.substring(0,字符串.indexOf(字符))," ","\t");
     };
     public static void main(String[] args) {

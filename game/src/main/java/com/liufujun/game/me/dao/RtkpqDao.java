@@ -5,6 +5,7 @@ import com.liufujun.game.me.pojo.PQ;
 import com.liufujun.game.pdf.Main;
 import com.liufujun.game.pdf.util.Fileprocessing;
 import com.liufujun.game.pdf.util.StringUtil;
+import com.liufujun.game.util.inter.ICallback;
 import com.liufujun.game.util.服务器使用路径;
 
 public class RtkpqDao {
@@ -184,39 +185,43 @@ public class RtkpqDao {
     }
 
     public static void PQ_OSDUpdate(String path, PQ pq) {
-        String content = Fileprocessing.readTxtFile(path);
-        content = UPNO(content, pq);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String content = Fileprocessing.readTxtFile(path);
+                content = UPNO(content, pq);
+                String pqdate[] = content.split("\n");
 
-        String pqdate[] = content.split("\n");
-
-        for (int i = 0; i < pqdate.length; i++) {
-            if (pqdate[i].indexOf("/*USER*/") != -1) {
-                pqdate[i] = "\t{\t" + pq.getUserR() + ",\t" + pq.getUserG() + ",\t" + pq.getUserB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*USER*/";
-            } else if (pqdate[i].indexOf("/*NORMAL(7500K)*/") != -1) {
-                pqdate[i] = "\t{\t" + pq.getStandardR() + ",\t" + pq.getStandardG() + ",\t" + pq.getStandardB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*NORMAL(7500K)*/";
-            } else if (pqdate[i].indexOf("/*WARMER (5500K)*/") != -1) {
-                pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*WARMER (5500K)*/";
-            } else if (pqdate[i].indexOf("/*WARM (6500K)*/") != -1) {
-                pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*WARM (6500K)*/";
-            } else if (pqdate[i].indexOf("/*COOL (8500K)*/") != -1) {
-                pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*COOL (8500K)*/";
-            } else if (pqdate[i].indexOf("/*COOLER (9500K)*/") != -1) {
-                pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*COOLER (9500K)*/";
+                for (int i = 0; i < pqdate.length; i++) {
+                    if (pqdate[i].indexOf("/*USER*/") != -1) {
+                        pqdate[i] = "\t{\t" + pq.getUserR() + ",\t" + pq.getUserG() + ",\t" + pq.getUserB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*USER*/";
+                    } else if (pqdate[i].indexOf("/*NORMAL(7500K)*/") != -1) {
+                        pqdate[i] = "\t{\t" + pq.getStandardR() + ",\t" + pq.getStandardG() + ",\t" + pq.getStandardB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*NORMAL(7500K)*/";
+                    } else if (pqdate[i].indexOf("/*WARMER (5500K)*/") != -1) {
+                        pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*WARMER (5500K)*/";
+                    } else if (pqdate[i].indexOf("/*WARM (6500K)*/") != -1) {
+                        pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*WARM (6500K)*/";
+                    } else if (pqdate[i].indexOf("/*COOL (8500K)*/") != -1) {
+                        pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*COOL (8500K)*/";
+                    } else if (pqdate[i].indexOf("/*COOLER (9500K)*/") != -1) {
+                        pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*COOLER (9500K)*/";
+                    }
+                }
+                content = "";
+                for (int i = 0; i < pqdate.length; i++) {
+                    content += pqdate[i] + "\n";
+                }
+                Fileprocessing.updateFile(path, content);
+                Fileprocessing.newFile(path, 服务器使用路径.rtk2851_pq_Windows+StringUtil.提取文件名(path));
+                ConnectLinux.execComm("cd "+服务器使用路径.rtk2851_pq_Linux+"\n"+"./genPanelFactoryOSD.pl"+"\n");
+                String old=StringUtil.提取文件名(path).replace("VIP_Panel","vip").replace("Osd","osd").replace("cpp","bin");
+                old=服务器使用路径.rtk2851_pq_Windows+"PanelParam/"+old;
+                String newbin=StringUtil.提取文件路径(path)+"vip_default_osd.bin";
+                Fileprocessing.newFile(old,newbin);
             }
-        }
-        content = "";
-        for (int i = 0; i < pqdate.length; i++) {
-            content += pqdate[i] + "\n";
-        }
-
-        Fileprocessing.updateFile(path, content);
-        Fileprocessing.newFile(path, 服务器使用路径.rtk2851_pq_Windows+StringUtil.提取文件名(path));
-        ConnectLinux.execComm("cd "+服务器使用路径.rtk2851_pq_Linux+"\n"+"./genPanelFactoryOSD.pl"+"\n");
-        String old=StringUtil.提取文件名(path).replace("VIP_Panel","vip").replace("Osd","osd").replace("cpp","bin");
-        old=服务器使用路径.rtk2851_pq_Windows+"PanelParam/"+old;
-        String newbin=StringUtil.提取文件路径(path)+"vip_default_osd.bin";
-        Fileprocessing.newFile(old,newbin);
+        }).start();
     }
+
 
     private static String UPNO(String content, PQ pq) {
         String arr[] = content.split("\n");
@@ -389,7 +394,6 @@ public class RtkpqDao {
 
             if (SDHDMI) {
                 if (arr[i].indexOf("BRIGHTNESS_50") != -1) {
-
                     arr[i] = arr[i].replace(StringUtil.截取到第一次出现(arr[i], ","), pq.getHDMIBrightness());
                 } else if (arr[i].indexOf("CONTRAST_50") != -1) {
                     arr[i] = arr[i].replace(StringUtil.截取到第一次出现(arr[i], ","), pq.getHDMIContrast());

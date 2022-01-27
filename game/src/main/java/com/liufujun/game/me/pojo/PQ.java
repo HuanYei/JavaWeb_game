@@ -14,6 +14,19 @@ public class PQ {
      String UserG;
      String UserB;
 
+    String WarmROFF;
+    String WarmGOFF;
+    String WarmBOFF;
+    String CoolROFF;
+    String CoolGOFF;
+    String CoolBOFF;
+    String StandardROFF;
+    String StandardGOFF;
+    String StandardBOFF;
+    String UserROFF;
+    String UserGOFF;
+    String UserBOFF;
+
      String ALLBrightness;
      String ALLContrast;
      String ALLSaturation;
@@ -83,6 +96,18 @@ public class PQ {
                 ", UserR='" + UserR + '\'' +
                 ", UserG='" + UserG + '\'' +
                 ", UserB='" + UserB + '\'' +
+                ", WarmROFF='" + WarmROFF + '\'' +
+                ", WarmGOFF='" + WarmGOFF + '\'' +
+                ", WarmBOFF='" + WarmBOFF + '\'' +
+                ", CoolROFF='" + CoolROFF + '\'' +
+                ", CoolGOFF='" + CoolGOFF + '\'' +
+                ", CoolBOFF='" + CoolBOFF + '\'' +
+                ", StandardROFF='" + StandardROFF + '\'' +
+                ", StandardGOFF='" + StandardGOFF + '\'' +
+                ", StandardBOFF='" + StandardBOFF + '\'' +
+                ", UserROFF='" + UserROFF + '\'' +
+                ", UserGOFF='" + UserGOFF + '\'' +
+                ", UserBOFF='" + UserBOFF + '\'' +
                 ", ALLBrightness='" + ALLBrightness + '\'' +
                 ", ALLContrast='" + ALLContrast + '\'' +
                 ", ALLSaturation='" + ALLSaturation + '\'' +
@@ -129,6 +154,102 @@ public class PQ {
                 ", HDMI4KSharpness='" + HDMI4KSharpness + '\'' +
                 ", HDMI4KHue='" + HDMI4KHue + '\'' +
                 '}';
+    }
+
+    public String getWarmROFF() {
+        return WarmROFF;
+    }
+
+    public void setWarmROFF(String warmROFF) {
+        WarmROFF = warmROFF;
+    }
+
+    public String getWarmGOFF() {
+        return WarmGOFF;
+    }
+
+    public void setWarmGOFF(String warmGOFF) {
+        WarmGOFF = warmGOFF;
+    }
+
+    public String getWarmBOFF() {
+        return WarmBOFF;
+    }
+
+    public void setWarmBOFF(String warmBOFF) {
+        WarmBOFF = warmBOFF;
+    }
+
+    public String getCoolROFF() {
+        return CoolROFF;
+    }
+
+    public void setCoolROFF(String coolROFF) {
+        CoolROFF = coolROFF;
+    }
+
+    public String getCoolGOFF() {
+        return CoolGOFF;
+    }
+
+    public void setCoolGOFF(String coolGOFF) {
+        CoolGOFF = coolGOFF;
+    }
+
+    public String getCoolBOFF() {
+        return CoolBOFF;
+    }
+
+    public void setCoolBOFF(String coolBOFF) {
+        CoolBOFF = coolBOFF;
+    }
+
+    public String getStandardROFF() {
+        return StandardROFF;
+    }
+
+    public void setStandardROFF(String standardROFF) {
+        StandardROFF = standardROFF;
+    }
+
+    public String getStandardGOFF() {
+        return StandardGOFF;
+    }
+
+    public void setStandardGOFF(String standardGOFF) {
+        StandardGOFF = standardGOFF;
+    }
+
+    public String getStandardBOFF() {
+        return StandardBOFF;
+    }
+
+    public void setStandardBOFF(String standardBOFF) {
+        StandardBOFF = standardBOFF;
+    }
+
+    public String getUserROFF() {
+        return UserROFF;
+    }
+
+    public void setUserROFF(String userROFF) {
+        UserROFF = userROFF;
+    }
+
+    public String getUserGOFF() {
+        return UserGOFF;
+    }
+
+    public void setUserGOFF(String userGOFF) {
+        UserGOFF = userGOFF;
+    }
+
+    public String getUserBOFF() {
+        return UserBOFF;
+    }
+
+    public void setUserBOFF(String userBOFF) {
+        UserBOFF = userBOFF;
     }
 
     public String getUserR() {

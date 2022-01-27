@@ -6,10 +6,8 @@ import com.liufujun.game.me.dao.SwDao;
 import com.liufujun.game.me.pojo.SW;
 import com.liufujun.game.me.pojo.SwEnglish;
 import com.liufujun.game.pdf.util.Fileprocessing;
-import com.liufujun.game.util.Colortemperature;
-import com.liufujun.game.util.EditorstyleUtil;
-import com.liufujun.game.util.PlanUtil;
-import com.liufujun.game.util.RAWUtils;
+import com.liufujun.game.util.*;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,13 +16,37 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 @Controller
 public class Meconntroller {
 
     @RequestMapping("/")
-    public String  toMeworkbench(){
+    public String  toMeworkbench(Model model){
+        model.addAttribute("isSelt368",服务器使用路径.MTK368PALL.get(0));
+        model.addAttribute("isSelt9632",服务器使用路径.MTK368PALL.get(0));
+        model.addAttribute("isSelt2851",服务器使用路径.RTK2851PALL.get(0));
+        model.addAttribute("equManager368",服务器使用路径.MTK368PALL);
+        model.addAttribute("equManager9632",服务器使用路径.MTK9632PALL);
+        model.addAttribute("equManager2851",服务器使用路径.RTK2851PALL);
+        for (int i = 0; i <服务器使用路径.MTK368PALL.size() ; i++) {
+            if (服务器使用路径.MTK368PALL.get(i).indexOf(服务器使用路径.MTK368PATH)!=-1){
+                model.addAttribute("isSelt368",服务器使用路径.MTK368PALL.get(i));
+            }
+        }
+        for (int i = 0; i <服务器使用路径.MTK9632PALL.size() ; i++) {
+            if (服务器使用路径.MTK9632PALL.get(i).indexOf(服务器使用路径.MTK9632PATH)!=-1){
+                model.addAttribute("isSelt9632",服务器使用路径.MTK9632PALL.get(i));
+            }
+        }
+        for (int i = 0; i <服务器使用路径.RTK2851PALL.size() ; i++) {
+            if (服务器使用路径.RTK2851PALL.get(i).indexOf(服务器使用路径.RTK2851PATH)!=-1){
+                model.addAttribute("isSelt2851",服务器使用路径.RTK2851PALL.get(i));
+            }
+        }
         return "me/meindex";
     }
     @RequestMapping("/dzpt")
@@ -158,8 +180,11 @@ public class Meconntroller {
         电子屏贴path=sw.get电子屏贴路径();
         Plan=sw.get方案();
         遥控器丝印图Path=sw.getIRimgPath();
+        e开机视频路径=sw.get软件开机视频路径全称();
+        e是否有开机视频=sw.getSWinfo().getIsbootvideo();
     }
-
+    String e是否有开机视频;
+    String e开机视频路径;
     String potopath="";
     String 电子屏贴path="";
     String Plan="";
@@ -167,9 +192,10 @@ public class Meconntroller {
     @RequestMapping(value = "/image/{image_name}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable("image_name") String image_name) throws Exception{
         if (image_name.equals("dzpt")){
-            return poto(电子屏贴path);
+            return poto(电子屏贴path,1);
         }else if (image_name.equals("ykq")){
-            return poto(遥控器丝印图Path);
+            System.out.println(666+遥控器丝印图Path);
+            return poto(遥控器丝印图Path,2);
         } else {
             byte[] imageContent ;
             String path = potopath;
@@ -186,14 +212,37 @@ public class Meconntroller {
         }
     }
 
-    private ResponseEntity poto(String Path) throws Exception{
+    @RequestMapping(value = "/preview2", method = RequestMethod.GET)
+  @ResponseBody
+   public void getPreview2( HttpServletResponse response) {
+      try {
+          if (e是否有开机视频.equals("false"))return;
+
+            File file = new File(e开机视频路径);
+            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+            response.setHeader("Content-Disposition", "attachment; filename="+file.getName().replace(" ", "_"));
+            InputStream iStream = new FileInputStream(file);
+            IOUtils.copy(iStream, response.getOutputStream());
+            response.flushBuffer();
+          } catch (java.nio.file.NoSuchFileException e) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+          } catch (Exception e) {
+            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+       }
+    }
+
+
+    private ResponseEntity poto(String Path,int type) throws Exception{
         byte[] imageContent ;
         File potoFile=new File(Path);
         if (potoFile.exists()){
+
             imageContent = Fileprocessing.fileToByte(potoFile);
             final HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.IMAGE_PNG);
             return new ResponseEntity<>(imageContent, headers, HttpStatus.OK);
+        }else if (type==1){
+            return poto("res/config/drawable/sticker.png",2);
         }
         return null;
     }
@@ -230,5 +279,6 @@ public class Meconntroller {
         }else {
             Colortemperature.Colortupdate(sw);
         }
+
     }
 }

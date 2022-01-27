@@ -28,10 +28,37 @@ public class SHconntroller {
         return 查找(e关键字arr);
     }
 
+    @RequestMapping(value = "/Changku368", method = RequestMethod.POST)
+    @ResponseBody
+    public void Changku368 (@RequestBody(required=false) String path) {
+        服务器使用路径.Info368(path.substring(path.indexOf("：")+1));
+        System.out.println(服务器使用路径.MTK368PATH+"  当前路径");
+    }
 
+    @RequestMapping(value = "/openSWfile", method = RequestMethod.POST)
+    @ResponseBody
+    public void openSWfile (@RequestBody(required=false) String path) {
+        System.out.println(path);
+        Fileprocessing.openFile(path);
+    }
+
+    @RequestMapping(value = "/Changku9632", method = RequestMethod.POST)
+    @ResponseBody
+    public void Changku9632 (@RequestBody(required=false) String path) {
+        System.out.println(path);
+        服务器使用路径.Info9632(path.substring(path.indexOf("：")+1));
+        System.out.println(服务器使用路径.MTK9632PATH+"  当前路径");
+    }
+
+    @RequestMapping(value = "/Changku2851", method = RequestMethod.POST)
+    @ResponseBody
+    public void Changku2851 (@RequestBody(required=false) String path) {
+        服务器使用路径.Info2851(path.substring(path.indexOf("：")+1));
+        System.out.println(服务器使用路径.RTK2851PATH+"  当前路径");
+    }
     @RequestMapping(value = "/JBall", method = RequestMethod.POST)
     @ResponseBody
-    public void JBall ( ) {
+    public void JBall () {
         JBAlllist.clear();
         if (!服务器使用路径.MTK368PATH.equals("null")) {
             File file368=new File(服务器使用路径.脚本路径368);

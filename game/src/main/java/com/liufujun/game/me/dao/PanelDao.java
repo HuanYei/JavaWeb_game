@@ -15,6 +15,14 @@ public class PanelDao {
                 String Name=Main.replaceBlank(e屏数组[i]);
                 Name=Name.replace("m_pPanelName=","").replace(";","");
                 sw.getPanel().setM_PNAME(Name);
+            }else if (e屏数组[i].indexOf("m_wPanelWidth")!=-1){
+                String SWAP=Main.replaceBlank(e屏数组[i]);
+                SWAP=SWAP.replace("m_wPanelWidth=","").replace(";","");
+                sw.getPanel().setM_wPanelWidth(SWAP);
+            }else if (e屏数组[i].indexOf("m_wPanelHeight")!=-1){
+                String SWAP=Main.replaceBlank(e屏数组[i]);
+                SWAP=SWAP.replace("m_wPanelHeight=","").replace(";","");
+                sw.getPanel().setM_wPanelHeight(SWAP);
             }
             if (sw.get方案().equals("9632")){
                 if (e屏数组[i].indexOf("m_bPanelDualPort")!=-1){
@@ -34,6 +42,9 @@ public class PanelDao {
                     sw.getPanel().setSwap_MODE(SWAP);
                 }
             }
+
+            sw.getPanel().setMirror_MODE(SwDao.e脚本宏查值("mirror_on="));
+
         }
         return sw;
     }
@@ -50,7 +61,15 @@ public class PanelDao {
                 String iVFLIP=Main.replaceBlank(e屏数组[i]);
                 iVFLIP=iVFLIP.replace(".iVFLIP=","").substring(0,1);
                 sw.getPanel().setMirror_MODE(iVFLIP);
-            }
+            }else if (e屏数组[i].indexOf(".iCONFIG_DISP_ACT_END_HPOS")!=-1){
+                 String SWAP=Main.replaceBlank(e屏数组[i]);
+                 SWAP=SWAP.replace(".iCONFIG_DISP_ACT_END_HPOS=","").replace(",","");
+                 sw.getPanel().setM_wPanelWidth(SWAP);
+             }else if (e屏数组[i].indexOf(".iCONFIG_DISP_ACT_END_VPOS")!=-1){
+                 String SWAP=Main.replaceBlank(e屏数组[i]);
+                 SWAP=SWAP.replace(".iCONFIG_DISP_ACT_END_VPOS=","").replace(",","");
+                 sw.getPanel().setM_wPanelHeight(SWAP);
+             }
 
             if (sw.get方案().equals("2842")){
                 if (e屏数组[i].indexOf(".iCONFIG_DISPLAY_COLOR_BITS")!=-1){
@@ -78,7 +97,7 @@ public class PanelDao {
     }
 
     public static void Panel修改(SwEnglish sw) {
-        if (sw.getSoftware_name().indexOf("2851")!=-1||sw.getSoftware_name().indexOf("2842")!=-1){
+        if (sw.getIsRTK()==1){
             RTK屏修改(sw);
         }else {
             MTK屏修改(sw);
@@ -145,6 +164,9 @@ public class PanelDao {
                     e屏数组[i] = e屏数组[i].replace(a, a.substring(0, a.length() - 2) + " " + ac);
                 }
             }
+        }
+        if (sw.getPanel().getMirror_MODE()!=null&&!sw.getPanel().getMirror_MODE().equals("")) {
+            Fileprocessing.updateJBFile(sw.getFull_name_of_software_path(),"mirror_on=",sw.getPanel().getMirror_MODE());
         }
         PanelString="";
         for (int i = 0; i < e屏数组.length; i++) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -21,16 +21,42 @@
     </style>
     <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
 </head>
-<body>
+<body >
 <div style="width: 100%" >
     <a href="/tool" style="font-size: 150%">其他工具</a>
 </div>
-<div align="center">
-    <h1 style="margin-top: 150px;font-size: 80px">软件信息查找</h1>
+<div align="center" >
 <form action="/subswname" method="post" enctype="multipart/form-data" style="font-size: 150%;">
     <div style=" width: 70%;" align="left">
+        <h2>软件信息查找</h2>
+        368仓库：
+        <select name="merchantNo" id="368select">
+            <option th:each="item:${equManager368}"
+                th:value="${item}"
+                    th:selected="${isSelt368==item}"
+                th:text="${item}">
+            </option>
+        </select>
+        <br>
+        9632仓库：
+        <select name="merchantNo" id="9632select">
+            <option th:each="item:${equManager9632}"
+                    th:value="${item}"
+                    th:selected="${isSelt9632==item}"
+                    th:text="${item}">
+            </option>
+        </select>
+        <br>
+        2851仓库：
+        <select name="merchantNo" id="2851select">
+            <option th:each="item:${equManager2851}"
+                    th:value="${item}"
+                    th:selected="${isSelt2851==item}"
+                    th:text="${item}">
+            </option>
+        </select>
     <div style="margin-top: 100px">
-    <input id="text" type="text"  name="swname" style="text-align:center; font-size:15px; width: 90%;height: 40px;"placeholder="请输入脚本名" autocomplete="off"></input>
+    <input id="text" type="text"  name="swname" style="text-align:center; font-size:15px; width: 87%;height: 40px;"placeholder="请输入脚本名" autocomplete="off"></input>
     <button type="submit" style="font-size:15px;height: 50px; width: 100px" >查询</button>
     </div>
         <div id="divtisi">
@@ -61,31 +87,33 @@
         });
         document.getElementById("divtisi").style.visibility="hidden";
         $("#text").bind('input propertychange', function() {
-            var shuru= $("#text").val();
-            $.ajax({
-                type:"post",
-                url:"/chaJB",
-                data:shuru,
-                contentType: 'application/json',
-                success: function (data1) {
-                    if ($("#text").val()==""){
-                        document.getElementById("divtisi").style.visibility="hidden";
-                    }else {
-                        var text=data1.split("|");
-                        var ss="";
-                        oneJB=text[0];
-                        for (var i = 0; i <text.length ; i++) {
-                            ss+="<p>"+text[i]+"</p>"
-                        }
-                        document.getElementById("divtisi").style.visibility="visible";
-                        document.getElementById("divtisi").innerHTML="";
-                        document.getElementById("divtisi").innerHTML=ss;
-                    }
-                }
-            });
-
+            f();
         });
     });
+    function f() {
+        var shuru= $("#text").val();
+        $.ajax({
+            type:"post",
+            url:"/chaJB",
+            data:shuru,
+            contentType: 'application/json',
+            success: function (data1) {
+                if ($("#text").val()==""){
+                    document.getElementById("divtisi").style.visibility="hidden";
+                }else {
+                    var text=data1.split("|");
+                    var ss="";
+                    oneJB=text[0];
+                    for (var i = 0; i <text.length ; i++) {
+                        ss+="<p>"+text[i]+"</p>"
+                    }
+                    document.getElementById("divtisi").style.visibility="visible";
+                    document.getElementById("divtisi").innerHTML="";
+                    document.getElementById("divtisi").innerHTML=ss;
+                }
+            }
+        });
+    }
     var oneJB="";
     document.onkeydown=function (e) {
         event=event||window.event;
@@ -101,5 +129,62 @@
             return true;
         }
     };
+    //监听库房选择事件
+    $("#368select").change(function(){
+        //获取选中项的文本值
+        var itemText = $("#368select option:selected").text();
+        $.ajax({
+            type:"post",
+            url:"/Changku368",
+            data:itemText,
+            contentType: 'application/json'
+        });
+        $.ajax({
+            type: "post",
+            url: "/JBall",
+            contentType: 'application/json',
+            success: function () {
+                f();
+            }
+        });
+
+    });
+    $("#2851select").change(function(){
+        //获取选中项的文本值
+        var itemText = $("#2851select option:selected").text();
+        $.ajax({
+            type:"post",
+            url:"/Changku2851",
+            data:itemText,
+            contentType: 'application/json'
+        });
+        $.ajax({
+            type: "post",
+            url: "/JBall",
+            contentType: 'application/json',
+            success: function () {
+                f();
+            }
+        });
+    });
+
+    $("#9632select").change(function(){
+        //获取选中项的文本值
+        var itemText = $("#9632select option:selected").text();
+        $.ajax({
+            type:"post",
+            url:"/Changku9632",
+            data:itemText,
+            contentType: 'application/json'
+        });
+        $.ajax({
+            type: "post",
+            url: "/JBall",
+            contentType: 'application/json',
+            success: function () {
+                f();
+            }
+        });
+    });
 </script>
 </html>

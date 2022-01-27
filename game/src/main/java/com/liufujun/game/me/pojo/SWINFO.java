@@ -7,10 +7,11 @@ public class SWINFO {
     String SOURCE;
     String board;
     String store;
-    String IsCI;String TV_system;String ATVManual;String TTX_language;
-    String ECO_MODE;String Country_and_language;String Isdolby;String IsBluetooth;
-    String languageAll;String Sound_power;String Back_light;String Resolution;
-    String APPS;String IsEshare;String IsZeasn;String UpdateName;String Model_name;
+    String IsCI, TV_system, ATVManual, TTX_language;
+    String ECO_MODE, Country_and_language, Isdolby, IsBluetooth;
+    String languageAll, Sound_power, Current, Resolution;
+    String APPS, IsEshare, IsZeasn, UpdateName, Model_name;
+    String IsDzpt,backlight,IsPower_memory,Equipment_name,Standby_mode,Isbootvideo,Path;
 
     @Override
     public String toString() {
@@ -31,7 +32,7 @@ public class SWINFO {
                 ", IsBluetooth='" + IsBluetooth + '\'' +
                 ", languageAll='" + languageAll + '\'' +
                 ", Sound_power='" + Sound_power + '\'' +
-                ", Back_light='" + Back_light + '\'' +
+                ", Current='" + Current + '\'' +
                 ", Resolution='" + Resolution + '\'' +
                 ", APPS='" + APPS + '\'' +
                 ", IsEshare='" + IsEshare + '\'' +
@@ -161,12 +162,12 @@ public class SWINFO {
         Sound_power = sound_power;
     }
 
-    public String getBack_light() {
-        return Back_light;
+    public String getCurrent() {
+        return Current;
     }
 
-    public void setBack_light(String back_light) {
-        Back_light = back_light;
+    public void setCurrent(String Current) {
+       this.Current = Current;
     }
 
     public String getResolution() {
@@ -223,5 +224,61 @@ public class SWINFO {
 
     public void setIRname(String IRname) {
         this.IRname = IRname;
+    }
+
+    public String getIsDzpt() {
+        return IsDzpt;
+    }
+
+    public void setIsDzpt(String isDzpt) {
+        IsDzpt = isDzpt;
+    }
+
+    public String getBacklight() {
+        return backlight;
+    }
+
+    public void setBacklight(String backlight) {
+        this.backlight = backlight;
+    }
+
+    public String getIsPower_memory() {
+        return IsPower_memory;
+    }
+
+    public void setIsPower_memory(String isPower_memory) {
+        IsPower_memory = isPower_memory;
+    }
+
+    public String getEquipment_name() {
+        return Equipment_name;
+    }
+
+    public void setEquipment_name(String equipment_name) {
+        Equipment_name = equipment_name;
+    }
+
+    public String getStandby_mode() {
+        return Standby_mode;
+    }
+
+    public void setStandby_mode(String standby_mode) {
+        Standby_mode = standby_mode;
+    }
+
+    public String getIsbootvideo() {
+        return Isbootvideo;
+    }
+
+    public void setIsbootvideo(String isbootvideo) {
+        Isbootvideo = isbootvideo;
+    }
+
+    public String getPath() {
+        return Path;
+    }
+
+    public void setPath(String path) {
+        Path = path;
     }
 }

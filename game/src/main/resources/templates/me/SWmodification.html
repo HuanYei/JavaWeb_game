@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+        a{
+            color: #143fb0;
+            text-decoration:underline;
+        }
         a:link {color: #143fb0
         } /* 未访问的链接 */
         a:visited {color: #143fb0
@@ -32,54 +36,67 @@
     <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
     <script type="text/javascript" src="js/vue.js"></script>
 </head>
-<body onload="myFunction()" >
+<body onload="myFunction()" style="width: 500%;">
 <div style="width: 100%">
     <a href="/" style="font-size: 150%">主页</a>
+    <a onclick="Refresh()" href="#" style="font-size: 100%">按(Ctrl+Alt+Z)刷新页面</a>
 </div>
 <div style="margin-left: 20px">
     <h1>软件信息</h1>
-    <p><b>智像DP：</b><span th:text="${SW.getZeasn_devicetype()}"></span>&nbsp;&nbsp;<button onclick="copyDP()">点击复制</button></p>
-    <p><b>脚本：<a th:href="${'/toScript?swSCpath='}+${SW.getFull_name_of_software_path}">编辑脚本</a>|<a onclick="openfilejb()" href="#">打开目录</a></b></p>
-    <div style="margin-left: 30px">
-        <input id="ScName" type="text" th:value=" ${SW.software_name}"></input><br>
-        <button onclick="rmScName()">重命名脚本</button>
-        <button onclick="newSc()">创建新脚本</button>
-<!--        <span style="color: red;" class="zhushi">*请先创建新脚本在创建新客制化文件夹</span>-->
-    </div>
     <div style="display: flex;">
         <div>
-            <p><b>客制化文件夹：<a onclick="openfile()" href="#">打开目录</a></b></p>
+            <p><b>智像DP：</b><span th:text="${SW.getZeasn_devicetype()}"></span>&nbsp;&nbsp;<button onclick="copyDP()">点击复制</button></p>
+            <p><b>脚本：<a th:href="${'/toScript?swSCpath='}+${SW.getFull_name_of_software_path}">编辑脚本</a>|<a th:onclick="openpath([[${SW.getFull_name_of_software_path}]])">打开目录</a></b></p>
+            <div style="margin-left: 30px">
+                <input id="ScName" type="text" th:value=" ${SW.software_name}"></input><br>
+                <button onclick="rmScName()">重命名脚本</button>
+                <button onclick="newSc()">创建新脚本</button>
+                <!--        <span style="color: red;" class="zhushi">*请先创建新脚本在创建新客制化文件夹</span>-->
+            </div>
+
+            <p><b>客制化文件夹：<a th:onclick="openpath([[${SW.full_name_of_software_customization_path}]])" >打开目录</a></b></p>
             <div style="margin-left: 30px">
                 <input type="text" id="CuDir" th:value="${SW.software_customization_name}"></input><br>
                 <button onclick="rmDir()">重命名文件夹</button>
                 <button onclick="newDir()">创建新文件夹</button>
                 <!--        <span style="color: red;" class="zhushi">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>-->
             </div>
-            <p><b>logo<span id="dzpt1">和电子屏贴</span>：<a onclick="openfile2()" href="#">打开LOGO目录</a><span  class="rtksty">|<a id="clogo"  href="/toRAWLOGO">制作logo</a></span><span id="dzpt3">|<a onclick="openfiledzpt()" href="#">打开电子屏贴目录</a></span></b>
 
-            <div style="margin-left: 30px">
+            <p><b>logo<span id="dzpt1" style="display: none">和电子屏贴</span>：<a th:onclick="openpath([[${SW.full_name_of_software_logo_path}]])" >打开LOGO目录</a><span  class="rtksty">|<a id="clogo"  href="/toRAWLOGO">制作logo</a></span><span id="dzpt3" style="display: none;">|<a th:onclick="openpath([[${SW.dzptPath}]])"  >打开电子屏贴目录</a></span></b>
+
+            <div style="margin-left: 30px;display: flex;" >
+            <div>
                 <a th:href="@{/image/logo}" style="text-decoration:none;">
                     <img style="height: 180px;width: 320px;" border="3" title="点击可查看大图" th:src="@{/image/logo}">
                 </a>&nbsp;
-                <a href="/dzpt" id="dzpt2" style="text-decoration:none;">
+                <a href="/dzpt" id="dzpt2" style="text-decoration:none;display: none;">
                     <img style="height: 180px;width: 320px;" border="3" title="点击可查看大图" th:src="@{/image/dzpt}">
                 </a>
-                <br>
-                <input id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 38%;height: 20px"></input>
-                <button onclick="UPlogo()" style="height: 30px;">更换logo</button>
+                <video id="donhvideo" loop="loop" style="height: 187px; display: none; width: 327px;" autoplay="autoplay" controls="autoplay"  th:src="@{/preview2}"></video>
+            </div>
+            <div id="donhdiv" style="border:2px solid #000000;display: none; background-color: black; height: 180px;width: 320px;margin-left: 10px" >
+                    <img class="mtksty" style="position:absolute;height: 42px;width: 170px; margin: 69px  75px; background-color: white"/>
+                    <img class="mtksty" id="don" style="position:absolute;height: 42px;width: 0px; margin: 69px -100px;"  src="img/android-logo-shine.png"/>
+                    <img class="mtksty" style="position:absolute;height: 180px;width: 320px;"src="img/3.png"/>
+                    <img id="donh" style="position:absolute;height: 42px;width: 170px; margin: 69px 78px;"  title="点击可查看大图" src="img/android-logo-mask.png"/>
+            </div>
+            <br>
                 <!--        <span style="color: red;" class="zhushi">*请打开logo目录，复制你要修改的logo名称，填入输入框更换logo。</span>-->
             </div>
+            <input id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 23%;height: 20px;margin-left: 30px;"></input>
+            <button onclick="UPlogo()" style="height: 30px;">更换logo</button>
         </div>
         <div style="padding-left: 50px">
             <p><b>遥控器丝印图：</b></p>
             <a th:href="@{/image/ykq}" style="text-decoration:none;">
-            <img style="height: 300px;width: 366px;" border="1" title="点击可查看大图" th:src="@{/image/ykq}">
+            <img style="height: 450px;width: 366px;" border="1" title="点击可查看大图" th:src="@{/image/ykq}">
             </a>
         </div>
     </div>
     <p>
         <div id="swdiv1">
-        <b>屏： <a onclick="openfile3()" href="#">打开目录</a></b>
+
+        <b>屏： <a th:onclick="openpath([[${SW.full_name_of_software_screen_parameter_name_path}]])" >打开目录</a></b>
     <div class="tit2">
         屏参文件名：<input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;"></input>
         <button onclick="UPPanel()" style="height: 30px;">更换屏参</button>
@@ -136,6 +153,7 @@
             <input  style="display: none;" type="text" th:field="*{panel.Mirror_MODE}"/>
             <input  style="display: none;" type="text" th:field="*{panel.Bit_MODE}"/>
             <input  style="display: none;" type="text" th:field="*{software_name}"/>
+            <input  style="display: none;" type="text" th:field="*{full_name_of_software_path}"/>
             <input  style="display: none;" type="text"
                    th:field="*{full_name_of_software_screen_parameter_name_path}"/>
         </form>
@@ -147,39 +165,45 @@
             <table>
                 <tr>
                     <td>遥控器名：<span th:text="${SW.getSwinfo().getIRname()}"></span></td>
-                    <td>按键板名：XXXX</td>
+                    <td>电子屏贴：<span th:text="${SW.getSwinfo().getIsDzpt()}"></span></td>
                     <td>按键板类型：<span th:text="${SW.getSwinfo().getKEYboardType()}"></span></td>
                     <td>通道配置：<span th:text="${SW.getSwinfo().getSOURCE()}"></span></td>
                 </tr>
                 <tr>
-                    <td>板卡类型：XXXXXX</td>
-                    <td>板卡内存及存储：XXXXXX</td>
-                    <td>是否带CI：XXXXXX</td>
+                    <td>板卡类型：<span th:text="${SW.getSwinfo().getBoard()}"></span></td>
+                    <td>CI：<span th:text="${SW.getSwinfo().getIsCI()}"></span></td>
+                    <td>板卡内存及存储：<span th:text="${SW.getSwinfo().getStore()}"></span></td>
                     <td>按键板名：<span th:text="${SW.getSwinfo().getKEYboardName()}"></span></td>
                 </tr>
                 <tr>
-                    <td>TV制式：XXXXXX</td>
-                    <td>ATV手动搜台制式：XXXXXX</td>
-                    <td>默认图文语言：XXXXXX</td>
-                    <td>ECO mode：XXXX XXXXX XXXXX XXXXX XXXX</td>
+                    <td>TV制式：<span th:text="${SW.getSwinfo().getTV_system()}"></span></td>
+                    <td>蓝牙：<span th:text="${SW.getSwinfo().getIsBluetooth()}"></span></td>
+                    <td>默认背光：<span th:text="${SW.getSwinfo().getBacklight()}"></span></td>
+                    <td>节能模式：<span th:text="${SW.getSwinfo().getECO_MODE()}"></span></td>
                 </tr>
                 <tr>
-                    <td>国家+默认语言：XXXXXX</td>
-                    <td>是否带杜比：XXXXXX</td>
-                    <td>是否带蓝牙：XXXXXX</td>
-                    <td>所有语言：XXXX XXXXX XXXXX XXXXX XXXX</td>
+                    <td>国家+默认语言：<span th:text="${SW.getSwinfo().getCountry_and_language()}"></span></td>
+                    <td>杜比：<span th:text="${SW.getSwinfo().getIsdolby()}"></span></td>
+                    <td>ATV手动搜台制式：<span th:text="${SW.getSwinfo().getATVManual()}"></span></td>
+                    <td>所有语言：<span th:text="${SW.getSwinfo().getLanguageAll()}"></span></td>
                 </tr>
                 <tr>
-                    <td>声音功率：XXXXXX</td>
-                    <td>背光电流：XXXXXX</td>
-                    <td>屏分辨率：XXXXXX</td>
-                    <td>内置应用：XXXX XXXXX XXXXX XXXXX XXXX</td>
+                    <td>声音功率：<span th:text="${SW.getSwinfo().getSound_power()}"></span></td>
+                    <td>智像：<span th:text="${SW.getSwinfo().getIsZeasn()}"></span></td>
+                    <td>屏分辨率：<span th:text="${SW.getSwinfo().getResolution()}"></span></td>
+                    <td>内置应用：<span th:text="${SW.getSwinfo().getAPPS()}"></span></td>
                 </tr>
                 <tr>
-                    <td>是否包含智像：XXXXXX</td>
-                    <td>是否包含Eshare：XXXXXX</td>
-                    <td>升级软件名称：XXXXXX</td>
-                    <td>客户机型名：XXXX XXXXX XXXXX XXXXX XXXX</td>
+                    <td>背光电流：<span th:text="${SW.getSwinfo().getCurrent()}"></span></td>
+                    <td>Eshare：<span th:text="${SW.getSwinfo().getIsEshare()}"></span></td>
+                    <td>升级软件名称：<span th:text="${SW.getSwinfo().getUpdateName()}"></span></td>
+                    <td>客户机型名：<span th:text="${SW.getSwinfo().getModel_name()}"></span></td>
+                </tr>
+                <tr>
+                    <td>待机模式：<span th:text="${SW.getSwinfo().getStandby_mode()}"></span></td>
+                    <td>上电模式：<span th:text="${SW.getSwinfo().getIsPower_memory()}"></span></td>
+                    <td>设备名：<span th:text="${SW.getSwinfo().getEquipment_name()}"></span></td>
+                    <td>图文：<span th:text="${SW.getSwinfo().getTTX_language()}"></span></td>
                 </tr>
             </table>
         </div>
@@ -196,36 +220,57 @@
             <table style="margin-left: 30px">
                 <tr>
                     <th></th>
-                    <th class="rtksty">User</th>
+                    <th>User</th>
                     <th>Standard</th>
                     <th>COOL</th>
                     <th>Warm</th>
                 </tr>
                 <tr>
                     <th>R</th>
-                    <td id="ColorUserTd1" class="rtksty"><input type="text" th:field="*{PQ_data.UserR}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.UserR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmR}"/></td>
                 </tr>
                 <tr>
                     <th>G</th>
-                    <td id="ColorUserTd2" class="rtksty"><input type="text" th:field="*{PQ_data.UserG}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.UserG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmG}"/></td>
                 </tr>
                 <tr>
                     <th>B</th>
-                    <td id="ColorUserTd3" class="rtksty"><input type="text" th:field="*{PQ_data.UserB}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.UserB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmB}"/></td>
                 </tr>
                 <tr>
+                    <th>R OFF</th>
+                    <td><input type="text" th:field="*{PQ_data.UserROFF}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.StandardROFF}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.CoolROFF}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.WarmROFF}"/></td>
+                </tr>
+                <tr>
+                    <th>G OFF</th>
+                    <td><input type="text" th:field="*{PQ_data.UserGOFF}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.StandardGOFF}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.CoolGOFF}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.WarmGOFF}"/></td>
+                </tr>
+                <tr>
+                    <th>B OFF</th>
+                    <td><input type="text" th:field="*{PQ_data.UserBOFF}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.StandardBOFF}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.CoolBOFF}"/></td>
+                    <td><input type="text" th:field="*{PQ_data.WarmBOFF}"/></td>
+                </tr>
+                <tr>
                     <td></td>
                     <td></td>
-                    <th><input id="mtksub" type="submit" value="提交修改"  ></th>
+                    <th><input id="mtksub" class="mtksty" type="submit" value="提交修改"  ></th>
                     <td></td>
                 </tr>
             </table>
@@ -309,15 +354,25 @@
 </div>
 <script type="text/javascript" th:inline="javascript">
 
+    var wzsd1=1000;
+    var sbbb= setInterval("sb()",wzsd1);
+    function sb(){
+        $("#don").animate({margin: '69px 0px',width:'0px'},0);
+        $("#don").animate({margin: '69px 75px',width:'170px'},3000);
+        $("#don").animate({margin: '69px 150px',width:'170px'},2000);
+        $("#don").animate({margin: '69px 240px',width:'75px'},1000);
+    }
+
     window.onload = function () {
+        setInterval(sbbb);
         var msg = [[${msg}]];
         if (msg.length > 1) {
             alert(msg);
         }
-        if ([[${SW.getIsdzpt()}]]!="true") {
-            document.getElementById("dzpt1").style.display = "none";
-            document.getElementById("dzpt2").style.display = "none";
-            document.getElementById("dzpt3").style.display = "none";
+        if ([[${SW.getIsdzpt()}]]=="true") {
+            document.getElementById("dzpt1").style.display = "inline";
+            document.getElementById("dzpt2").style.display = "inline";
+            document.getElementById("dzpt3").style.display = "inline";
         }
         if ([[${SW.getPanel().getTi_MODE()}]] == null) {
             document.getElementById("TiMode").style.display = "none";
@@ -334,13 +389,22 @@
         if ([[${SW.getPanel().getDual_MODE()}]] == null) {
             document.getElementById("DualMode").style.display = "none";
         }
+        if ([[${SW.getSwinfo().getIsbootvideo()}]] == "false") {
+            document.getElementById("donhdiv").style.display = "inline";
+        }else {
+            document.getElementById("donhvideo").style.display = "inline";
+        }
         if ([[${SW.getIsRTK()}]] == 0) {
             var a=document.querySelectorAll(".rtksty");
             for (var i = 0; i < a.length; i++) {
                 a[i].style.display = "none";
             }
         }else {
-            document.getElementById("mtksub").style.display = "none";
+            var a=document.querySelectorAll(".mtksty");
+            for (var i = 0; i < a.length; i++) {
+                a[i].style.display = "none";
+            }
+            document.getElementById("donh").src="img/rtk.gif";
         }
 
         let input = document.getElementById("ScName");
@@ -353,7 +417,6 @@
 
     function tijiao() {
         document.getElementById("pqfrom").submit();
-        alert("按下确认后提交，请耐心等待修改完成！请勿重复提交。");
     }
     function Timodeon() {
         document.getElementById("panel.Ti_MODE").value = 1;
@@ -579,62 +642,6 @@
         }
     }
 
-    function openfile() {
-        var postForm = document.createElement("form");//表单对象
-        postForm.method = "post";
-        postForm.action = '/OpenFile';
-        var oldScnameInput = document.createElement("input");
-        oldScnameInput.setAttribute("name", "Filepath");
-        oldScnameInput.setAttribute("value", [[${SW.full_name_of_software_customization_path}]] + '|' + [[${SW.software_name}]]);
-        postForm.appendChild(oldScnameInput);
-        document.body.appendChild(postForm);
-        postForm.submit();
-    }
-    function openfilejb() {
-        var postForm = document.createElement("form");//表单对象
-        postForm.method = "post";
-        postForm.action = '/OpenFile';
-        var oldScnameInput = document.createElement("input");
-        oldScnameInput.setAttribute("name", "Filepath");
-        oldScnameInput.setAttribute("value", [[${SW.full_name_of_software_path}]] + '|' + [[${SW.software_name}]]);
-        postForm.appendChild(oldScnameInput);
-        document.body.appendChild(postForm);
-        postForm.submit();
-    }
-    function openfile2() {
-        var postForm = document.createElement("form");//表单对象
-        postForm.method = "post";
-        postForm.action = '/OpenFile';
-        var oldScnameInput = document.createElement("input");
-        oldScnameInput.setAttribute("name", "Filepath");
-        oldScnameInput.setAttribute("value", [[${SW.full_name_of_software_logo_path}]] + '|' + [[${SW.software_name}]]);
-        postForm.appendChild(oldScnameInput);
-        document.body.appendChild(postForm);
-        postForm.submit();
-    }
-
-    function openfile3() {
-        var postForm = document.createElement("form");//表单对象
-        postForm.method = "post";
-        postForm.action = '/OpenFile';
-        var oldScnameInput = document.createElement("input");
-        oldScnameInput.setAttribute("name", "Filepath");
-        oldScnameInput.setAttribute("value", [[${SW.full_name_of_software_screen_parameter_name_path}]] + '|' + [[${SW.software_name}]]);
-        postForm.appendChild(oldScnameInput);
-        document.body.appendChild(postForm);
-        postForm.submit();
-    }
-    function openfiledzpt() {
-        var postForm = document.createElement("form");//表单对象
-        postForm.method = "post";
-        postForm.action = '/OpenFile';
-        var oldScnameInput = document.createElement("input");
-        oldScnameInput.setAttribute("name", "Filepath");
-        oldScnameInput.setAttribute("value", [[${SW.dzptPath}]] + '|' + [[${SW.software_name}]]);
-        postForm.appendChild(oldScnameInput);
-        document.body.appendChild(postForm);
-        postForm.submit();
-    }
     function copyDP() {
         var Url2="DP:"+[[${SW.getZeasn_devicetype()}]];
         var oInput = document.createElement('input');
@@ -646,7 +653,41 @@
         oInput.style.display='none';
     }
 
+    function Refresh(){
+        var textname=[[${SW.software_name}]];
+        var postForm = document.createElement("form");//表单对象
+        postForm.method="post" ;
+        postForm.action = '/subswname' ;
 
+        var pathInput = document.createElement("input") ;
+        pathInput.setAttribute("name", "swname") ;
+        pathInput.setAttribute("value", textname);
+        postForm.appendChild(pathInput);
+
+        document.body.appendChild(postForm) ;
+        postForm.submit() ;
+    }
+    document.onkeydown=function (e) {
+        event=event||window.event;
+        var currKey=0, e=e||event||window.event;
+        currKey = e.keyCode||e.which||e.charCode;
+        //检测按下哪个键，作相应处理
+        if((e.ctrlKey||e.metaKey) &&(e.altKey||e.metaKey) &&  currKey == 90){
+            Refresh();
+            return false;
+        } else{
+            return true;
+        }
+    };
+
+    function openpath(path) {
+        $.ajax({
+            type:"post",
+            url:"/openSWfile",
+            data:path,
+            contentType: 'application/json'
+        });
+    }
 </script>
 <script defer="defer">
 

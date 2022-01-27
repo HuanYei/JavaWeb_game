@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
+<body>
+<div style="width: 100%">
+    <a href="/" style="font-size: 150%">主页</a>
+</div>
+<div align="center" >
+    <form action="/" method="post" enctype="multipart/form-data">
+        <div style=" width: 70%;" align="left">
+            <h1>软件包管理</h1>
+            <span th:each="item:${total}">
+                <input type="checkbox"
+                         th:value="${item}"
+                         th:text="${item}"/>
+                <br>
+            </span>
+        </div>
+    </form>
+    <table>
+        <tr>
+            <th>软件名称</th>
+            <th>操作</th>
+        </tr>
+        <tr th:each="item:${swfile}">
+            <td th:text="${item.getName()}"></td>
+            <td> <button  th:onclick="openpath([[${item.getPath()}]])">打开目录</button></td>
+        </tr>
+    </table>
+</div>
+<script>
+    function openpath(path) {
+        $.ajax({
+            type:"post",
+            url:"/openSWfile",
+            data:path,
+            contentType: 'application/json'
+        });
+    }
+</script>
+</body>
+</html>

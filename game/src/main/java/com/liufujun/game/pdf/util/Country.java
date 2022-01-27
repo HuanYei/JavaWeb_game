@@ -7,7 +7,7 @@ public class Country {
         String list[]=nei.split("\n");
         for (String a:list) {
             if (a.indexOf(yu)!=-1){
-                return a.replace(yu+"=","");
+                return a.replace("=","").replace(yu,"");
             }
         }
         return yu;
@@ -73,6 +73,17 @@ public class Country {
                 return an;
         }
     }
+
+    public static String to中文语言(String yu){
+        yu=yu.replace("\"","");
+        String allarr[]=yu.split(" ");
+        String 中文语言="";
+        for (int i = 0; i <allarr.length ; i++) {
+            中文语言+=单个翻译语言(allarr[i])+" ";
+        }
+        return 中文语言;
+    }
+
 
     public static String 语言(String yu,String defaultyu){
         yu=StringUtil.删除字符(yu,"，","、","/","\\");

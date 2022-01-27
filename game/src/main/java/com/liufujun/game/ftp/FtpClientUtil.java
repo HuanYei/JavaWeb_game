@@ -29,7 +29,7 @@ public class FtpClientUtil {
             if (f.open()) {
 //                f.get("/opt/IBM/WebSphere/AppServer/profiles/AppSrv01/qunarlog.txt", "E:/zhangjun.txt");// 远程路径为相对路径
 
-                String name="/研发生产软件-android/MTK368P/C001/SO211215010 TZ2112-033/";
+                String name="/研发生产软件-android/";
                 name=new String(name.getBytes("UTF-8"),"iso-8859-1");// 转换后的目录名或文件名。
                 f.getFileNameList(name);
             }
@@ -101,6 +101,10 @@ public class FtpClientUtil {
 
     private FTPFile[] getFileList(String filePath) throws IOException {
         FTPFile[] list = ftpClient.listFiles();
+        for (FTPFile name:
+             list) {
+            System.out.println(name.getName());
+        }
         return list;
 
     }
@@ -303,12 +307,16 @@ public class FtpClientUtil {
          if (!open())
          return list;
          try {
-         String  dis[] = ftpClient.listNames(ftpDirectory);
-             for (String a:
-                  dis) {
+             FTPFile[] list2 = ftpClient.listFiles(ftpDirectory);
+             for (FTPFile name:
+                     list2) {
+                 String a=name.getName();
+                 if (name.isDirectory()&&a.length()>2){
+                     getFileNameList(ftpDirectory+a+"/");
+                 }
+                 a=new String(a.getBytes("iso-8859-1"),"UTF-8");
                  System.out.println(a);
              }
-
          } catch (Exception e) {
          e.printStackTrace();
          }

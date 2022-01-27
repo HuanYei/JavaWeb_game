@@ -46,6 +46,7 @@ public class SwDao {
             //MTK
             sw.getSWinfo().setKEYboardName(e脚本宏查值("keypad_file"));
             sw.getSWinfo().setIRname(e脚本宏查值("ir_file"));
+
             sw.set软件logo名(e脚本宏查值("bootlogo_file"));
             sw.set屏名(e脚本宏查值("panelname"));
             sw.set按键数量(e脚本宏查值("keypad_file"));
@@ -56,7 +57,7 @@ public class SwDao {
             }else if (sw.get方案().equals("9632")){
                 sw.set软件客制化名称(e脚本宏查值("export customer_folder=$toptech_path/customer/9632/$cus_id/"));
             }else if (sw.get方案().equals("6681")){
-                sw.set软件客制化名称(e脚本宏查值("customer_folder=$toptech_path/customer/6681/$cus_id/"));
+                sw.set软件客制化名称(e脚本宏查值("export customer_folder=$toptech_path/customer/6681/$cus_id/"));
             }
             PlanType(sw);
             Pq赋值(sw);
@@ -86,14 +87,54 @@ public class SwDao {
                 sw.getPQ数据().setStandardR(e色温数组[i+3].substring(0,4).replace(",",""));
                 sw.getPQ数据().setStandardG(e色温数组[i+10].substring(0,4).replace(",",""));
                 sw.getPQ数据().setStandardB(e色温数组[i+14].substring(0,4).replace(",",""));
+                for (int j = 0; j <34 ; j++) {
+                    if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE3_RED_OFFSET")!=-1){
+                        sw.getPQ数据().setStandardROFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }else if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE3_GREEN_OFFSET")!=-1){
+                        sw.getPQ数据().setStandardGOFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }else if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE3_BLUE_OFFSET")!=-1){
+                        sw.getPQ数据().setStandardBOFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }
+                }
             }else if (e色温数组[i].indexOf("mode: Cool")!=-1){
                 sw.getPQ数据().setCoolR(e色温数组[i+3].substring(0,4).replace(",",""));
                 sw.getPQ数据().setCoolG(e色温数组[i+10].substring(0,4).replace(",",""));
                 sw.getPQ数据().setCoolB(e色温数组[i+14].substring(0,4).replace(",",""));
+                for (int j = 0; j <34 ; j++) {
+                    if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE2_RED_OFFSET")!=-1){
+                        sw.getPQ数据().setCoolROFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }else if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE2_GREEN_OFFSET")!=-1){
+                        sw.getPQ数据().setCoolGOFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }else if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE2_BLUE_OFFSET")!=-1){
+                        sw.getPQ数据().setCoolBOFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }
+                }
             }else if (e色温数组[i].indexOf("mode: Warm")!=-1){
                 sw.getPQ数据().setWarmR(e色温数组[i+3].substring(0,4).replace(",",""));
                 sw.getPQ数据().setWarmG(e色温数组[i+10].substring(0,4).replace(",",""));
                 sw.getPQ数据().setWarmB(e色温数组[i+14].substring(0,4).replace(",",""));
+                for (int j = 0; j <34 ; j++) {
+                    if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE1_RED_OFFSET")!=-1){
+                        sw.getPQ数据().setWarmROFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }else if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE1_GREEN_OFFSET")!=-1){
+                        sw.getPQ数据().setWarmGOFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }else if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE1_BLUE_OFFSET")!=-1){
+                        sw.getPQ数据().setWarmBOFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }
+                }
+            }else if (e色温数组[i].indexOf("mode: User")!=-1){
+                sw.getPQ数据().setUserR(e色温数组[i+3].substring(0,4).replace(",",""));
+                sw.getPQ数据().setUserG(e色温数组[i+10].substring(0,4).replace(",",""));
+                sw.getPQ数据().setUserB(e色温数组[i+14].substring(0,4).replace(",",""));
+                for (int j = 0; j <34 ; j++) {
+                    if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE0_RED_OFFSET")!=-1){
+                        sw.getPQ数据().setUserROFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }else if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE0_GREEN_OFFSET")!=-1){
+                        sw.getPQ数据().setUserGOFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }else if (e色温数组[i+j].indexOf("COLOR_TEMP_MODE0_BLUE_OFFSET")!=-1){
+                        sw.getPQ数据().setUserBOFF(e色温数组[i+j+1].substring(0,4).replace(",",""));
+                    }
+                }
             }
         }
         return sw;
@@ -127,16 +168,46 @@ public class SwDao {
     }
 
     private static SW 赋值368(SW sw) {
+        String bootvideoname=e脚本宏查值("config_bootvideo_name");
+        if (bootvideoname.equals("")||bootvideoname.equals("未识别到这个宏")){
+            sw.getSWinfo().setIsbootvideo("false");
+        }else {
+            sw.set软件开机视频路径全称(服务器使用路径.MTK368PATH+"vendor/toptech/customer/common/bootvideo/"+bootvideoname);
+            sw.getSWinfo().setIsbootvideo("true");
+        }
+        sw.getSWinfo().setPath(服务器使用路径.MTK368PATH);
         sw.setIRimgPath(服务器使用路径.MTK368PATH+"vendor/toptech/customer/common/ir/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径368+sw.get软件logo名()+".jpg");
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径368+sw.get屏名());
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径368+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
         sw.set软件色温文件路径(sw.get软件客制化路径全称()+"default_ini/OsdMapping.ini");
+
         sw.set软件logo前端(sw.get软件logo路径全称().substring(3));
+
         return sw;
     }
-
+    private static void MTK9632(SW sw){
+        sw.getSWinfo().setPath(服务器使用路径.MTK9632PATH);
+        String bootvideoname=e脚本宏查值("bootvideo_file");
+        if (bootvideoname.equals("")||bootvideoname.equals("未识别到这个宏")){
+            sw.getSWinfo().setIsbootvideo("false");
+        }else {
+            sw.set软件开机视频路径全称(服务器使用路径.MTK9632PATH+"vendor/toptech/customer/common/bootvideo/"+bootvideoname);
+            sw.getSWinfo().setIsbootvideo("true");
+        }
+    }
+    private static void RTK2851(SW sw){
+        sw.getSWinfo().setPath(服务器使用路径.RTK2851PATH);
+        String bootvideoname=e脚本宏查值("config_bootvideo_name");
+        if (bootvideoname.equals("")||bootvideoname.equals("未识别到这个宏")){
+            sw.getSWinfo().setIsbootvideo("false");
+        }else {
+            sw.set软件开机视频路径全称(服务器使用路径.RTK2851PATH+"customer/bootlogo/"+bootvideoname);
+            sw.getSWinfo().setIsbootvideo("true");
+        }
+    }
     private static SW 赋值9632(SW sw) {
+        MTK9632(sw);
         sw.setIRimgPath(服务器使用路径.MTK9632PATH+"vendor/toptech/customer/common/ir/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径9632+sw.get软件logo名()+".jpg");
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径9632+sw.get屏名());
@@ -146,6 +217,7 @@ public class SwDao {
         return sw;
     }
     private static SW 赋值6681(SW sw) {
+        MTK9632(sw);
         sw.setIRimgPath(服务器使用路径.MTK9632PATH+"vendor/toptech/customer/common/ir/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径6681+sw.get软件logo名()+".jpg");
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径6681+sw.get屏名());
@@ -156,6 +228,7 @@ public class SwDao {
     }
 
     private static SW 赋值2851(SW sw) {
+        RTK2851(sw);
         sw.setIRimgPath(服务器使用路径.RTK2851PATH+"customer/IR/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2851+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2851+sw.get屏名()+".h");
@@ -169,6 +242,7 @@ public class SwDao {
         return sw;
     }
     private static SW 赋值2842(SW sw) {
+        RTK2851(sw);
         sw.setIRimgPath(服务器使用路径.RTK2851PATH+"customer/IR/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2842+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2842+sw.get屏名()+".h");

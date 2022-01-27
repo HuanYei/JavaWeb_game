@@ -181,6 +181,7 @@ public class Fileprocessing {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             BufferedImage bi;
+
             bi = ImageIO.read(img);
             ImageIO.write(bi, "png", baos);
             bytes = baos.toByteArray();
@@ -192,4 +193,20 @@ public class Fileprocessing {
         return bytes;
     }
 
+
+    public static void updateJBFile(String 脚本路径,String 宏,String 值){
+
+       String con[]=  readTxtFile(脚本路径).split("\n");
+        for (int i = 0; i <con.length ; i++) {
+            if (con[i].indexOf(宏)!=-1){
+                con[i]=宏+值;
+                break;
+            }
+        }
+        StringBuffer str5 = new StringBuffer();
+        for (String s : con) {
+            str5.append(s+"\n");
+        }
+        updateFile(脚本路径,str5.toString());
+    }
 }

@@ -7,7 +7,8 @@ public class Panel {
     String Swap_MODE;
     String Bit_MODE;
     String M_PNAME;
-
+    String m_wPanelWidth;
+    String m_wPanelHeight;
     @Override
     public String toString() {
         return "Panel{" +
@@ -68,6 +69,22 @@ public class Panel {
         Bit_MODE = bit_MODE;
     }
 
+    public String getM_wPanelWidth() {
+        return m_wPanelWidth;
+    }
+
+    public void setM_wPanelWidth(String m_wPanelWidth) {
+        this.m_wPanelWidth = m_wPanelWidth;
+    }
+
+    public String getM_wPanelHeight() {
+        return m_wPanelHeight;
+    }
+
+    public void setM_wPanelHeight(String m_wPanelHeight) {
+        this.m_wPanelHeight = m_wPanelHeight;
+    }
+
     public class Ti_MODE {
         @Override
         public String toString() {
@@ -118,5 +135,6 @@ public class Panel {
             off=0;
             on=0;
         }
+
     }
 }
