@@ -18,6 +18,10 @@ public class PlanUtil {
             return"6681";
         } else if (swname.indexOf("2842")!=-1){
             return"2842";
+        } else if (swname.indexOf("2853")!=-1){
+            return"2853";
+        } else if (swname.indexOf("2843")!=-1){
+            return"2843";
         }else {
             return "未识别到方案";
         }
@@ -37,6 +41,10 @@ public class PlanUtil {
             return 服务器使用路径.脚本路径6681+swname+".sh";
         }else if (swname.indexOf("2842")!=-1){
             return 服务器使用路径.脚本路径2842+swname+".sh";
+        } else if (swname.indexOf("2853")!=-1){
+            return 服务器使用路径.脚本路径2853+swname+".sh";
+        } else if (swname.indexOf("2843")!=-1){
+            return 服务器使用路径.脚本路径2843+swname+".sh";
         }  else {
             return "未识别到方案";
         }

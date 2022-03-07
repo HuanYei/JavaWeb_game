@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
+</head>
+<body>
+<div style="width: 100%" >
+    <a href="/" style="font-size: 150%">主页</a>
+    <a  href="/toSWtool" style="font-size: 100%">返回</a>
+</div>
+<h1>上传状态</h1>
+
+<div id="text"></div>
+<script>
+    var aa;
+    $(function(){
+      aa=setInterval("f()",1000);
+    });
+    function f() {
+        $.ajax({
+            type:"post",
+            url:"/putftpJG",
+            contentType: 'application/json',
+            success: function (data1) {
+                document.getElementById("text").innerHTML=data1;
+                if (data1.length-data1.lastIndexOf("！！！")<20) {
+                    clearInterval(aa);
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

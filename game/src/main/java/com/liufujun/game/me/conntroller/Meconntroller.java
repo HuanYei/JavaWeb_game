@@ -26,27 +26,50 @@ public class Meconntroller {
 
     @RequestMapping("/")
     public String  toMeworkbench(Model model){
-        model.addAttribute("isSelt368",服务器使用路径.MTK368PALL.get(0));
-        model.addAttribute("isSelt9632",服务器使用路径.MTK368PALL.get(0));
-        model.addAttribute("isSelt2851",服务器使用路径.RTK2851PALL.get(0));
-        model.addAttribute("equManager368",服务器使用路径.MTK368PALL);
-        model.addAttribute("equManager9632",服务器使用路径.MTK9632PALL);
-        model.addAttribute("equManager2851",服务器使用路径.RTK2851PALL);
-        for (int i = 0; i <服务器使用路径.MTK368PALL.size() ; i++) {
-            if (服务器使用路径.MTK368PALL.get(i).indexOf(服务器使用路径.MTK368PATH)!=-1){
-                model.addAttribute("isSelt368",服务器使用路径.MTK368PALL.get(i));
+
+        if (服务器使用路径.MTK368PALL.size()>0){
+            model.addAttribute("isSelt368",服务器使用路径.MTK368PALL.get(0));
+            model.addAttribute("equManager368",服务器使用路径.MTK368PALL);
+            for (int i = 0; i <服务器使用路径.MTK368PALL.size() ; i++) {
+                if (服务器使用路径.MTK368PALL.get(i).indexOf(服务器使用路径.MTK368PATH)!=-1){
+                    model.addAttribute("isSelt368",服务器使用路径.MTK368PALL.get(i));
+                }
             }
         }
-        for (int i = 0; i <服务器使用路径.MTK9632PALL.size() ; i++) {
-            if (服务器使用路径.MTK9632PALL.get(i).indexOf(服务器使用路径.MTK9632PATH)!=-1){
-                model.addAttribute("isSelt9632",服务器使用路径.MTK9632PALL.get(i));
+
+        if (服务器使用路径.MTK9632PALL.size()>0){
+            model.addAttribute("isSelt9632",服务器使用路径.MTK9632PALL.get(0));
+            model.addAttribute("equManager9632",服务器使用路径.MTK9632PALL);
+            for (int i = 0; i <服务器使用路径.MTK9632PALL.size() ; i++) {
+                if (服务器使用路径.MTK9632PALL.get(i).indexOf(服务器使用路径.MTK9632PATH)!=-1){
+                    model.addAttribute("isSelt9632",服务器使用路径.MTK9632PALL.get(i));
+                }
             }
         }
-        for (int i = 0; i <服务器使用路径.RTK2851PALL.size() ; i++) {
-            if (服务器使用路径.RTK2851PALL.get(i).indexOf(服务器使用路径.RTK2851PATH)!=-1){
-                model.addAttribute("isSelt2851",服务器使用路径.RTK2851PALL.get(i));
+
+        if (服务器使用路径.RTK2851PALL.size()>0){
+            model.addAttribute("isSelt2851",服务器使用路径.RTK2851PALL.get(0));
+            model.addAttribute("equManager2851",服务器使用路径.RTK2851PALL);
+            for (int i = 0; i <服务器使用路径.RTK2851PALL.size() ; i++) {
+                if (服务器使用路径.RTK2851PALL.get(i).indexOf(服务器使用路径.RTK2851PATH)!=-1){
+                    model.addAttribute("isSelt2851",服务器使用路径.RTK2851PALL.get(i));
+                }
             }
         }
+
+        if (服务器使用路径.RTK2853PALL.size()>0){
+            model.addAttribute("isSelt2853",服务器使用路径.RTK2853PALL.get(0));
+            model.addAttribute("equManager2853",服务器使用路径.RTK2853PALL);
+            for (int i = 0; i <服务器使用路径.RTK2853PALL.size() ; i++) {
+                if (服务器使用路径.RTK2853PALL.get(i).indexOf(服务器使用路径.RTK2853PATH)!=-1){
+                    model.addAttribute("isSelt2853",服务器使用路径.RTK2853PALL.get(i));
+                }
+            }
+        }
+        if (!服务器使用路径.comparison_tool.equals("")){
+            model.addAttribute("Iscomparison","true");
+        }
+
         return "me/meindex";
     }
     @RequestMapping("/dzpt")
@@ -182,6 +205,7 @@ public class Meconntroller {
         遥控器丝印图Path=sw.getIRimgPath();
         e开机视频路径=sw.get软件开机视频路径全称();
         e是否有开机视频=sw.getSWinfo().getIsbootvideo();
+        System.out.println("swpotopath = [" + potopath + "]");
     }
     String e是否有开机视频;
     String e开机视频路径;
@@ -199,9 +223,9 @@ public class Meconntroller {
         } else {
             byte[] imageContent ;
             String path = potopath;
-            if (Plan.equals("2851")){
+            if (Plan.equals("2851")||Plan.equals("2853")){
                 imageContent =  RAWUtils.rawtshow(path,1920,1080);
-            }else if (Plan.equals("2842")){
+            }else if (Plan.equals("2842")||Plan.equals("2843")){
                 imageContent =  RAWUtils.rawtshow(path,1280,720);
             }else {
                 imageContent = Fileprocessing.fileToByte(new File(path));
@@ -263,20 +287,35 @@ public class Meconntroller {
 
     private void PQ(SwEnglish sw){
         if (sw.getIsRTK()==1){
-            if (sw.getSoftware_color_temperature_file_path().indexOf("vip_default_osd.cpp")!=-1){
-                String name="";
-                if (sw.getPlan().equals("2851"))
-                    name="pq";
-                else
-                    name="pq_RTK2842P";
-                File file=new File(sw.getFull_name_of_software_customization_path()+name+"/");
-                file.mkdir();
-                Fileprocessing.newFile(sw.getSoftware_color_temperature_file_path(),sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp");
-                RtkpqDao.PQ_OSDUpdate(sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp",sw.getPQ_data());
+            if (sw.getPlan().equals("2853")||sw.getPlan().equals("2843")){
+                if (sw.getSoftware_color_temperature_file_path().indexOf(sw.getSoftware_customization_name())==-1){
+                    String name="files/customer/PQ_OverScan/";
+                    File file=new File(sw.getFull_name_of_software_customization_path()+name);
+                    file.mkdirs();
+                    String path=sw.getFull_name_of_software_customization_path()+name+"VIP_Panel_"+sw.getScreen_name()+"_"+MyUtil.toDay()+"_Default_Osd.cpp";
+                    Fileprocessing.newFile(sw.getSoftware_color_temperature_file_path(),path);
+                    RtkpqDao.PQ_OSDUpdate(path,sw.getPQ_data());
+                }else {
+                    RtkpqDao.PQ_OSDUpdate(sw.getSoftware_color_temperature_file_path(),sw.getPQ_data());
+                }
             }else {
-                RtkpqDao.PQ_OSDUpdate(sw.getSoftware_color_temperature_file_path(),sw.getPQ_data());
+                if (sw.getSoftware_color_temperature_file_path().indexOf(sw.getSoftware_customization_name())==-1){
+                    String name="";
+                    if (sw.getPlan().equals("2851"))
+                        name="pq";
+                    else
+                        name="pq_RTK2842P";
+                    File file=new File(sw.getFull_name_of_software_customization_path()+name+"/");
+                    file.mkdir();
+                    Fileprocessing.newFile(sw.getSoftware_color_temperature_file_path(),sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp");
+                    RtkpqDao.PQ_OSDUpdate(sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp",sw.getPQ_data());
+                }else {
+                    RtkpqDao.PQ_OSDUpdate(sw.getSoftware_color_temperature_file_path(),sw.getPQ_data());
+                }
             }
+
         }else {
+            SwDao.MTKPQ写入(sw);
             Colortemperature.Colortupdate(sw);
         }
 

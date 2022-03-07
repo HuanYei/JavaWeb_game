@@ -3,35 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style type="text/css">
+        tr:hover{
+            background: rgba(165, 91, 255, 0.25);
+        }
+    </style>
 </head>
 <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
 <body>
 <div style="width: 100%">
     <a href="/" style="font-size: 150%">主页</a>
 </div>
+<h1>软件包管理</h1>
+<p><button style="font-size: 25px" onclick="allcheckbox()" id="allbutton">全选</button></p>
+<form action="/putftp" method="post">
+<p>
+    <button style="font-size: 25px" type="submit">上传到ftp样机目录</button>
+    <select name="merchantNo" id="ChineseSelect" style="font-size: 20px">
+        <option value="中文国家路径" th:selected="${IsChinese} eq 'ture'">中文国家路径</option>
+        <option value="英文国家路径" th:selected="${IsChinese} eq 'false'">默认国家路径</option>
+    </select>
+</p>
+
 <div align="center" >
-    <form action="/" method="post" enctype="multipart/form-data">
-        <div style=" width: 70%;" align="left">
-            <h1>软件包管理</h1>
-            <span th:each="item:${total}">
-                <input type="checkbox"
-                         th:value="${item}"
-                         th:text="${item}"/>
-                <br>
-            </span>
-        </div>
-    </form>
+<!--    <form action="/" method="post" enctype="multipart/form-data" style="display: none">-->
+<!--        <div style=" width: 70%;" align="left">-->
+<!--            <span th:each="item:${total}">-->
+<!--                <input type="checkbox"-->
+<!--                         th:value="${item}"-->
+<!--                         th:text="${item}"/>-->
+<!--                <br>-->
+<!--            </span>-->
+<!--        </div>-->
+<!--    </form>-->
+
     <table>
         <tr>
             <th>软件名称</th>
             <th>操作</th>
         </tr>
         <tr th:each="item:${swfile}">
-            <td th:text="${item.getName()}"></td>
-            <td> <button  th:onclick="openpath([[${item.getPath()}]])">打开目录</button></td>
+            <td th:if="${item.getName().length()} lt 20" style="color: red;">&nbsp; &nbsp;&nbsp;<span  th:value="${item.getPath()}" th:text="${item.getPath()}" ></span></td>
+            <td th:if="${item.getName().length()} ge 20" style="color:green;"><input type="checkbox" th:value="${item.getPath()}" th:text="${item.getName()}" class="swcheckbox" name="swcheckbox"/></td>
+            <td> <button type="button" th:onclick="openpath([[${item.getPath()}]])">打开目录</button></td>
         </tr>
     </table>
 </div>
+</form>
 <script>
     function openpath(path) {
         $.ajax({
@@ -41,6 +59,36 @@
             contentType: 'application/json'
         });
     }
+    var isall=true;
+    function allcheckbox() {
+        var checkList = document.getElementsByClassName('swcheckbox');//选择框列表
+        if (isall){
+            for(var i = 0;i<checkList.length;i++){
+                checkList[i].checked =true;
+            }
+            document.getElementById("allbutton").innerHTML="全不选";
+            isall=false;
+        }else {
+            for(var i = 0;i<checkList.length;i++){
+                checkList[i].checked =false;
+            }
+            document.getElementById("allbutton").innerHTML="全选";
+            isall=true;
+        }
+    }
+    function ftpput() {
+        
+    }
+    $("#ChineseSelect").change(function(){
+        //获取选中项的文本值
+        var itemText = $("#ChineseSelect option:selected").text();
+        $.ajax({
+            type:"post",
+            url:"/updateChinese",
+            data:itemText,
+            contentType: 'application/json'
+        });
+    });
 </script>
 </body>
 </html>

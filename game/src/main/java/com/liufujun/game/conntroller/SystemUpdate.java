@@ -18,12 +18,13 @@ public class SystemUpdate {
 
     @RequestMapping("/start")
     public void startUpdate(){
-        downLoadFromUrl("http://172.168.1.230:8080/jardownload","t.txt","IR/");
+        downLoadFromUrl("http://172.168.1.230:8888/jardownload","t.txt","IR/");
     }
     @RequestMapping("/toupdate")
     public ModelAndView toupdate(){
-        return new ModelAndView(new RedirectView("http://172.168.1.230:8080/toupdate?oldver="+Versionconfig.SystemVersion));
+        return new ModelAndView(new RedirectView("http://172.168.1.230:8888/toupdate?oldver="+Versionconfig.SystemVersion));
     }
+
 
     @RequestMapping(value = "/checkVer", method = RequestMethod.POST)
     @ResponseBody

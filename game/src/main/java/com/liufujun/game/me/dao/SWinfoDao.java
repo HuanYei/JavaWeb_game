@@ -10,8 +10,8 @@ import com.liufujun.game.util.服务器使用路径;
 
 
 public class SWinfoDao {
+    private static boolean is2853;
     public static String 按键板类型(SW sw,int is){
-
         if (is==0){
             String C0017key=SwDao.e脚本宏查值("config_c001_onekeypad");
             if (C0017key.equals("1")){
@@ -51,7 +51,7 @@ public class SWinfoDao {
         return "未识别";
     }
     public static void SWinfohandle(SW sw){
-        通道处理(sw);
+
         //MTK
         if (sw.getIsrtk()==0){
             sw.getSWinfo().setBoard(SwDao.e脚本宏查值("pcbname").replace("\"",""));
@@ -66,7 +66,8 @@ public class SWinfoDao {
                 ddr="1.5G";
             }
             sw.getSWinfo().setStore(ddr+EMMC);
-            sw.getSWinfo().setTV_system("全ATV "+DTV());
+            if (SwDao.e脚本宏查值("ATV_enable").equals("1")) sw.getSWinfo().setTV_system("全ATV "+DTV());
+            else  sw.getSWinfo().setTV_system("无ATV "+DTV());
             String ATV画面=SwDao.e脚本宏查值("color_system").toUpperCase();
             if (ATV画面.equals("未识别到这个宏"))ATV画面="PAL";
             String ATV声音=SwDao.e脚本宏查值("sound_system");
@@ -97,12 +98,17 @@ public class SWinfoDao {
             sw.getSWinfo().setEquipment_name(Equipment(sw.getSWinfo().getPath()));
         }else {
             //RTK
-            sw.getSWinfo().setBoard(SwDao.e脚本宏查值("config_pcb_varient").replace("\"",""));
-            sw.getSWinfo().setIsCI(SwDao.e脚本宏查值("config_default_enable_ci").equals("1")?"带":"不带");
+            is2853=sw.get方案().equals("2853")||sw.get方案().equals("2843")?true:false;
+            if (is2853)sw.getSWinfo().setBoard(SwDao.e脚本宏查值("config_pcb_variant").replace("\"",""));
+            else sw.getSWinfo().setBoard(SwDao.e脚本宏查值("config_pcb_varient").replace("\"",""));
+            if (is2853)sw.getSWinfo().setIsCI(SwDao.e脚本宏查值("config_default_enable_ci").equals("true")?"带":"不带");
+            else sw.getSWinfo().setIsCI(SwDao.e脚本宏查值("config_default_enable_ci").equals("1")?"带":"不带");
+
             sw.getSWinfo().setStore(SwDao.e脚本宏查值("config_ddr_type_1G").equals("true")?"1G8G":"1.5G8G");
             sw.getSWinfo().setTV_system(RTKTV());
-            String isdzpt=sw.getIs电子屏贴().equals("true")?"带":"不带";
-            sw.getSWinfo().setIsDzpt(isdzpt);
+
+            e电子屏贴(sw);
+
             String ATV画面=SwDao.e脚本宏查值("config_color_system").toUpperCase();
             if (ATV画面.equals("未识别到这个宏"))ATV画面="PAL";
             String ATV声音=SwDao.e脚本宏查值("config_sound_system");
@@ -126,6 +132,7 @@ public class SWinfoDao {
             sw.getSWinfo().setModel_name(SwDao.e脚本宏查值("config_product_name").replace("\"",""));
             sw.getSWinfo().setBacklight(SwDao.e脚本宏查值("config_default_backlight").replace("\"",""));
             String mode=SwDao.e脚本宏查值("config_power_on_mode");
+            if (mode.equals("未识别到这个宏"))mode=initconfig("config_power_on_mode");
             sw.getSWinfo().setIsPower_memory(mode);
             sw.getSWinfo().setEquipment_name(RTKEquipment(sw.getSWinfo().getPath()));
             String aStr=SwDao.e脚本宏查值("config_str_disable");
@@ -139,9 +146,60 @@ public class SWinfoDao {
             sw.getSWinfo().setStandby_mode(aStr);
             sw.getSWinfo().setECO_MODE(RTKECO());
             sw.getSWinfo().setTTX_language(RTKTTX());
+            e智像DP(sw);
         }
+        通道处理(sw);
+    }
+    public static String initconfig(String e宏){
+        String Stringshu[];
+        if (is2853){
+            Stringshu=Fileprocessing.readTxtFile(服务器使用路径.RTK2853PATH+"customer/scripts/init.sh").split("\n");
+        }else {
+            Stringshu=Fileprocessing.readTxtFile(服务器使用路径.RTK2851PATH+"customer/scripts/init.sh").split("\n");
+        }
+        for (String a:Stringshu){
+            if (a.indexOf(e宏)==0){
+                return a.replace(e宏,"").replace("=","").replace("export ","").trim();
+            }
+        }
+        return "未识别到这个宏";
+    }
+    public static void e智像DP(SW sw){
+        if (is2853){
+            sw.set智像DP(SwDao.e脚本宏查值("config_devicetype_zeasn"));
+            if (sw.get智像DP().equals("未识别到这个宏")){
+                sw.set智像DP(StringUtil.提取config文件的值(服务器使用路径.RTK2853PATH+"customer/scripts/init.sh","config_devicetype_zeasn"));
+            }
+        }else {
+            sw.set智像DP(SwDao.e脚本宏查值("config_devicetype_Zeasn"));
+            if (sw.get智像DP().equals("未识别到这个宏")){
+                sw.set智像DP(StringUtil.提取config文件的值(服务器使用路径.RTK2851PATH+"customer/scripts/init.sh","config_devicetype_Zeasn"));
+            }
+        }
+        sw.set智像DP(sw.get智像DP()+"(country="+SwDao.e脚本宏查值("config_default_country").replace("\"","")+")");
     }
 
+    public static void e电子屏贴(SW sw){
+        String isdzpt;
+        if (is2853){
+            sw.setIs电子屏贴(SwDao.e脚本宏查值("config_sticker"));
+            if (sw.getIs电子屏贴().equals("none")){
+                isdzpt="不带";
+                sw.setIs电子屏贴("false");
+            }else {
+                sw.setIs电子屏贴("true");
+                isdzpt=sw.getIs电子屏贴().equals("true")?"带,默认开":"带，默认关";
+                sw.set电子屏贴路径(sw.get软件客制化路径全称()+"overlay/com.toptech.tvmenu/res/drawable-nodpi/img_sticker.png");
+            }
+        }
+        else{
+            sw.setIs电子屏贴(SwDao.e脚本宏查值("config_sticker_visible"));
+            isdzpt=sw.getIs电子屏贴().equals("true")?"带":"不带";
+        }
+
+
+        sw.getSWinfo().setIsDzpt(isdzpt);
+    }
     private static String RTKTV() {
         String TV="";
         if (SwDao.e脚本宏查值("config_no_atv").equals("true")){
@@ -429,12 +487,24 @@ public class SWinfoDao {
                 }
             }
         }else {
-            board=SwDao.e脚本宏查值("config_pcb_varient");
+            String board2851[];
+            System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
+            if (is2853){
+                System.out.println("2222222222222222222222222222222222222222222222222222222222222222222222222222222222223633");
+                board=SwDao.e脚本宏查值("config_pcb_variant");
+                board2851= Fileprocessing.readTxtFile(服务器使用路径.RTK2853PATH+"kernel/system/board.json").split("\n");
+            }
+            else {
+                System.out.println("11111111111111111111111111111111111111111111111111111111");
+                board=SwDao.e脚本宏查值("config_pcb_varient");
+                board2851= Fileprocessing.readTxtFile(服务器使用路径.RTK2851PATH+"kernel/system/board.json").split("\n");
+            }
             System.out.println(board);
-            String board2851[]= Fileprocessing.readTxtFile(服务器使用路径.RTK2851PATH+"kernel/system/board.json").split("\n");
+
             for (int i = 0; i <board2851.length ; i++) {
                 if (board2851[i].indexOf(board)!=-1){
                     sw.getSWinfo().setSOURCE(e取值(board2851,i));
+                    System.out.println(666666666+e取值(board2851,i));
                 }
             }
         }

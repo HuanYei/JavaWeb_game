@@ -21,6 +21,7 @@ public class ConnectLinux {
     static BufferedReader br;
     public static String endString;
     public static void Connect(){
+        if (服务器使用路径.user.equals(""))return;
         System.out.println("ip:"+服务器使用路径.ip);
         System.out.println("user:"+服务器使用路径.user);
         System.out.println("password:"+服务器使用路径.password);

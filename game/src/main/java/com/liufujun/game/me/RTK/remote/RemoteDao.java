@@ -46,6 +46,7 @@ public class RemoteDao {
 
         String outpath=服务器使用路径.RTK2851PATH+"kernel/linux/linux-4.14/drivers/rtk_kdriver/ir/ir_table/ir_table_default.c";
         String jgg="";
+        if (服务器使用路径.rtk2851_Linux.equals(""))return;
         new Thread(new Runnable() {
             @Override
             public void run() {

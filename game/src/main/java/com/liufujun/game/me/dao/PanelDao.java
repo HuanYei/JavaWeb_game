@@ -70,6 +70,48 @@ public class PanelDao {
                  SWAP=SWAP.replace(".iCONFIG_DISP_ACT_END_VPOS=","").replace(",","");
                  sw.getPanel().setM_wPanelHeight(SWAP);
              }
+             //2853
+            if (sw.get方案().equals("2853")||sw.get方案().equals("2843")){
+                if (e屏数组[i].indexOf("DISP_PANEL_NAME")!=-1){
+                    String Name=Main.replaceBlank(e屏数组[i]);
+                    Name=Name.replace("DISP_PANEL_NAME","").replace(" ","").replace("=","");
+                    sw.getPanel().setM_PNAME(Name);
+                }else if (e屏数组[i].indexOf("VFLIP")!=-1){
+                    String iVFLIP=Main.replaceBlank(e屏数组[i]);
+                    iVFLIP=iVFLIP.replace("VFLIP","").replace(" ","").replace("=","");
+                    sw.getPanel().setMirror_MODE(iVFLIP);
+                }else if (e屏数组[i].indexOf("DISP_ACT_END_HPOS")!=-1){
+                    String SWAP=Main.replaceBlank(e屏数组[i]);
+                    SWAP=SWAP.replace("DISP_ACT_END_HPOS=","").replace(" ","").replace("=","");
+                    sw.getPanel().setM_wPanelWidth(SWAP);
+                }else if (e屏数组[i].indexOf("DISP_ACT_END_VPOS")!=-1){
+                    String SWAP=Main.replaceBlank(e屏数组[i]);
+                    SWAP=SWAP.replace("DISP_ACT_END_VPOS","").replace(" ","").replace("=","");
+                    sw.getPanel().setM_wPanelHeight(SWAP);
+                }
+                if (sw.get方案().equals("2843")){
+                    if (e屏数组[i].indexOf("DISPLAY_COLOR_BITS")!=-1){
+                        String Bits=Main.replaceBlank(e屏数组[i]);
+                        Bits=Bits.replace("DISPLAY_COLOR_BITS","").replace(" ","").replace("=","");
+                        sw.getPanel().setBit_MODE(Bits);
+                    }else if (e屏数组[i].indexOf("DISPLAY_BITMAPPING_TABLE")!=-1){
+                        String TI=Main.replaceBlank(e屏数组[i]);
+                        TI=TI.replace("DISPLAY_BITMAPPING_TABLE","").replace(" ","").replace("=","");
+                        sw.getPanel().setTi_MODE(TI);
+                    }else if (e屏数组[i].indexOf("DISPLAY_PORTAB_SWAP")!=-1){
+                        String Swap=Main.replaceBlank(e屏数组[i]);
+                        Swap=Swap.replace("DISPLAY_PORTAB_SWAP=","").replace(" ","").replace("=","");
+                        sw.getPanel().setSwap_MODE(Swap);
+                    }
+                }else {
+                    if (e屏数组[i].indexOf("SFG_SEG_NUM")!=-1){
+                        String NUM= Main.replaceBlank(e屏数组[i]);
+                        NUM=NUM.replace("SFG_SEG_NUM","").replace(" ","").replace("=","");
+                        sw.getPanel().setDual_MODE(NUM);
+                    }
+                }
+            }
+
 
             if (sw.get方案().equals("2842")){
                 if (e屏数组[i].indexOf(".iCONFIG_DISPLAY_COLOR_BITS")!=-1){

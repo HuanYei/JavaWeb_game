@@ -1,5 +1,7 @@
 package com.liufujun.game.pdf.util;
 
+import com.liufujun.game.util.服务器使用路径;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -67,14 +69,41 @@ public class Fileprocessing {
     }
 
     public static void openFile(String path) {
+        boolean isopenpath=true;
+        boolean isopenpathrow=false;
+        int row=1;
+        if (path.indexOf("96322851368")!=-1){
+            path=path.replace("96322851368","");
+            isopenpath=false;
+        }else if(path.indexOf("36896322851")!=-1){
+            String aa[]=path.split("36896322851");
+            row=e查找字符串所在行(aa[0],aa[1]);
+            path=aa[0];
+            isopenpathrow=true;
+        }
         path = path.replace("/", "\\");
-        System.out.println(path);
+        System.out.println(path+"ssssssssssssssssssssssssssssss"+row);
 
         try {
-            Runtime.getRuntime().exec("explorer /select," + path);
+            if (isopenpath&&!isopenpathrow) Runtime.getRuntime().exec("explorer /select," + path);
+            else if (isopenpathrow) Runtime.getRuntime().exec("\""+服务器使用路径.codeEditor +"\" -n"+row+" \""+ path+"\"");
+            else Runtime.getRuntime().exec("\""+服务器使用路径.codeEditor +"\"  \""+ path+"\"");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    public static int e查找字符串所在行(String path,String Str) {
+        System.out.println("path = [" + path + "], Str = [" + Str + "]");
+        String center[]=readTxtFile(path).split("\n");
+        for (int i=0;i<center.length;i++) {
+            if (center[i].indexOf(Str)!=-1){
+                return i+1;
+            }
+        }
+        return -1;
     }
 
     public static void ReNameFile(String oldPath, String newPath) {
@@ -148,7 +177,7 @@ public class Fileprocessing {
             System.out.println("请输入正确的文件名或路径名");
         }
     }
-
+    //复制文件
     public static void copy(String path, String copyPath) {
         System.out.println("path = [" + path + "], copyPath = [" + copyPath + "]");
         try {
@@ -193,20 +222,44 @@ public class Fileprocessing {
         return bytes;
     }
 
-
+    //简单更新文件宏值
     public static void updateJBFile(String 脚本路径,String 宏,String 值){
 
        String con[]=  readTxtFile(脚本路径).split("\n");
+       boolean kon=true;
         for (int i = 0; i <con.length ; i++) {
             if (con[i].indexOf(宏)!=-1){
                 con[i]=宏+值;
+                kon=false;
                 break;
             }
         }
+
         StringBuffer str5 = new StringBuffer();
         for (String s : con) {
             str5.append(s+"\n");
         }
+//        if (kon)str5.append(宏+值+"\n");
         updateFile(脚本路径,str5.toString());
+    }
+    //简单读取文件宏值
+    public static String findJBFile(String 脚本路径,String 宏){
+        String Stringshu[]=  readTxtFile(脚本路径).split("\n");
+        for (String a:Stringshu){
+            if (a.indexOf(宏)==0){
+                return a.replace(宏,"").replace("=","").replace("export ","").trim();
+            }
+        }
+        return "未识别到这个宏";
+    }
+
+    //使用对比工具文件
+    public static void ComparedFile(String path1,String path2){
+        System.out.println("path1 = [" + path1 + "], path2 = [" + path2 + "]");
+        try {
+            Runtime.getRuntime().exec("\""+服务器使用路径.comparison_tool +"\"    \""+path1+"\"    \""+ path2+"\"");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -4,18 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-        a{
-            color: #143fb0;
-            text-decoration:underline;
-        }
-        a:link {color: #143fb0
-        } /* 未访问的链接 */
-        a:visited {color: #143fb0
-        } /* 已访问的链接 */
-        a:hover {color: #ff2516
-        } /* 当有鼠标悬停在链接上 */
-        a:active {color: #fcfaff
-        } /* 被选择的链接 */
+
         #swdiv1{
             float: left;
         }
@@ -30,9 +19,11 @@
             padding-left: 20px;
         }
         #swdiv2 span{
-            color: #d82622;
+            color: rgba(255, 44, 44, 0.64);
         }
+
     </style>
+    <link href="css/button.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
     <script type="text/javascript" src="js/vue.js"></script>
 </head>
@@ -46,7 +37,7 @@
     <div style="display: flex;">
         <div>
             <p><b>智像DP：</b><span th:text="${SW.getZeasn_devicetype()}"></span>&nbsp;&nbsp;<button onclick="copyDP()">点击复制</button></p>
-            <p><b>脚本：<a th:href="${'/toScript?swSCpath='}+${SW.getFull_name_of_software_path}">编辑脚本</a>|<a th:onclick="openpath([[${SW.getFull_name_of_software_path}]])">打开目录</a></b></p>
+            <p><b>脚本：<a th:href="${'/toScript?swSCpath='}+${SW.getFull_name_of_software_path}">编辑脚本</a>|<a th:onclick="openpath([[${SW.getFull_name_of_software_path}]])">打开目录</a>|<a th:onclick="openFile([[${SW.getFull_name_of_software_path}]])">打开文件</a></b></p>
             <div style="margin-left: 30px">
                 <input id="ScName" type="text" th:value=" ${SW.software_name}"></input><br>
                 <button onclick="rmScName()">重命名脚本</button>
@@ -75,16 +66,16 @@
                 <video id="donhvideo" loop="loop" style="height: 187px; display: none; width: 327px;" autoplay="autoplay" controls="autoplay"  th:src="@{/preview2}"></video>
             </div>
             <div id="donhdiv" style="border:2px solid #000000;display: none; background-color: black; height: 180px;width: 320px;margin-left: 10px" >
-                    <img class="mtksty" style="position:absolute;height: 42px;width: 170px; margin: 69px  75px; background-color: white"/>
-                    <img class="mtksty" id="don" style="position:absolute;height: 42px;width: 0px; margin: 69px -100px;"  src="img/android-logo-shine.png"/>
-                    <img class="mtksty" style="position:absolute;height: 180px;width: 320px;"src="img/3.png"/>
+                    <img class="mtk9632" style="position:absolute;height: 42px;width: 170px; margin: 69px  75px; background-color: white"/>
+                    <img class="mtk9632" id="don" style="position:absolute;height: 42px;width: 0px; margin: 69px -100px;"  src="img/android-logo-shine.png"/>
+                    <img class="mtk9632" style="position:absolute;height: 180px;width: 320px;"src="img/3.png"/>
                     <img id="donh" style="position:absolute;height: 42px;width: 170px; margin: 69px 78px;"  title="点击可查看大图" src="img/android-logo-mask.png"/>
             </div>
             <br>
                 <!--        <span style="color: red;" class="zhushi">*请打开logo目录，复制你要修改的logo名称，填入输入框更换logo。</span>-->
             </div>
             <input id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 23%;height: 20px;margin-left: 30px;"></input>
-            <button onclick="UPlogo()" style="height: 30px;">更换logo</button>
+            <button onclick="UPlogo()">更换logo</button>
         </div>
         <div style="padding-left: 50px">
             <p><b>遥控器丝印图：</b></p>
@@ -96,13 +87,13 @@
     <p>
         <div id="swdiv1">
 
-        <b>屏： <a th:onclick="openpath([[${SW.full_name_of_software_screen_parameter_name_path}]])" >打开目录</a></b>
+        <b>屏： <a th:onclick="openpath([[${SW.full_name_of_software_screen_parameter_name_path}]])" >打开目录</a>|<a th:onclick="openFile([[${SW.full_name_of_software_screen_parameter_name_path}]])">打开文件</a></b>
     <div class="tit2">
         屏参文件名：<input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;"></input>
-        <button onclick="UPPanel()" style="height: 30px;">更换屏参</button>
+        <button onclick="UPPanel()" >更换屏参</button>
 <!--    <span style="color: red;" class="zhushi">*请打开目录，复制你要修改的屏文件名称，填入输入框更换配屏</span>-->
         <br><br>
-        <form action="#" th:action="@{/Panel}" method="post" th:object="${SW}">
+        <form action="#" th:action="@{/Panel}" method="post" th:object="${SW}" style="background-color: #eeeeee">
             工厂菜单显示名:
             <input type="text" th:field="*{panel.M_PNAME}"/>
             <br>
@@ -144,7 +135,7 @@
             </div>
 
             <br>
-            <input type="submit" value="提交修改">
+            <button style="padding: 5px 150px;" type="submit">提交修改</button>
 <!--            <span style="color: red;" class="zhushi">*提交修改后，会直接修改屏参文件，请注意检查。</span>-->
             <br>
             <input  style="display: none;" type="text" th:field="*{panel.Ti_MODE}"/>
@@ -164,22 +155,22 @@
         <div class="tit2">
             <table>
                 <tr>
-                    <td>遥控器名：<span th:text="${SW.getSwinfo().getIRname()}"></span></td>
-                    <td>电子屏贴：<span th:text="${SW.getSwinfo().getIsDzpt()}"></span></td>
+                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getIRname()}]])">遥控器名：<a th:text="${SW.getSwinfo().getIRname()}"></a></td>
+                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'sticker')">电子屏贴：<a th:text="${SW.getSwinfo().getIsDzpt()}"></a></td>
                     <td>按键板类型：<span th:text="${SW.getSwinfo().getKEYboardType()}"></span></td>
                     <td>通道配置：<span th:text="${SW.getSwinfo().getSOURCE()}"></span></td>
                 </tr>
                 <tr>
-                    <td>板卡类型：<span th:text="${SW.getSwinfo().getBoard()}"></span></td>
+                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getBoard()}]])">板卡类型：<a th:text="${SW.getSwinfo().getBoard()}"></a></td>
                     <td>CI：<span th:text="${SW.getSwinfo().getIsCI()}"></span></td>
                     <td>板卡内存及存储：<span th:text="${SW.getSwinfo().getStore()}"></span></td>
-                    <td>按键板名：<span th:text="${SW.getSwinfo().getKEYboardName()}"></span></td>
+                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getKEYboardName()}]])">按键板名：<a th:text="${SW.getSwinfo().getKEYboardName()}"></a></td>
                 </tr>
                 <tr>
                     <td>TV制式：<span th:text="${SW.getSwinfo().getTV_system()}"></span></td>
                     <td>蓝牙：<span th:text="${SW.getSwinfo().getIsBluetooth()}"></span></td>
                     <td>默认背光：<span th:text="${SW.getSwinfo().getBacklight()}"></span></td>
-                    <td>节能模式：<span th:text="${SW.getSwinfo().getECO_MODE()}"></span></td>
+                    <td>能效模式：<span th:text="${SW.getSwinfo().getECO_MODE()}"></span></td>
                 </tr>
                 <tr>
                     <td>国家+默认语言：<span th:text="${SW.getSwinfo().getCountry_and_language()}"></span></td>
@@ -188,16 +179,16 @@
                     <td>所有语言：<span th:text="${SW.getSwinfo().getLanguageAll()}"></span></td>
                 </tr>
                 <tr>
-                    <td>声音功率：<span th:text="${SW.getSwinfo().getSound_power()}"></span></td>
+                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getSound_power()}]])">声音功率：<a th:text="${SW.getSwinfo().getSound_power()}"></a></td>
                     <td>智像：<span th:text="${SW.getSwinfo().getIsZeasn()}"></span></td>
                     <td>屏分辨率：<span th:text="${SW.getSwinfo().getResolution()}"></span></td>
                     <td>内置应用：<span th:text="${SW.getSwinfo().getAPPS()}"></span></td>
                 </tr>
                 <tr>
-                    <td>背光电流：<span th:text="${SW.getSwinfo().getCurrent()}"></span></td>
+                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getCurrent()}]])">背光电流：<a th:text="${SW.getSwinfo().getCurrent()}"></a></td>
                     <td>Eshare：<span th:text="${SW.getSwinfo().getIsEshare()}"></span></td>
                     <td>升级软件名称：<span th:text="${SW.getSwinfo().getUpdateName()}"></span></td>
-                    <td>客户机型名：<span th:text="${SW.getSwinfo().getModel_name()}"></span></td>
+                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getModel_name()}]])">客户机型名：<a th:text="${SW.getSwinfo().getModel_name()}"></a></td>
                 </tr>
                 <tr>
                     <td>待机模式：<span th:text="${SW.getSwinfo().getStandby_mode()}"></span></td>
@@ -226,57 +217,52 @@
                     <th>Warm</th>
                 </tr>
                 <tr>
-                    <th>R</th>
+                    <th style="background-color: rgba(255,37,22,0.56)">R</th>
                     <td><input type="text" th:field="*{PQ_data.UserR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmR}"/></td>
                 </tr>
                 <tr>
-                    <th>G</th>
+                    <th style="background-color: rgba(0,207,0,0.44)">G</th>
                     <td><input type="text" th:field="*{PQ_data.UserG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmG}"/></td>
                 </tr>
                 <tr>
-                    <th>B</th>
+                    <th style="background-color: rgba(0,0,255,0.44)">B</th>
                     <td><input type="text" th:field="*{PQ_data.UserB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmB}"/></td>
                 </tr>
                 <tr>
-                    <th>R OFF</th>
+                    <th  style="background-color: rgba(255,37,22,0.56)">R OFFSET</th>
                     <td><input type="text" th:field="*{PQ_data.UserROFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardROFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolROFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmROFF}"/></td>
                 </tr>
                 <tr>
-                    <th>G OFF</th>
+                    <th style="background-color: rgba(0,207,0,0.44)">G OFFSET</th>
                     <td><input type="text" th:field="*{PQ_data.UserGOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardGOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolGOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmGOFF}"/></td>
                 </tr>
                 <tr>
-                    <th>B OFF</th>
+                    <th  style="background-color: rgba(0,0,255,0.44)">B OFFSET</th>
                     <td><input type="text" th:field="*{PQ_data.UserBOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardBOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolBOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmBOFF}"/></td>
                 </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <th><input id="mtksub" class="mtksty" type="submit" value="提交修改"  ></th>
-                    <td></td>
-                </tr>
             </table>
+
             <br>
-            <b id="rtktit" class="rtksty">Non-linear(OSD_50):</b>
-            <table style="margin-left: 30px"  class="rtksty">
+            <b id="rtktit">Non-linear(OSD_50):</b>
+            <table style="margin-left: 30px">
                 <tr>
                     <th></th>
                     <th>ATV</th>
@@ -296,6 +282,7 @@
                     <td><input type="text" th:field="*{PQ_data.HDMIBrightness}"/></td>
                     <td><input type="text" th:field="*{PQ_data.VGABrightness}"/></td>
                     <td><input type="text" th:field="*{PQ_data.USBBrightness}"/></td>
+                    <th>Brightness</th>
                 </tr>
                 <tr>
                     <th>Contrast</th>
@@ -306,6 +293,7 @@
                     <td><input type="text" th:field="*{PQ_data.HDMIContrast}"/></td>
                     <td><input type="text" th:field="*{PQ_data.VGAContrast}"/></td>
                     <td><input type="text" th:field="*{PQ_data.USBContrast}"/></td>
+                    <th>Contrast</th>
                 </tr>
                 <tr>
                     <th>Saturation</th>
@@ -316,6 +304,7 @@
                     <td><input type="text" th:field="*{PQ_data.HDMISaturation}"/></td>
                     <td><input type="text" th:field="*{PQ_data.VGASaturation}"/></td>
                     <td><input type="text" th:field="*{PQ_data.USBSaturation}"/></td>
+                    <th>Saturation</th>
                 </tr>
                 <tr>
                     <th>Sharpness</th>
@@ -326,6 +315,7 @@
                     <td><input type="text" th:field="*{PQ_data.HDMISharpness}"/></td>
                     <td><input type="text" th:field="*{PQ_data.VGASharpness}"/></td>
                     <td><input type="text" th:field="*{PQ_data.USBSharpness}"/></td>
+                    <th>Sharpness</th>
                 </tr>
                 <tr>
                     <th>Hue</th>
@@ -336,15 +326,18 @@
                     <td><input type="text" th:field="*{PQ_data.HDMIHue}"/></td>
                     <td><input type="text" th:field="*{PQ_data.VGAHue}"/></td>
                     <td><input type="text" th:field="*{PQ_data.USBHue}"/></td>
+                    <th>Hue</th>
                 </tr>
             </table>
             <br>
-            <input id="rtksub" class="rtksty" type="button" value="提交修改" style=" font-size: 50px;" onclick="tijiao()">
+            <button id="rtksub"  type="button"  style="font-size: 100%;padding: 15px 350px;"  onclick="tijiao()">提交修改</button>
 <!--            <span id="rtksubzs" style="color: red;" class="zhushi">*提交修改后，会直接修改PQ文件，2851和2842会编译成bin文件并生成在客制化文件夹中，请检查。</span>-->
             <input  style="display: none;" type="text" th:field="*{software_color_temperature_file_path}"/>
             <input  style="display: none;" type="text" th:field="*{software_name}"/>
             <input  style="display: none;" type="text" th:field="*{isRTK}"/>
             <input  style="display: none;" type="text" th:field="*{full_name_of_software_customization_path}"/>
+            <input  style="display: none;" type="text" th:field="*{screen_name}"/>
+            <input  style="display: none;" type="text" th:field="*{software_customization_name}"/>
             <input  style="display: none;" type="text" th:field="*{Plan}"/>
         </form>
     </div>
@@ -399,11 +392,22 @@
             for (var i = 0; i < a.length; i++) {
                 a[i].style.display = "none";
             }
+            if ([[${SW.getPlan()}]] =="368") {
+                var a=document.querySelectorAll(".mtk9632");
+                for (var i = 0; i < a.length; i++) {
+                    a[i].style.display = "none";
+                }
+                document.getElementById("donh").src="img/MTK368.gif";
+                document.getElementById("donh").style.width="80px";
+                document.getElementById("donh").style.height="80px";
+                document.getElementById("donh").style.margin="50px 120px"
+            }
         }else {
-            var a=document.querySelectorAll(".mtksty");
+            var a=document.querySelectorAll(".mtk9632");
             for (var i = 0; i < a.length; i++) {
                 a[i].style.display = "none";
             }
+
             document.getElementById("donh").src="img/rtk.gif";
         }
 
@@ -685,6 +689,22 @@
             type:"post",
             url:"/openSWfile",
             data:path,
+            contentType: 'application/json'
+        });
+    }
+    function openFile(path) {
+        $.ajax({
+            type:"post",
+            url:"/openSWfile",
+            data:path+"96322851368",
+            contentType: 'application/json'
+        });
+    }
+    function openFileRow(path,str) {
+        $.ajax({
+            type:"post",
+            url:"/openSWfile",
+            data:path+"36896322851"+str,
             contentType: 'application/json'
         });
     }

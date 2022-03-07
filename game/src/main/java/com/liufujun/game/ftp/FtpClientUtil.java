@@ -1,8 +1,16 @@
 package com.liufujun.game.ftp;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
 
+import com.liufujun.game.me.conntroller.SWconntroller;
+import com.liufujun.game.pdf.util.Country;
+import com.liufujun.game.pdf.util.Fileprocessing;
+import com.liufujun.game.pdf.util.StringUtil;
+import com.liufujun.game.util.PlanUtil;
+import com.liufujun.game.util.服务器使用路径;
+import javafx.scene.layout.Pane;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -24,17 +32,93 @@ public class FtpClientUtil {
     private String userPassword;
 
     public static void main(String[] args) {
-        FtpClientUtil f = new FtpClientUtil("172.168.2.84", 21, "liufujun", "123456");
-        try {
-            if (f.open()) {
-//                f.get("/opt/IBM/WebSphere/AppServer/profiles/AppSrv01/qunarlog.txt", "E:/zhangjun.txt");// 远程路径为相对路径
+//        FtpClientUtil f = new FtpClientUtil("172.168.2.84", 21, "liufujun", "123456");
 
-                String name="/研发生产软件-android/";
-                name=new String(name.getBytes("UTF-8"),"iso-8859-1");// 转换后的目录名或文件名。
-                f.getFileNameList(name);
+        String swpath[]={"Z:/9632/images/android_9/m7332_eu/C001_KOSOVO_PP2103-005T_LE58N3_P150_9632V62_sw600ma_Inverseoff_Mirroroff_shareoff_dolbyon_1p5G_8G_CC580PV5D_C001_509_T2_CAIXUN_445070c7f1b_20220104_110633_yes.rar",
+        "Z:/9255/images/android_9/mt5862/C001_EGYPT_NKI_TC2007-091_LE32N1_P50_368_V50_ShareOn_DobyOn_SW300MA_InverseOff_8G_MirrorOff_T320XVN02_G_C001_509_Contex_1f80100985e_20220106_101654_yes.rar"};
+        FtpSwput(swpath);
+        //        try {
+//            if (f.open()) {
+////                f.get("/opt/IBM/WebSphere/AppServer/profiles/AppSrv01/qunarlog.txt", "E:/zhangjun.txt");// 远程路径为相对路径
+//
+//                String name="/研发生产软件-android/";
+//                name=new String(name.getBytes("UTF-8"),"iso-8859-1");// 转换后的目录名或文件名。
+////                f.getFileNameList(name);
+//            }
+//        } catch (Exception e) {
+//
+//            e.printStackTrace();
+//        }
+    }
+    public static void FtpSwput(String[] swnamearr){
+
+        try {
+            String ftppath;
+            for (String swname:swnamearr){
+                FtpClientUtil f = new FtpClientUtil("172.168.2.84", 21, 服务器使用路径.FtpUser, 服务器使用路径.FtpPassword);
+                if (f.open()) {
+                    swname=swname.replace("\\","/");
+                    String e方案=PlanUtil.PlanType(StringUtil.提取文件名(swname));
+                    SWconntroller.JG+="<b>方案：</b>"+e方案+"<br>";
+                    System.out.println(e方案);
+                    String e切分[]= StringUtil.提取文件名(swname).split("_");
+                    String IsChinese= Fileprocessing.findJBFile("user.config","FtpCountryIsChinese");
+                    String e国家;
+                    if (IsChinese.equals("true"))e国家=Country.e软件名提取中文国家名(swname);
+                    else e国家=e切分[1];
+                    if (e国家.equals("无"))e国家=e切分[1];
+
+                    if (e方案.equals("368")){
+                        ftppath="/研发样机软件-android/";
+                        ftppath+="MTK368P/Toptech Image/"+e切分[0]+"/"+e国家+"/";
+                        System.out.println(ftppath);
+                    }else if (e方案.equals("9632")){
+                        ftppath="/研发样机软件-android/";
+                        ftppath+="MTK9632P/Toptech软件/"+e切分[0]+"/"+e国家+"/";
+                        System.out.println(ftppath);
+                    }else if (e方案.equals("6681")){
+                        ftppath="/研发样机软件-android/";
+                        ftppath+="MTK6681P/"+e切分[0]+"/"+e国家+"/";
+                        System.out.println(ftppath);
+                    }else if (e方案.equals("2851")){
+                        ftppath="/研发样机软件-android/";
+                        ftppath+="RTK2851/"+e切分[0]+"/"+e国家+"/";
+                        System.out.println(ftppath);
+                    }else if (e方案.equals("2842")){
+                        ftppath="/研发样机软件-android/";
+                        ftppath+="RTK2842/"+e切分[0]+"/"+e国家+"/";
+                        System.out.println(ftppath);
+                    }else if (e方案.equals("2853")){
+                        ftppath="/研发样机软件-android/";
+                        ftppath+="RTK2853R/"+e切分[0]+"/"+e国家+"/";
+                        System.out.println(ftppath);
+                    }else if (e方案.equals("2843")){
+                        ftppath="/研发样机软件-android/";
+                        ftppath+="RTK2843R/"+e切分[0]+"/"+e国家+"/";
+                        System.out.println(ftppath);
+                    } else {
+                        ftppath="";
+                    }
+                    SWconntroller.JG+="<b>原路径：</b>"+swname+"<br>";
+                    SWconntroller.JG+="<b>FTP路径：</b>"+ftppath+"<br>";
+                    SWconntroller.JG+="<b>正在上传，请稍等......</b><br>";
+                    if (!ftppath.equals("")){
+                        if (f.put(swname,StringUtil.提取文件名(swname),ftppath)){
+                            File myObj = new File(swname);
+                            if (myObj.delete()) {
+                                System.out.println("Deleted the file: " + myObj.getName());
+                                SWconntroller.JG+="<b>上传成功，已删除原文件！！！</b><br><br>";
+                            } else {
+                                SWconntroller.JG+="<b>删除失败，未删除原文件！！！</b><br><br>";
+                                System.out.println("Failed to delete the file.");
+                            }
+                        }else {
+                            SWconntroller.JG+="<b>上传失败，未删除原文件！！！</b><br><br>";
+                        };
+                    }
+                }
             }
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }
@@ -67,7 +151,7 @@ public class FtpClientUtil {
             if (!FTPReply.isPositiveCompletion(reply)) {
                 this.close();
                 System.err.println("FTP server refused connection.");
-                System.exit(1);
+                return false;
             }
             System.out.println("open FTP success:" + this.server+";port:"+this.port + ";name:"
                     + this.userName + ";pwd:" + this.userPassword);
@@ -219,6 +303,7 @@ public class FtpClientUtil {
     public boolean put(String localDirectoryAndFileName, String ftpFileName,
                        String ftpDirectory) {
         if (!ftpClient.isConnected()) {
+            System.out.println(11111111);
             return false;
         }
         boolean flag = false;
@@ -234,21 +319,20 @@ public class FtpClientUtil {
 
                 ftpClient.setBufferSize(1024);
                 ftpClient.setControlEncoding("UTF-8");
-
                 // 设置文件类型（二进制）
                 ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
                 // 上传
-                flag = ftpClient.storeFile(new String(ftpFileName.getBytes(),
-                        "iso-8859-1"), fis);
+                flag = ftpClient.storeFile(new String(ftpFileName.getBytes(),"iso-8859-1"), fis);
             } catch (Exception e) {
                 this.close();
                 e.printStackTrace();
+                System.out.println(22222222);
                 return false;
             } finally {
                 IOUtils.closeQuietly(fis);
             }
         }
-
+        System.out.println("结果"+flag);
         System.out.println("success put file " + localDirectoryAndFileName
                 + " to " + ftpDirectory + ftpFileName);
         return flag;
@@ -315,7 +399,6 @@ public class FtpClientUtil {
                      getFileNameList(ftpDirectory+a+"/");
                  }
                  a=new String(a.getBytes("iso-8859-1"),"UTF-8");
-                 System.out.println(a);
              }
          } catch (Exception e) {
          e.printStackTrace();

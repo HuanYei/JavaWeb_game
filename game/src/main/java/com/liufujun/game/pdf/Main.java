@@ -236,7 +236,7 @@ public class Main {
         }
         user.set屏分辨率(v(sc,"寸分辨率","背光"));
         user.set屏背光电流(v(sc,"背光","玻璃品牌").toLowerCase().substring(v(sc,"背光","玻璃品牌").toLowerCase().indexOf("ma")-3,v(sc,"背光","玻璃品牌").toLowerCase().indexOf("ma")));
-        user.set按键数量(v(sc,"按键数量","键"));
+        user.set按键数量(v(sc,"按键数量","键").replace("刻模",""));
         user.set遥控器名(v(sc,"遥控器型号1:","数量").replace("CX-",""));
         user.set遥控器码值(sc.substring(sc.indexOf("件型号2")-6,sc.indexOf("件型号2")));
         user.set屏贴(sc.substring(sc.indexOf("电子屏贴")-1,sc.indexOf("电子屏贴")));

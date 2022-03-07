@@ -159,19 +159,31 @@ public class RtkpqDao {
                 pq.setUserR(Color赋值(pqdate[i], 0));
                 pq.setUserG(Color赋值(pqdate[i], 1));
                 pq.setUserB(Color赋值(pqdate[i], 2));
+                pq.setUserROFF(Color赋值(pqdate[i], 3));
+                pq.setUserGOFF(Color赋值(pqdate[i], 4));
+                pq.setUserBOFF(Color赋值(pqdate[i], 5));
             } else if (pqdate[i].indexOf("/*NORMAL(7500K)*/") != -1) {
                 pq.setStandardR(Color赋值(pqdate[i], 0));
                 pq.setStandardG(Color赋值(pqdate[i], 1));
                 pq.setStandardB(Color赋值(pqdate[i], 2));
+                pq.setStandardROFF(Color赋值(pqdate[i], 3));
+                pq.setStandardGOFF(Color赋值(pqdate[i], 4));
+                pq.setStandardBOFF(Color赋值(pqdate[i], 5));
             } else if (pqdate[i].indexOf("/*WARMER (5500K)*/") != -1) {
                 pq.setWarmR(Color赋值(pqdate[i], 0));
                 pq.setWarmG(Color赋值(pqdate[i], 1));
                 pq.setWarmB(Color赋值(pqdate[i], 2));
+                pq.setWarmROFF(Color赋值(pqdate[i], 3));
+                pq.setWarmGOFF(Color赋值(pqdate[i], 4));
+                pq.setWarmBOFF(Color赋值(pqdate[i], 5));
             } else if (pqdate[i].indexOf("/*WARM (6500K)*/") != -1) {
             } else if (pqdate[i].indexOf("/*COOL (8500K)*/") != -1) {
                 pq.setCoolR(Color赋值(pqdate[i], 0));
                 pq.setCoolG(Color赋值(pqdate[i], 1));
                 pq.setCoolB(Color赋值(pqdate[i], 2));
+                pq.setCoolROFF(Color赋值(pqdate[i], 3));
+                pq.setCoolGOFF(Color赋值(pqdate[i], 4));
+                pq.setCoolBOFF(Color赋值(pqdate[i], 5));
             } else if (pqdate[i].indexOf("/*COOLER (9500K)*/") != -1) {
             }
         }
@@ -179,7 +191,7 @@ public class RtkpqDao {
         return pq;
     }
 
-    private static String Color赋值(String date, int i) {
+    public static String Color赋值(String date, int i) {
         String datearr[] = date.split(",");
         return StringUtil.删除字符(datearr[i], "\t", " ", "{");
     }
@@ -191,20 +203,26 @@ public class RtkpqDao {
                 String content = Fileprocessing.readTxtFile(path);
                 content = UPNO(content, pq);
                 String pqdate[] = content.split("\n");
+                String Colorend;
+                if (path.indexOf("PQ_OverScan")==-1){
+                    Colorend="RELATE_TO_GAMMA_MODE";
+                }else {
+                    Colorend="0";
+                }
 
                 for (int i = 0; i < pqdate.length; i++) {
                     if (pqdate[i].indexOf("/*USER*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getUserR() + ",\t" + pq.getUserG() + ",\t" + pq.getUserB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*USER*/";
+                        pqdate[i] = "\t{\t" + pq.getUserR() + ",\t" + pq.getUserG() + ",\t" + pq.getUserB() + ",\t"+pq.getUserROFF() + ",\t" + pq.getUserGOFF() + ",\t" + pq.getUserBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*USER*/";
                     } else if (pqdate[i].indexOf("/*NORMAL(7500K)*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getStandardR() + ",\t" + pq.getStandardG() + ",\t" + pq.getStandardB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*NORMAL(7500K)*/";
+                        pqdate[i] = "\t{\t" + pq.getStandardR() + ",\t" + pq.getStandardG() + ",\t" + pq.getStandardB() + ",\t"+pq.getStandardROFF() + ",\t" + pq.getStandardGOFF() + ",\t" + pq.getStandardBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*NORMAL(7500K)*/";
                     } else if (pqdate[i].indexOf("/*WARMER (5500K)*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*WARMER (5500K)*/";
+                        pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t"+pq.getWarmROFF() + ",\t" + pq.getWarmGOFF() + ",\t" + pq.getWarmBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*WARMER (5500K)*/";
                     } else if (pqdate[i].indexOf("/*WARM (6500K)*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*WARM (6500K)*/";
+                        pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t"+pq.getWarmROFF() + ",\t" + pq.getWarmGOFF() + ",\t" + pq.getWarmBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*WARM (6500K)*/";
                     } else if (pqdate[i].indexOf("/*COOL (8500K)*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*COOL (8500K)*/";
+                        pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t"+pq.getCoolROFF() + ",\t" + pq.getCoolGOFF() + ",\t" + pq.getCoolBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*COOL (8500K)*/";
                     } else if (pqdate[i].indexOf("/*COOLER (9500K)*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t512,\t512,\t512, MAGIC_CT_ST_VAL, GAMMA_CURVE_RELATE_TO_GAMMA_MODE,},/*COOLER (9500K)*/";
+                        pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t"+pq.getCoolROFF() + ",\t" + pq.getCoolGOFF() + ",\t" + pq.getCoolBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*COOLER (9500K)*/";
                     }
                 }
                 content = "";
@@ -212,6 +230,7 @@ public class RtkpqDao {
                     content += pqdate[i] + "\n";
                 }
                 Fileprocessing.updateFile(path, content);
+                if (服务器使用路径.rtk2851_pq_Linux.equals(""))return;
                 Fileprocessing.newFile(path, 服务器使用路径.rtk2851_pq_Windows+StringUtil.提取文件名(path));
                 ConnectLinux.execComm("cd "+服务器使用路径.rtk2851_pq_Linux+"\n"+"./genPanelFactoryOSD.pl"+"\n");
                 String old=StringUtil.提取文件名(path).replace("VIP_Panel","vip").replace("Osd","osd").replace("cpp","bin");

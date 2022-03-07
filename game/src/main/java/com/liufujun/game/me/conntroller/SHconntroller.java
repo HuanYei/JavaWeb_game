@@ -1,6 +1,7 @@
 package com.liufujun.game.me.conntroller;
 
 import com.liufujun.game.pdf.util.Fileprocessing;
+import com.liufujun.game.util.PlanUtil;
 import com.liufujun.game.util.服务器使用路径;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,20 @@ public class SHconntroller {
         System.out.println(JBAlllist.size());
         return 查找(e关键字arr);
     }
+
+    @RequestMapping(value = "/Compared", method = RequestMethod.POST)
+    @ResponseBody
+    public void Compared(@RequestBody(required=false) String Compared) {
+        System.out.println("Compared = [" + Compared + "]");
+        if (Compared==null||Compared.equals("")){
+            return;
+        }
+        Compared=Compared.trim();
+        String e双脚本arr[] =Compared.split(" ");
+
+        Fileprocessing.ComparedFile(PlanUtil.SW脚本路径(e双脚本arr[0].replace(".sh","")),PlanUtil.SW脚本路径(e双脚本arr[1].replace(".sh","")));
+    }
+
 
     @RequestMapping(value = "/Changku368", method = RequestMethod.POST)
     @ResponseBody
@@ -56,21 +71,34 @@ public class SHconntroller {
         服务器使用路径.Info2851(path.substring(path.indexOf("：")+1));
         System.out.println(服务器使用路径.RTK2851PATH+"  当前路径");
     }
+
+    @RequestMapping(value = "/Changku2853", method = RequestMethod.POST)
+    @ResponseBody
+    public void Changku2853 (@RequestBody(required=false) String path) {
+        服务器使用路径.Info2853(path.substring(path.indexOf("：")+1));
+        System.out.println(服务器使用路径.RTK2853PATH+"  当前路径");
+    }
     @RequestMapping(value = "/JBall", method = RequestMethod.POST)
     @ResponseBody
     public void JBall () {
         JBAlllist.clear();
-        if (!服务器使用路径.MTK368PATH.equals("null")) {
+        if (!服务器使用路径.MTK368PATH.equals("")) {
             File file368=new File(服务器使用路径.脚本路径368);
             JBAlllist.addAll(Arrays.asList(提取file名称(file368)));
         }
-        if (!服务器使用路径.RTK2851PATH.equals("null")) {
+        if (!服务器使用路径.RTK2851PATH.equals("")) {
             File file2851=new File(服务器使用路径.脚本路径2851);
             File file2842=new File(服务器使用路径.脚本路径2842);
             JBAlllist.addAll(Arrays.asList(提取file名称(file2842)));
             JBAlllist.addAll(Arrays.asList(提取file名称(file2851)));
         }
-        if (!服务器使用路径.MTK9632PATH.equals("null")) {
+        if (!服务器使用路径.RTK2853PATH.equals("")) {
+            File file2853=new File(服务器使用路径.脚本路径2853);
+            File file2843=new File(服务器使用路径.脚本路径2843);
+            JBAlllist.addAll(Arrays.asList(提取file名称(file2843)));
+            JBAlllist.addAll(Arrays.asList(提取file名称(file2853)));
+        }
+        if (!服务器使用路径.MTK9632PATH.equals("")) {
             File file9632=new File(服务器使用路径.脚本路径9632);
             File file6681=new File(服务器使用路径.脚本路径6681);
             JBAlllist.addAll(Arrays.asList(提取file名称(file6681)));

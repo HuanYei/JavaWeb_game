@@ -1,0 +1,25 @@
+button,#LeftComparedid,#Comparedid{
+    padding: 5px 10px;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+    color: white;
+    background-color: #f47c00;
+}
+button:hover,#LeftComparedid:hover,#Comparedid:hover {
+    background-color: #ff8500;
+    box-shadow: 0 4px 5px 0 rgba(0,0,0,0.24), 0 8px 20px 0 rgba(0,0,0,0.19);
+}
+
+a{
+    color: green;
+    text-decoration:underline;
+}
+a:link {color: green;
+} /* 未访问的链接 */
+a:visited {color: green;
+} /* 已访问的链接 */
+a:hover {color: #ff2516
+} /* 当有鼠标悬停在链接上 */
+a:active {color: #fcfaff
+} /* 被选择的链接 */

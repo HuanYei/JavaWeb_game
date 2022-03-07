@@ -9,16 +9,18 @@
             font-size: 15px;
             border: solid 1px rgba(0, 0, 0, 0.53);
         }
-        .row{
+        tr{
+            word-break:break-all;
             display:block;
-            height: 30px;
-            line-height:30px;
-            width: 100%;
+            padding:3px 0px;
         }
-        .row:hover{
-            background-color: #c5c5c5;
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.17);
+            color: #020aff;
         }
+
     </style>
+    <link href="css/button.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
 </head>
 <body >
@@ -26,9 +28,10 @@
     <a href="/tool" style="font-size: 150%">其他工具</a>
 </div>
 <div align="center" >
-<form action="/subswname" method="post" enctype="multipart/form-data" style="font-size: 150%;">
+<form id="SWform" action="/subswname" method="post" enctype="multipart/form-data" style="font-size: 150%;">
     <div style=" width: 70%;" align="left">
         <h2>软件信息查找</h2>
+        <div th:if="${isSelt368}">
         368仓库：
         <select name="merchantNo" id="368select">
             <option th:each="item:${equManager368}"
@@ -38,6 +41,8 @@
             </option>
         </select>
         <br>
+        </div>
+        <div th:if="${isSelt9632}">
         9632仓库：
         <select name="merchantNo" id="9632select">
             <option th:each="item:${equManager9632}"
@@ -47,6 +52,8 @@
             </option>
         </select>
         <br>
+        </div>
+        <div th:if="${isSelt2851}">
         2851仓库：
         <select name="merchantNo" id="2851select">
             <option th:each="item:${equManager2851}"
@@ -55,11 +62,27 @@
                     th:text="${item}">
             </option>
         </select>
-    <div style="margin-top: 100px">
+        </div>
+        <div th:if="${isSelt2853}">
+            2853仓库：
+            <select name="merchantNo" id="2853select">
+                <option th:each="item:${equManager2853}"
+                        th:value="${item}"
+                        th:selected="${isSelt2853==item}"
+                        th:text="${item}">
+                </option>
+            </select>
+        </div>
+        <div th:if="${Iscomparison}">
+            <input type="button" id="LeftComparedid" style="visibility: hidden;" onclick="LeftCompared()" value="选择输入框内脚本为左边文件进行比较" />
+            <input type="button" id="Comparedid" style="visibility: hidden;" onclick="Comparedmethod()" />
+        </div>
+    <div style="margin-top: 80px">
     <input id="text" type="text"  name="swname" style="text-align:center; font-size:15px; width: 87%;height: 40px;"placeholder="请输入脚本名" autocomplete="off"></input>
     <button type="submit" style="font-size:15px;height: 50px; width: 100px" >查询</button>
     </div>
         <div id="divtisi">
+
         </div>
     </div>
 </form>
@@ -90,6 +113,33 @@
             f();
         });
     });
+    var text;
+    var leftcompared;
+    function LeftCompared() {
+        leftcompared=$("#text").val();
+        if (leftcompared.length>50){
+            document.getElementById("Comparedid").style.visibility="visible";
+            document.getElementById("Comparedid").value="输入框内脚本和"+leftcompared.substring(0,20)+"...进行比较";
+        }else {
+
+            alert("请输入完整脚本名");
+        }
+    }
+
+
+    function Comparedmethod() {
+        var  aa=$("#text").val();
+        if (aa.length>50){
+            $.ajax({
+                type: "post",
+                url: "/Compared",
+                data: leftcompared+" "+aa,
+                contentType: 'application/json'
+            });
+            document.getElementById("Comparedid").style.visibility="hidden";
+        }
+    }
+
     function f() {
         var shuru= $("#text").val();
         $.ajax({
@@ -100,19 +150,26 @@
             success: function (data1) {
                 if ($("#text").val()==""){
                     document.getElementById("divtisi").style.visibility="hidden";
+                    document.getElementById("LeftComparedid").style.visibility="hidden";
                 }else {
-                    var text=data1.split("|");
+                    text=data1.split("|");
                     var ss="";
                     oneJB=text[0];
+                    ss+="<table>";
                     for (var i = 0; i <text.length ; i++) {
-                        ss+="<p>"+text[i]+"</p>"
+                        ss+="<tr onclick='openpath("+i+")'><td>"+text[i]+"</td></tr>"
                     }
+                    ss+="</table>";
                     document.getElementById("divtisi").style.visibility="visible";
                     document.getElementById("divtisi").innerHTML="";
                     document.getElementById("divtisi").innerHTML=ss;
                 }
             }
         });
+    }
+    function openpath(path) {
+        document.getElementById("LeftComparedid").style.visibility="visible";
+        $("#text").val(text[path]);
     }
     var oneJB="";
     document.onkeydown=function (e) {
@@ -122,12 +179,14 @@
         //检测按下哪个键，作相应处理
         if(currKey == 13){
             if(oneJB.length>2){
-                $("#text").val(oneJB);
+                if ($("#text").val().indexOf(".sh")==-1) {
+                    $("#text").val(oneJB);
+                }
+                document.getElementById("SWform").submit();
+
             }
         }
-        else{
-            return true;
-        }
+        return true;
     };
     //监听库房选择事件
     $("#368select").change(function(){
@@ -155,6 +214,25 @@
         $.ajax({
             type:"post",
             url:"/Changku2851",
+            data:itemText,
+            contentType: 'application/json'
+        });
+        $.ajax({
+            type: "post",
+            url: "/JBall",
+            contentType: 'application/json',
+            success: function () {
+                f();
+            }
+        });
+    });
+
+    $("#2853select").change(function(){
+        //获取选中项的文本值
+        var itemText = $("#2853select option:selected").text();
+        $.ajax({
+            type:"post",
+            url:"/Changku2853",
             data:itemText,
             contentType: 'application/json'
         });
