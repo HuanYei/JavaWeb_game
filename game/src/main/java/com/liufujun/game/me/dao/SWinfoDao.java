@@ -89,13 +89,25 @@ public class SWinfoDao {
             String applist=SwDao.e脚本宏查值("preinstall_apk").replace("\"","");
             sw.getSWinfo().setAPPS(applist);
             sw.getSWinfo().setResolution(sw.getPanel().getM_wPanelWidth()+"*"+sw.getPanel().getM_wPanelHeight());
-            sw.getSWinfo().setIsZeasn(applist.indexOf("Zeasn")==-1?"不带":"带");
+            sw.getSWinfo().setIsZeasn(applist.toLowerCase().indexOf("zeasn")==-1?"不带":"带");
             sw.getSWinfo().setIsEshare(applist.indexOf("EShare")==-1?"不带":"带");
             sw.getSWinfo().setUpdateName("MTK"+sw.get方案()+"P.bin");
             sw.getSWinfo().setModel_name(SwDao.e脚本宏查值("cus_pro_id").replace("\"",""));
-            sw.getSWinfo().setBacklight(Backlight(sw));
+            sw.getSWinfo().setBacklight(
+
+                    Backlight(sw));
             sw.getSWinfo().setStandby_mode(STR(sw));
             sw.getSWinfo().setEquipment_name(Equipment(sw.getSWinfo().getPath()));
+            sw.getSWinfo().setIRpath(StringUtil.CDDD(StringUtil.提取文件路径(sw.getIRimgPath()))+sw.getSWinfo().getIRname()+".ini");
+            if (SwDao.e脚本宏查值("defaultVolume").equals("未识别到这个宏"))sw.getSWinfo().setDefaultVolume("30");
+            else sw.getSWinfo().setDefaultVolume(SwDao.e脚本宏查值("defaultVolume"));
+            if (sw.get方案().equals("368")){
+                sw.getSWinfo().setAutostandby("不待机");
+            }else {
+                sw.getSWinfo().setAutostandby(SwDao.e脚本宏查值("config_auto_standby_default").equals("0")?"不待机":"4小时后");
+            }
+            sw.getSWinfo().setJb2(sw.get软件客制化路径全称()+"set_config");
+
         }else {
             //RTK
             is2853=sw.get方案().equals("2853")||sw.get方案().equals("2843")?true:false;
@@ -103,8 +115,8 @@ public class SWinfoDao {
             else sw.getSWinfo().setBoard(SwDao.e脚本宏查值("config_pcb_varient").replace("\"",""));
             if (is2853)sw.getSWinfo().setIsCI(SwDao.e脚本宏查值("config_default_enable_ci").equals("true")?"带":"不带");
             else sw.getSWinfo().setIsCI(SwDao.e脚本宏查值("config_default_enable_ci").equals("1")?"带":"不带");
-
-            sw.getSWinfo().setStore(SwDao.e脚本宏查值("config_ddr_type_1G").equals("true")?"1G8G":"1.5G8G");
+            if (is2853)sw.getSWinfo().setStore(SwDao.e脚本宏查值("config_emmc_size").equals("8G")?"1.5G8G":"1.5G16G");
+            else sw.getSWinfo().setStore(SwDao.e脚本宏查值("config_ddr_type_1G").equals("true")?"1G8G":"1.5G8G");
             sw.getSWinfo().setTV_system(RTKTV());
 
             e电子屏贴(sw);
@@ -118,7 +130,9 @@ public class SWinfoDao {
                     SwDao.e脚本宏查值("config_default_country").replace("\"",""),0
             )+" "+Country.单个翻译语言(StringUtil.截取到第一次出现(SwDao.e脚本宏查值("config_product_locales")," ")
                     .replace("\"",""))+"语");
-            sw.getSWinfo().setIsdolby(SwDao.e脚本宏查值("config_dolby_able").equals("1")?"带":"不带");
+            if (is2853)sw.getSWinfo().setIsdolby(SwDao.e脚本宏查值("config_dolby_enable").equals("1")?"带":"不带");
+            else sw.getSWinfo().setIsdolby(SwDao.e脚本宏查值("config_dolby_able").equals("1")?"带":"不带");
+
             sw.getSWinfo().setIsBluetooth(SwDao.e脚本宏查值("config_bluetooth_enable").equals("1")?"带":"不带");
             sw.getSWinfo().setLanguageAll(Country.to中文语言(SwDao.e脚本宏查值("config_product_locales")));
             sw.getSWinfo().setSound_power(SwDao.e脚本宏查值("config_amp_power"));
@@ -126,8 +140,10 @@ public class SWinfoDao {
             String applist=SwDao.e脚本宏查值("config_prebuild_modules").replace("\"","");
             sw.getSWinfo().setAPPS(applist);
             sw.getSWinfo().setResolution(sw.getPanel().getM_wPanelWidth()+"*"+sw.getPanel().getM_wPanelHeight());
-            sw.getSWinfo().setIsZeasn(applist.indexOf("zhixiangUI")==-1?"不带":"带");
-            sw.getSWinfo().setIsEshare(SwDao.e脚本宏查值("toptech_eshare_enable").equals("1")?"带":"不带");
+            if (is2853)sw.getSWinfo().setIsZeasn(applist.toLowerCase().indexOf("zeasn")==-1?"不带":"带");
+            else sw.getSWinfo().setIsZeasn(applist.indexOf("zhixiangUI")==-1?"不带":"带");
+            if (is2853)sw.getSWinfo().setIsEshare(applist.toLowerCase().indexOf("eshare")==-1?"不带":"带");
+            else sw.getSWinfo().setIsEshare(SwDao.e脚本宏查值("toptech_eshare_enable").equals("1")?"带":"不带");
             sw.getSWinfo().setUpdateName("RTK"+sw.get方案()+"P.img");
             sw.getSWinfo().setModel_name(SwDao.e脚本宏查值("config_product_name").replace("\"",""));
             sw.getSWinfo().setBacklight(SwDao.e脚本宏查值("config_default_backlight").replace("\"",""));
@@ -146,8 +162,20 @@ public class SWinfoDao {
             sw.getSWinfo().setStandby_mode(aStr);
             sw.getSWinfo().setECO_MODE(RTKECO());
             sw.getSWinfo().setTTX_language(RTKTTX());
+            if (SwDao.e脚本宏查值("defaultVolume").equals("未识别到这个宏")) sw.getSWinfo().setDefaultVolume("30");
+            else sw.getSWinfo().setDefaultVolume(SwDao.e脚本宏查值("defaultVolume"));
+            sw.getSWinfo().setAutostandby("不待机");
+            sw.getSWinfo().setIRpath(StringUtil.CDDD(StringUtil.提取文件路径(sw.getIRimgPath()))+sw.getSWinfo().getIRname()+".config");
             e智像DP(sw);
+            sw.getSWinfo().setJb2(sw.get软件路径全称());
         }
+
+        if (is2853){
+            sw.getSWinfo().setIshotel(SwDao.e脚本宏查值("config_hotel_enabled").equals("true")?"带":"不带");
+        }else {
+            sw.getSWinfo().setIshotel(SwDao.e脚本宏查值("config_hotel_visible").equals("true")?"带":"不带");
+        }
+
         通道处理(sw);
     }
     public static String initconfig(String e宏){
@@ -336,6 +364,7 @@ public class SWinfoDao {
             String ECOdate=SwDao.e脚本宏查值("config_shopmode_backlight");
             return "显示为"+isECO+",默认为"+ECOenabled+",开启时为"+ECOdate;
         }else {
+            if (is2853)return "2853未完善，无法识别";
             return "无节能模式";
         }
     }
@@ -364,7 +393,7 @@ public class SWinfoDao {
         }
     }
     private static String RTKTTX() {
-        if (SwDao.e脚本宏查值("config_default_enable_tt").equals("1")){
+        if (SwDao.e脚本宏查值("config_default_enable_tt").equals("1")||SwDao.e脚本宏查值("config_default_enable_tt").equals("true")){
             if (SwDao.e脚本宏查值("config_ttx_language_visible").equals("true")){
                 return "带图文,有显示图文语言选项，图文语言为"+RTKTTX_L();
             }else {
@@ -488,9 +517,7 @@ public class SWinfoDao {
             }
         }else {
             String board2851[];
-            System.out.println("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
             if (is2853){
-                System.out.println("2222222222222222222222222222222222222222222222222222222222222222222222222222222222223633");
                 board=SwDao.e脚本宏查值("config_pcb_variant");
                 board2851= Fileprocessing.readTxtFile(服务器使用路径.RTK2853PATH+"kernel/system/board.json").split("\n");
             }
@@ -504,7 +531,6 @@ public class SWinfoDao {
             for (int i = 0; i <board2851.length ; i++) {
                 if (board2851[i].indexOf(board)!=-1){
                     sw.getSWinfo().setSOURCE(e取值(board2851,i));
-                    System.out.println(666666666+e取值(board2851,i));
                 }
             }
         }

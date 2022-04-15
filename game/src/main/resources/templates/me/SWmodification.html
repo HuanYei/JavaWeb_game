@@ -30,26 +30,28 @@
 <body onload="myFunction()" style="width: 500%;">
 <div style="width: 100%">
     <a href="/" style="font-size: 150%">主页</a>
-    <a onclick="Refresh()" href="#" style="font-size: 100%">按(Ctrl+Alt+Z)刷新页面</a>
+    <a onclick="Refresh(0)" href="#" style="font-size: 100%">按(Ctrl+Alt+Z)刷新页面</a>
 </div>
 <div style="margin-left: 20px">
     <h1>软件信息</h1>
     <div style="display: flex;">
         <div>
             <p><b>智像DP：</b><span th:text="${SW.getZeasn_devicetype()}"></span>&nbsp;&nbsp;<button onclick="copyDP()">点击复制</button></p>
-            <p><b>脚本：<a th:href="${'/toScript?swSCpath='}+${SW.getFull_name_of_software_path}">编辑脚本</a>|<a th:onclick="openpath([[${SW.getFull_name_of_software_path}]])">打开目录</a>|<a th:onclick="openFile([[${SW.getFull_name_of_software_path}]])">打开文件</a></b></p>
+            <p><b>脚本：
+<!--                <a th:href="${'/toScript?swSCpath='}+${SW.getFull_name_of_software_path}">编辑脚本</a>|-->
+                <a th:onclick="openpath([[${SW.getFull_name_of_software_path}]])">打开目录</a>|<a th:onclick="openFile([[${SW.getFull_name_of_software_path}]])">打开文件</a></b></p>
             <div style="margin-left: 30px">
                 <input id="ScName" type="text" th:value=" ${SW.software_name}"></input><br>
-                <button onclick="rmScName()">重命名脚本</button>
-                <button onclick="newSc()">创建新脚本</button>
+                <button onclick="rmandnew(0)">重命名脚本</button>
+                <button onclick="rmandnew(1)">创建新脚本</button>
                 <!--        <span style="color: red;" class="zhushi">*请先创建新脚本在创建新客制化文件夹</span>-->
             </div>
 
             <p><b>客制化文件夹：<a th:onclick="openpath([[${SW.full_name_of_software_customization_path}]])" >打开目录</a></b></p>
             <div style="margin-left: 30px">
                 <input type="text" id="CuDir" th:value="${SW.software_customization_name}"></input><br>
-                <button onclick="rmDir()">重命名文件夹</button>
-                <button onclick="newDir()">创建新文件夹</button>
+                <button onclick="rmandnew(2)">重命名文件夹</button>
+                <button onclick="rmandnew(3)">创建新文件夹</button>
                 <!--        <span style="color: red;" class="zhushi">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>-->
             </div>
 
@@ -74,11 +76,15 @@
             <br>
                 <!--        <span style="color: red;" class="zhushi">*请打开logo目录，复制你要修改的logo名称，填入输入框更换logo。</span>-->
             </div>
-            <input id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 23%;height: 20px;margin-left: 30px;"></input>
+<!--            <b><a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSoftware_logo_name()}]])" class="tit2">Logo名称：</a></b>-->
+            <input class="tit2" id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 23%;height: 20px;"></input>
             <button onclick="UPlogo()">更换logo</button>
         </div>
         <div style="padding-left: 50px">
-            <p><b>遥控器丝印图：</b></p>
+            <p><b>遥控器配置：
+                <a th:onclick="openpath([[${SW.getSwinfo().getIRpath()}]])">打开目录</a>|
+                <a th:onclick="openFile([[${SW.getSwinfo().getIRpath()}]])">打开文件</a>
+            </b></p>
             <a th:href="@{/image/ykq}" style="text-decoration:none;">
             <img style="height: 450px;width: 366px;" border="1" title="点击可查看大图" th:src="@{/image/ykq}">
             </a>
@@ -89,7 +95,8 @@
 
         <b>屏： <a th:onclick="openpath([[${SW.full_name_of_software_screen_parameter_name_path}]])" >打开目录</a>|<a th:onclick="openFile([[${SW.full_name_of_software_screen_parameter_name_path}]])">打开文件</a></b>
     <div class="tit2">
-        屏参文件名：<input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;"></input>
+<!--        <b><a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getScreen_name()}]])">屏参文件名：</a></b>-->
+        <input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;"></input>
         <button onclick="UPPanel()" >更换屏参</button>
 <!--    <span style="color: red;" class="zhushi">*请打开目录，复制你要修改的屏文件名称，填入输入框更换配屏</span>-->
         <br><br>
@@ -97,7 +104,8 @@
             工厂菜单显示名:
             <input type="text" th:field="*{panel.M_PNAME}"/>
             <br>
-
+            屏分辨率：<span th:text="${SW.getSwinfo().getResolution()}"></span>
+            <br>
             <div id="TiMode">
                 Ti Mode:
                 <input name="Ti" onclick="Timodeon()" th:checked="*{panel.getTi_MODE() eq '1'} ? true : false"
@@ -155,46 +163,124 @@
         <div class="tit2">
             <table>
                 <tr>
-                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getIRname()}]])">遥控器名：<a th:text="${SW.getSwinfo().getIRname()}"></a></td>
-                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'sticker')">电子屏贴：<a th:text="${SW.getSwinfo().getIsDzpt()}"></a></td>
-                    <td>按键板类型：<span th:text="${SW.getSwinfo().getKEYboardType()}"></span></td>
-                    <td>通道配置：<span th:text="${SW.getSwinfo().getSOURCE()}"></span></td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getIRname()}]])"> 遥控器名：</a>
+                        <span th:text="${SW.getSwinfo().getIRname()}"></span>
+                    </td>
+                    <td><a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'sticker')">电子屏贴：</a>
+                        <span th:text="${SW.getSwinfo().getIsDzpt()}"></span>
+                    </td>
+                    <td><a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'keypad')" >按键板类型：</a>
+                        <span th:text="${SW.getSwinfo().getKEYboardType()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'keypad')" >通道配置：</a>
+                        <span th:text="${SW.getSwinfo().getSOURCE()}"></span>
+                    </td>
                 </tr>
                 <tr>
-                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getBoard()}]])">板卡类型：<a th:text="${SW.getSwinfo().getBoard()}"></a></td>
-                    <td>CI：<span th:text="${SW.getSwinfo().getIsCI()}"></span></td>
-                    <td>板卡内存及存储：<span th:text="${SW.getSwinfo().getStore()}"></span></td>
-                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getKEYboardName()}]])">按键板名：<a th:text="${SW.getSwinfo().getKEYboardName()}"></a></td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getBoard()}]])">板卡类型：</a>
+                        <span th:text="${SW.getSwinfo().getBoard()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'ci')">CI：</a>
+                        <span th:text="${SW.getSwinfo().getIsCI()}"></span></td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'olume=')">系统音量：</a>
+                        <span th:text="${SW.getSwinfo().getDefaultVolume()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getKEYboardName()}]])">按键板名：</a>
+                        <span th:text="${SW.getSwinfo().getKEYboardName()}"></span>
+                    </td>
                 </tr>
                 <tr>
-                    <td>TV制式：<span th:text="${SW.getSwinfo().getTV_system()}"></span></td>
-                    <td>蓝牙：<span th:text="${SW.getSwinfo().getIsBluetooth()}"></span></td>
-                    <td>默认背光：<span th:text="${SW.getSwinfo().getBacklight()}"></span></td>
-                    <td>能效模式：<span th:text="${SW.getSwinfo().getECO_MODE()}"></span></td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'_dvbs')"> TV制式：</a>
+                        <span th:text="${SW.getSwinfo().getTV_system()}"></span></td>
+                    <td><a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'bluetooth')">蓝牙：</a>
+                        <span th:text="${SW.getSwinfo().getIsBluetooth()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'default_backlight')">默认背光：</a>
+                        <span th:text="${SW.getSwinfo().getBacklight()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'mode_backlight')">能效模式：</a>
+                        <span th:text="${SW.getSwinfo().getECO_MODE()}"></span>
+                    </td>
                 </tr>
                 <tr>
-                    <td>国家+默认语言：<span th:text="${SW.getSwinfo().getCountry_and_language()}"></span></td>
-                    <td>杜比：<span th:text="${SW.getSwinfo().getIsdolby()}"></span></td>
-                    <td>ATV手动搜台制式：<span th:text="${SW.getSwinfo().getATVManual()}"></span></td>
-                    <td>所有语言：<span th:text="${SW.getSwinfo().getLanguageAll()}"></span></td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'_country')">国家+默认语言：</a>
+                        <span th:text="${SW.getSwinfo().getCountry_and_language()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'dolby')">杜比：</a>
+                        <span th:text="${SW.getSwinfo().getIsdolby()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'color_system')">ATV手动搜台制式：</a>
+                        <span th:text="${SW.getSwinfo().getATVManual()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'vi_VN')"> 所有语言：</a>
+                        <span th:text="${SW.getSwinfo().getLanguageAll()}"></span>
+                    </td>
                 </tr>
                 <tr>
-                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getSound_power()}]])">声音功率：<a th:text="${SW.getSwinfo().getSound_power()}"></a></td>
-                    <td>智像：<span th:text="${SW.getSwinfo().getIsZeasn()}"></span></td>
-                    <td>屏分辨率：<span th:text="${SW.getSwinfo().getResolution()}"></span></td>
-                    <td>内置应用：<span th:text="${SW.getSwinfo().getAPPS()}"></span></td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getSound_power()}]])">声音功率：</a>
+                        <span th:text="${SW.getSwinfo().getSound_power()}"></span></td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'_hotel')">酒店模式：</a>
+                        <span th:text="${SW.getSwinfo().getIshotel()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'config_auto_standby_default')">自动待机：</a>
+                        <span th:text="${SW.getSwinfo().getAutostandby()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getAPPS()}]])">内置应用：</a>
+                        <span th:text="${SW.getSwinfo().getAPPS()}"></span>
+                    </td>
                 </tr>
                 <tr>
-                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getCurrent()}]])">背光电流：<a th:text="${SW.getSwinfo().getCurrent()}"></a></td>
-                    <td>Eshare：<span th:text="${SW.getSwinfo().getIsEshare()}"></span></td>
-                    <td>升级软件名称：<span th:text="${SW.getSwinfo().getUpdateName()}"></span></td>
-                    <td th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getModel_name()}]])">客户机型名：<a th:text="${SW.getSwinfo().getModel_name()}"></a></td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getCurrent()}]])">背光电流：</a>
+                        <span th:text="${SW.getSwinfo().getCurrent()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'Eshare')">Eshare：</a>
+                        <span th:text="${SW.getSwinfo().getIsEshare()}"></span>
+                    </td>
+                    <td><a>升级软件名称：</a><span th:text="${SW.getSwinfo().getUpdateName()}"></span></td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getModel_name()}]])">客户机型名：</a>
+                        <span th:text="${SW.getSwinfo().getModel_name()}"></span>
+                    </td>
                 </tr>
                 <tr>
-                    <td>待机模式：<span th:text="${SW.getSwinfo().getStandby_mode()}"></span></td>
-                    <td>上电模式：<span th:text="${SW.getSwinfo().getIsPower_memory()}"></span></td>
-                    <td>设备名：<span th:text="${SW.getSwinfo().getEquipment_name()}"></span></td>
-                    <td>图文：<span th:text="${SW.getSwinfo().getTTX_language()}"></span></td>
+                    powerOn
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getSwinfo().getJb2()}]],'str_')">待机模式：</a>
+                        <span th:text="${SW.getSwinfo().getStandby_mode()}"></span>
+                    </td>
+
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getSwinfo().getJb2()}]],'poweron')">上电模式：</a>
+                        <span th:text="${SW.getSwinfo().getIsPower_memory()}"></span>
+                    </td>
+                    <td>
+
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'device_name')">设备名：</a>
+                        <span th:text="${SW.getSwinfo().getEquipment_name()}"></span>
+                    </td>
+                    <td>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'ttx')">图文：</a>
+                        <span th:text="${SW.getSwinfo().getTTX_language()}"></span>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -407,10 +493,8 @@
             for (var i = 0; i < a.length; i++) {
                 a[i].style.display = "none";
             }
-
             document.getElementById("donh").src="img/rtk.gif";
         }
-
         let input = document.getElementById("ScName");
         const l = input.value.length;
         input.style.width = (l+1) * 8 + "px";
@@ -464,123 +548,36 @@
     }
 
 
-    function rmScName() {
-        var oldScname = [[${SW.full_name_of_software_path}]];
-        var newScname = document.getElementById("ScName").value;
-        var old = [[${SW.software_name}]];
-        if (old == newScname) {
-            alert("请在上方输入框更改脚本名");
-        } else {
-            var postForm = document.createElement("form");//表单对象
-            postForm.method = "post";
-            postForm.action = '/RmScname';
-
-            var oldScnameInput = document.createElement("input");
-            oldScnameInput.setAttribute("name", "oldScname");
-            oldScnameInput.setAttribute("value", oldScname);
-            postForm.appendChild(oldScnameInput);
-
-            var newScnameInput = document.createElement("input");
-            newScnameInput.setAttribute("name", "newScname");
-            newScnameInput.setAttribute("value", newScname);
-            postForm.appendChild(newScnameInput);
-
-            document.body.appendChild(postForm);
-            postForm.submit();
+    function rmandnew(ismm) {
+        var oldScname;
+        var newScname;
+        var old;
+        if (ismm<2){
+            oldScname = [[${SW.full_name_of_software_path}]];
+            newScname = document.getElementById("ScName").value;
+            old = [[${SW.software_name}]];
+        }else {
+            oldScname = [[${SW.full_name_of_software_customization_path}]];
+            newScname = document.getElementById("CuDir").value;
+            old = [[${SW.software_customization_name}]];
         }
-    }
-
-    function newSc() {
-        var oldScname = [[${SW.full_name_of_software_path}]];
-        var newScname = document.getElementById("ScName").value;
-        var old = [[${SW.software_name}]];
-        if (old == newScname) {
-
-            alert("请在上方输入框更改脚本名");
-        } else {
-            var postForm = document.createElement("form");//表单对象
-            postForm.method = "post";
-            postForm.action = '/newSc';
-
-            var oldScnameInput = document.createElement("input");
-            oldScnameInput.setAttribute("name", "oldScname");
-            oldScnameInput.setAttribute("value", oldScname);
-            postForm.appendChild(oldScnameInput);
-
-            var newScnameInput = document.createElement("input");
-            newScnameInput.setAttribute("name", "newScname");
-            newScnameInput.setAttribute("value", newScname);
-            postForm.appendChild(newScnameInput);
-
-            document.body.appendChild(postForm);
-            postForm.submit();
-        }
-    }
-
-    function rmDir() {
-        var oldScname = [[${SW.full_name_of_software_customization_path}]];
-        var newScname = document.getElementById("CuDir").value;
         var SwName = [[${SW.software_name}]];
-        var old = [[${SW.software_customization_name}]];
         if (old == newScname) {
-            alert("请在上方输入框更改客制化名");
+            alert("请在上方输入框重命名");
         } else {
-            var postForm = document.createElement("form");//表单对象
-            postForm.method = "post";
-            postForm.action = '/rmDir';
-
-            var oldScnameInput = document.createElement("input");
-            oldScnameInput.setAttribute("name", "oldScname");
-            oldScnameInput.setAttribute("value", oldScname);
-            postForm.appendChild(oldScnameInput);
-
-            var SwNameInput = document.createElement("input");
-            SwNameInput.setAttribute("name", "SwName");
-            SwNameInput.setAttribute("value", SwName);
-            postForm.appendChild(SwNameInput);
-
-            var newScnameInput = document.createElement("input");
-            newScnameInput.setAttribute("name", "newScname");
-            newScnameInput.setAttribute("value", newScname);
-            postForm.appendChild(newScnameInput);
-
-            document.body.appendChild(postForm);
-            postForm.submit();
+            $.ajax({
+                type:"post",
+                url:"/RmScname",
+                data:newScname+" "+oldScname+" "+ismm+" "+SwName,
+                contentType: 'application/json',
+                success:function (data1) {
+                    alert(data1);
+                    if (data1=="成功") Refresh(2);
+                }
+            });
         }
     }
 
-    function newDir() {
-        var oldScname = [[${SW.full_name_of_software_customization_path}]];
-        var newScname = document.getElementById("CuDir").value;
-        var SwName = [[${SW.software_name}]];
-        var old = [[${SW.software_customization_name}]];
-        if (old == newScname) {
-            alert("请在上方输入框更改客制化名");
-        } else {
-            var postForm = document.createElement("form");//表单对象
-            postForm.method = "post";
-            postForm.action = '/newDir';
-
-            var oldScnameInput = document.createElement("input");
-            oldScnameInput.setAttribute("name", "oldScname");
-            oldScnameInput.setAttribute("value", oldScname);
-            postForm.appendChild(oldScnameInput);
-
-            var SwNameInput = document.createElement("input");
-            SwNameInput.setAttribute("name", "SwName");
-            SwNameInput.setAttribute("value", SwName);
-            postForm.appendChild(SwNameInput);
-
-            var newScnameInput = document.createElement("input");
-            newScnameInput.setAttribute("name", "newScname");
-            newScnameInput.setAttribute("value", newScname);
-            postForm.appendChild(newScnameInput);
-
-            document.body.appendChild(postForm);
-            postForm.submit();
-        }
-
-    }
 
     function UPlogo() {
         var oldScname = [[${SW.software_logo_name}]];
@@ -657,8 +654,12 @@
         oInput.style.display='none';
     }
 
-    function Refresh(){
-        var textname=[[${SW.software_name}]];
+    function Refresh(is){
+        var textname="";
+        if (is==0) textname =[[${SW.software_name}]];
+        else {
+            textname= document.getElementById("ScName").value;
+        }
         var postForm = document.createElement("form");//表单对象
         postForm.method="post" ;
         postForm.action = '/subswname' ;

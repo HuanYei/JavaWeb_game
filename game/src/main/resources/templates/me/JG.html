@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
+    <link href="css/button.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <div style="width: 100%" >
     <a href="/" style="font-size: 150%">主页</a>
     <a  href="/toSWtool" style="font-size: 100%">返回</a>
+
 </div>
 <h1>上传状态</h1>
 
@@ -30,6 +32,16 @@
                 }
             }
         });
+    }
+
+    function copytext(text) {
+        var Url2=text.replace("<ssbb>","\n");
+        var textarea = document.createElement('textarea');
+        textarea.value = Url2;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        document.body.removeChild(textarea);
     }
 </script>
 </body>

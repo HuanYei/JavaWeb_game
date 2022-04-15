@@ -52,6 +52,16 @@ public class StringUtil {
         }
         return ci;
     };
+    public static String CDDD(String e目录){
+        if (e目录.charAt(e目录.length()-1)=='/'){
+            return 提取文件路径(e目录.substring(0,e目录.length()-1));
+        }else if (e目录.charAt(e目录.length()-1)=='\\'){
+            return 提取文件路径(e目录.substring(0,e目录.length()-1));
+        }else {
+            return 提取文件路径(e目录);
+        }
+    }
+
     public static String 提取config文件的值(String path,String 宏){
         String textarr[]=Fileprocessing.readTxtFile(path).split("\n");
 

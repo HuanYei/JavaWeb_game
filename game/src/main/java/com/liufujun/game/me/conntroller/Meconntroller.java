@@ -77,46 +77,42 @@ public class Meconntroller {
         return "me/dzpt";
     }
 
+    @RequestMapping(value = "/RmScname", method = RequestMethod.POST)
+    @ResponseBody
+    public String RmScname (@RequestBody(required=false) String path) {
 
-    @PostMapping("/RmScname")
-    public String  RmScname(@RequestParam("oldScname") String oldScname,@RequestParam("newScname") String newScname,Model model){
-        String a=newScname;
-        newScname=oldScname.replace(oldScname.substring(oldScname.lastIndexOf("/")+1),"")+newScname+".sh";
-        Fileprocessing.ReNameFile(oldScname,newScname);
-        model.addAttribute("msg","重命名成功");
-        return  "forward:/subswname?swname="+a;
+        String newScname=path.split(" ")[0];
+        String oldScname=path.split(" ")[1];
+        String neworrm=path.split(" ")[2];
+        String SwName=path.split(" ")[3];
+        String newScnameNAME=newScname;
+        System.out.println(path);
+        if (oldScname.charAt(oldScname.length()-1)=='/'){
+            oldScname=oldScname.substring(0,oldScname.length()-1);
+            newScname=oldScname.replace(oldScname.substring(oldScname.substring(0,oldScname.length()-2).lastIndexOf("/")+1),"")+newScname;
+        }else newScname=oldScname.replace(oldScname.substring(oldScname.lastIndexOf("/")+1),"")+newScname+".sh";
+        System.out.println(newScname);
+        if (Fileprocessing.isFile(newScname)){
+            return "失败，该文件名已存在";
+        }
+        if (neworrm.equals("0")) Fileprocessing.ReNameFile(oldScname,newScname);
+        else if (neworrm.equals("1")) Fileprocessing.newFile(oldScname,newScname);
+        else if (neworrm.equals("2")){
+            System.out.println(newScnameNAME);
+            SwDao.SW宏修改(SwName,newScnameNAME);
+            Fileprocessing.ReNameFile(oldScname,newScname);
+        }
+        else if (neworrm.equals("3")){
+            System.out.println(newScnameNAME);
+            SwDao.SW宏修改(SwName,newScnameNAME);
+            Fileprocessing.copy(oldScname+"/",newScname+"/");
+        }
+       return "成功";
     }
 
-    @PostMapping("/rmDir")
-    public String  rmDir(@RequestParam("oldScname") String oldScname,@RequestParam("newScname") String newScname,@RequestParam("SwName") String SwName,Model model){
-        SwDao.SW宏修改(SwName,newScname);
-        oldScname=oldScname.substring(0,oldScname.length()-1);
-        newScname=oldScname.replace(oldScname.substring(oldScname.substring(0,oldScname.length()-2).lastIndexOf("/")+1),"")+newScname;
-        Fileprocessing.ReNameFile(oldScname,newScname);
 
-        model.addAttribute("msg","重命名成功");
-        return  "forward:/subswname?swname="+SwName;
-    }
-    @PostMapping("/newDir")
-    public String  newDir(@RequestParam("oldScname") String oldScname,@RequestParam("newScname") String newScname,@RequestParam("SwName") String SwName,Model model){
-        SwDao.SW宏修改(SwName,newScname);
-        oldScname=oldScname.substring(0,oldScname.length()-1);
-        newScname=oldScname.replace(oldScname.substring(oldScname.substring(0,oldScname.length()-2).lastIndexOf("/")+1),"")+newScname;
-        Fileprocessing.copy(oldScname+"/",newScname+"/");
 
-        model.addAttribute("msg","重命名成功");
-        return  "forward:/subswname?swname="+SwName;
-    }
 
-    @PostMapping("/newSc")
-    public String  newSc(@RequestParam("oldScname") String oldScname,@RequestParam("newScname") String newScname,Model model){
-
-        String a=newScname;
-        newScname=oldScname.replace(oldScname.substring(oldScname.lastIndexOf("/")+1),"")+newScname+".sh";
-        Fileprocessing.newFile(oldScname,newScname);
-        model.addAttribute("msg","创建成功");
-        return  "forward:/subswname?swname="+a;
-    }
 
     @PostMapping("/UPlogo")
     public String  UPlogo(@RequestParam("oldScname") String oldScname,@RequestParam("newScname") String newScname,@RequestParam("SwName") String SwName,Model model){
@@ -128,26 +124,6 @@ public class Meconntroller {
         return  "forward:/subswname?swname="+SwName;
     }
 
-    @PostMapping("/topostScript")
-    public String  topostScript(@RequestParam("swSCpath") String swSCpath,Model model){
-        model=Tosc(model,swSCpath);
-        return "me/script_Update";
-    }
-
-    @GetMapping("/toScript")
-    public String  togetScript(@RequestParam("swSCpath") String swSCpath,Model model){
-        model=Tosc(model,swSCpath);
-        return "me/script_Update";
-    }
-
-    @PostMapping("/textUpdate")
-    public String textUpdate(@RequestParam("textcontent") String textcontent,@RequestParam("textpath") String textpath,Model model){
-        System.out.println(textcontent);
-        textcontent=EditorstyleUtil.DeleteStyle(textcontent);
-        Fileprocessing.updateFile(textpath,textcontent);
-        model.addAttribute("msg","成功保存");
-        return "forward:/topostScript?swSCpath="+textpath;
-    }
     @PostMapping("/OpenFile")
     public String OpenFile(@RequestParam("Filepath") String Filepath){
         String path="",swname="";
@@ -168,7 +144,6 @@ public class Meconntroller {
     public String COLOR(@ModelAttribute SwEnglish sw,Model model){
         PQ(sw);
         System.out.println(sw.getSoftware_name());
-        model.addAttribute("msg","色温修改成功");
         return "forward:/subswname?swname="+sw.getSoftware_name();
     }
     @PostMapping("/Panel")
@@ -270,19 +245,6 @@ public class Meconntroller {
         }
         return null;
     }
-
-
-    public Model Tosc(Model model,String swSCpath){
-        System.out.println(swSCpath);
-        String content=Fileprocessing.readTxtFile(swSCpath);
-        content= EditorstyleUtil.Editorstyle(content);
-        model.addAttribute("content",content);
-        model.addAttribute("scriptpath",swSCpath);
-        model.addAttribute("row",EditorstyleUtil.row);
-        return model;
-    }
-
-
 
 
     private void PQ(SwEnglish sw){

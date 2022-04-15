@@ -13,13 +13,17 @@ button:hover,#LeftComparedid:hover,#Comparedid:hover {
 
 a{
     color: green;
-    text-decoration:underline;
+    text-decoration:none;
 }
 a:link {color: green;
+    text-decoration:none;
 } /* 未访问的链接 */
 a:visited {color: green;
+    text-decoration:none;
 } /* 已访问的链接 */
-a:hover {color: #ff2516
+a:hover {color: #ff2516;
+    text-decoration:none;
 } /* 当有鼠标悬停在链接上 */
-a:active {color: #fcfaff
+a:active {color: #fcfaff;
+    text-decoration:none;
 } /* 被选择的链接 */

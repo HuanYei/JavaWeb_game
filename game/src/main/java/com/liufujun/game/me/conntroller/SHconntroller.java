@@ -39,7 +39,7 @@ public class SHconntroller {
         Compared=Compared.trim();
         String e双脚本arr[] =Compared.split(" ");
 
-        Fileprocessing.ComparedFile(PlanUtil.SW脚本路径(e双脚本arr[0].replace(".sh","")),PlanUtil.SW脚本路径(e双脚本arr[1].replace(".sh","")));
+        Fileprocessing.ComparedJBOrDir(PlanUtil.SW脚本路径(e双脚本arr[0].replace(".sh","")),PlanUtil.SW脚本路径(e双脚本arr[1].replace(".sh","")));
     }
 
 

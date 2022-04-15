@@ -12,7 +12,7 @@ public class GameApplication {
     public static void main(String[] args) {
         FaeUpdate.autoUpdate();
         服务器使用路径 fw=new 服务器使用路径();
-        ConnectLinux.Connect();
+        if(fw.FtpUser.length()>3) ConnectLinux.Connect();
         SpringApplication.run(GameApplication.class, args);
     }
 

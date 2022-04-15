@@ -405,6 +405,7 @@ public class SwDao {
         return sw;
     }
     public static void SW宏修改(String swname,String 客制化){
+        System.out.println("swname = [" + swname + "], 客制化 = [" + 客制化 + "]");
         if ( PlanUtil.PlanType(swname).equals("368")){
             if (客制化.indexOf("bootlogo")!=-1){
                 String jb =Stringmacro("bootlogo_file",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径368+swname+".sh"));
@@ -486,6 +487,34 @@ public class SwDao {
             客制化="\""+客制化+"\"";
             String jb =Stringmacro("config_panel_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2842+swname+".sh"));
             Fileprocessing.updateFile(服务器使用路径.脚本路径2842+swname+".sh",jb);
+        }else if (PlanUtil.PlanType(swname).equals("2853")){
+            if (客制化.indexOf(".raw")!=-1){
+                String jb =Stringmacro("config_bootlogo_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2853+swname+".sh"));
+                Fileprocessing.updateFile(服务器使用路径.脚本路径2853+swname+".sh",jb);
+                return;
+            }else if (客制化.indexOf("2853")!=-1){
+                客制化="\""+客制化+"\"";
+                String jb =Stringmacro("config_customer_folder_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2853+swname+".sh"));
+                Fileprocessing.updateFile(服务器使用路径.脚本路径2853+swname+".sh",jb);
+                return;
+            }
+            客制化="\""+客制化+"\"";
+            String jb =Stringmacro("config_panel_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2853+swname+".sh"));
+            Fileprocessing.updateFile(服务器使用路径.脚本路径2853+swname+".sh",jb);
+        }else if (PlanUtil.PlanType(swname).equals("2843")){
+            if (客制化.indexOf(".raw")!=-1){
+                String jb =Stringmacro("config_bootlogo_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2843+swname+".sh"));
+                Fileprocessing.updateFile(服务器使用路径.脚本路径2843+swname+".sh",jb);
+                return;
+            }else if (客制化.indexOf("2842")!=-1){
+                客制化="\""+客制化+"\"";
+                String jb =Stringmacro("config_customer_folder_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2843+swname+".sh"));
+                Fileprocessing.updateFile(服务器使用路径.脚本路径2843+swname+".sh",jb);
+                return;
+            }
+            客制化="\""+客制化+"\"";
+            String jb =Stringmacro("config_panel_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2843+swname+".sh"));
+            Fileprocessing.updateFile(服务器使用路径.脚本路径2843+swname+".sh",jb);
         }
     }
 

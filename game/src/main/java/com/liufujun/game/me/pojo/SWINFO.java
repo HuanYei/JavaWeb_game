@@ -11,7 +11,9 @@ public class SWINFO {
     String ECO_MODE, Country_and_language, Isdolby, IsBluetooth;
     String languageAll, Sound_power, Current, Resolution;
     String APPS, IsEshare, IsZeasn, UpdateName, Model_name;
-    String IsDzpt,backlight,IsPower_memory,Equipment_name,Standby_mode,Isbootvideo,Path;
+    String IsDzpt,backlight,IsPower_memory,Equipment_name,
+            Standby_mode,Isbootvideo,Path,IRpath,defaultVolume,
+            ishotel,adjustment,autostandby,jb2;
 
     @Override
     public String toString() {
@@ -39,6 +41,7 @@ public class SWINFO {
                 ", IsZeasn='" + IsZeasn + '\'' +
                 ", UpdateName='" + UpdateName + '\'' +
                 ", Model_name='" + Model_name + '\'' +
+                ", IRpath='" + IRpath + '\'' +
                 '}';
     }
 
@@ -280,5 +283,53 @@ public class SWINFO {
 
     public void setPath(String path) {
         Path = path;
+    }
+
+    public String getIRpath() {
+        return IRpath;
+    }
+
+    public void setIRpath(String IRpath) {
+        this.IRpath = IRpath;
+    }
+
+    public String getDefaultVolume() {
+        return defaultVolume;
+    }
+
+    public void setDefaultVolume(String defaultVolume) {
+        this.defaultVolume = defaultVolume;
+    }
+
+    public String getIshotel() {
+        return ishotel;
+    }
+
+    public void setIshotel(String ishotel) {
+        this.ishotel = ishotel;
+    }
+
+    public String getAdjustment() {
+        return adjustment;
+    }
+
+    public void setAdjustment(String adjustment) {
+        this.adjustment = adjustment;
+    }
+
+    public String getAutostandby() {
+        return autostandby;
+    }
+
+    public void setAutostandby(String autostandby) {
+        this.autostandby = autostandby;
+    }
+
+    public String getJb2() {
+        return jb2;
+    }
+
+    public void setJb2(String jb2) {
+        this.jb2 = jb2;
     }
 }

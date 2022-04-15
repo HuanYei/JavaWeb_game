@@ -101,12 +101,16 @@ public class FtpClientUtil {
                     }
                     SWconntroller.JG+="<b>原路径：</b>"+swname+"<br>";
                     SWconntroller.JG+="<b>FTP路径：</b>"+ftppath+"<br>";
+                    SWconntroller.JG+="<b>软件名称：</b>"+StringUtil.提取文件名(swname)+"<br>";
+                    String aa="<button onclick=\"copytext('软件路径："+ftppath+"<ssbb>软件名称："+StringUtil.提取文件名(swname)+"')\">复制FTP路径和软件名称</button><br>";
+                    SWconntroller.JG+=aa;
                     SWconntroller.JG+="<b>正在上传，请稍等......</b><br>";
                     if (!ftppath.equals("")){
                         if (f.put(swname,StringUtil.提取文件名(swname),ftppath)){
                             File myObj = new File(swname);
                             if (myObj.delete()) {
                                 System.out.println("Deleted the file: " + myObj.getName());
+                                System.out.println(aa);
                                 SWconntroller.JG+="<b>上传成功，已删除原文件！！！</b><br><br>";
                             } else {
                                 SWconntroller.JG+="<b>删除失败，未删除原文件！！！</b><br><br>";

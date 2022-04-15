@@ -1,5 +1,8 @@
 package com.liufujun.game.pdf.util;
 
+import com.liufujun.game.me.dao.SwDao;
+import com.liufujun.game.me.pojo.SW;
+import com.liufujun.game.util.PlanUtil;
 import com.liufujun.game.util.服务器使用路径;
 
 import javax.imageio.ImageIO;
@@ -13,7 +16,8 @@ import java.util.ArrayList;
 
 public class Fileprocessing {
     public static String readTxtFile(String filePath) {
-        System.out.println("读取文件路径："+filePath);
+        if (!filePath.equals("res/config/语言.config")) System.out.println("读取文件路径："+filePath);
+
         String map = "";
         try {
             String encoding = "UTF-8";
@@ -97,9 +101,9 @@ public class Fileprocessing {
 
     public static int e查找字符串所在行(String path,String Str) {
         System.out.println("path = [" + path + "], Str = [" + Str + "]");
-        String center[]=readTxtFile(path).split("\n");
+        String center[]=readTxtFile(path).toLowerCase().split("\n");
         for (int i=0;i<center.length;i++) {
-            if (center[i].indexOf(Str)!=-1){
+            if (center[i].indexOf(Str.toLowerCase())!=-1){
                 return i+1;
             }
         }
@@ -121,6 +125,11 @@ public class Fileprocessing {
         } else {
             System.out.println("Error");
         }
+    }
+
+    public static boolean isFile(String path){
+        File file=new File(path);
+        return file.exists();
     }
 
     public static void newFile(String srcPathStr, String desPathStr) {
@@ -210,7 +219,6 @@ public class Fileprocessing {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             BufferedImage bi;
-
             bi = ImageIO.read(img);
             ImageIO.write(bi, "png", baos);
             bytes = baos.toByteArray();
@@ -253,6 +261,25 @@ public class Fileprocessing {
         return "未识别到这个宏";
     }
 
+    //使用对比工具对比脚本和客制化文件夹
+    public static void ComparedJBOrDir(String path1,String path2){
+        ComparedFile(path1,path2);
+
+        SW sw1=new SW(),sw2=new SW();
+        sw1.set软件名称(StringUtil.提取文件名(path1));
+        sw1.set方案(PlanUtil.PlanType(StringUtil.提取文件名(path1)));
+        SwDao.读取软件所有属性(path1,sw1);
+        String cusPath1=sw1.get软件客制化路径全称();
+        System.out.println(cusPath1+"   SSSSSS  ");
+
+        sw2.set软件名称(StringUtil.提取文件名(path2));
+        sw2.set方案(PlanUtil.PlanType(StringUtil.提取文件名(path2)));
+        SwDao.读取软件所有属性(path2,sw2);
+        String cusPath2=sw2.get软件客制化路径全称();
+
+        System.out.println(cusPath1+"   SSSSSS  "+cusPath2);
+        ComparedFile(cusPath1,cusPath2);
+    }
     //使用对比工具文件
     public static void ComparedFile(String path1,String path2){
         System.out.println("path1 = [" + path1 + "], path2 = [" + path2 + "]");
