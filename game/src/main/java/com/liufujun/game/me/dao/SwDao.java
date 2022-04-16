@@ -294,7 +294,7 @@ public class SwDao {
         if (file.exists()) {
             sw.set软件色温文件路径(Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0));
         }else {
-            sw.set软件色温文件路径(服务器使用路径.RTK2853PATH+"customer/PQ_OverScan/VIP_Panel_Default_Osd.cpp");
+            sw.set软件色温文件路径(服务器使用路径.RTK2853PATH+"customer/PQ_OverScan/2843/VIP_Panel_Default_Osd.cpp");
         }
         return sw;
     }
@@ -309,7 +309,7 @@ public class SwDao {
         if (!Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0).equals("无")) {
             sw.set软件色温文件路径(Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0));
         }else {
-            sw.set软件色温文件路径(服务器使用路径.RTK2853PATH+"customer/PQ_OverScan/VIP_Panel_Default_Osd.cpp");
+            sw.set软件色温文件路径(服务器使用路径.RTK2853PATH+"customer/PQ_OverScan/2853/VIP_Panel_Default_Osd.cpp");
         }
         return sw;
     }

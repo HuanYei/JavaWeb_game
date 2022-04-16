@@ -151,6 +151,42 @@ public class PanelDao {
         System.out.println(sw.getFull_name_of_software_screen_parameter_name_path()+"SSSSSSSSS");
         String PanelString=Fileprocessing.readTxtFile(sw.getFull_name_of_software_screen_parameter_name_path());
         String[] e屏数组=PanelString.split("\n");
+        System.out.println(sw.getPlan()+"SSSSSSSS");
+        if (sw.getPlan().equals("2853")||sw.getPlan().equals("2843")){
+            System.out.println(2853);
+            for (int i = 0; i <e屏数组.length ; i++) {
+                if (e屏数组[i].indexOf("SFG_SEG_NUM")!=-1){
+                    if (sw.getPanel().getDual_MODE()!=null&&!sw.getPanel().getDual_MODE().equals(""))
+                        e屏数组[i]="SFG_SEG_NUM = "+sw.getPanel().getDual_MODE();
+                }else if (e屏数组[i].indexOf("DISP_PANEL_NAME")!=-1){
+                    if (sw.getPanel().getM_PNAME()!=null&&!sw.getPanel().getM_PNAME().equals(""))
+                        e屏数组[i]="DISP_PANEL_NAME = "+sw.getPanel().getM_PNAME();
+                }else if (e屏数组[i].indexOf("VFLIP")!=-1){
+                    if (sw.getPanel().getMirror_MODE()!=null&&!sw.getPanel().getMirror_MODE().equals(""))
+                        e屏数组[i]="VFLIP = "+sw.getPanel().getMirror_MODE();
+                }else if (e屏数组[i].indexOf("DISPLAY_COLOR_BITS")!=-1){
+                    if (sw.getPanel().getBit_MODE()!=null&&!sw.getPanel().getBit_MODE().equals(""))
+                        e屏数组[i]="DISPLAY_COLOR_BITS = "+sw.getPanel().getBit_MODE();
+                }else if (e屏数组[i].indexOf("DISPLAY_BITMAPPING_TABLE")!=-1){
+                    if (sw.getPanel().getTi_MODE()!=null&&!sw.getPanel().getTi_MODE().equals(""))
+                        e屏数组[i]="DISPLAY_BITMAPPING_TABLE = "+sw.getPanel().getTi_MODE();
+                }else if (e屏数组[i].indexOf("DISPLAY_PORTAB_SWAP")!=-1){
+                    if (sw.getPanel().getSwap_MODE()!=null&&!sw.getPanel().getSwap_MODE().equals(""))
+                        e屏数组[i]="DISPLAY_PORTAB_SWAP = "+sw.getPanel().getSwap_MODE();
+                }
+            }
+            PanelString="";
+            if (sw.getPlan().equals("2843")){
+                for (int i = 0; i < e屏数组.length; i++) {
+                    PanelString+=e屏数组[i]+"\n";
+                }
+            }
+            if (sw.getPlan().equals("2853")){
+                for (int i = 0; i < e屏数组.length; i++) {
+                    PanelString+=e屏数组[i]+"\r\n";
+                }
+            }
+        }else {
         for (int i = 0; i <e屏数组.length ; i++) {
             if (e屏数组[i].indexOf(".iCONFIG_SFG_SEG_NUM")!=-1){
                 if (sw.getPanel().getDual_MODE()!=null&&!sw.getPanel().getDual_MODE().equals(""))
@@ -172,10 +208,12 @@ public class PanelDao {
                     e屏数组[i]=".iCONFIG_DISPLAY_PORTAB_SWAP="+sw.getPanel().getSwap_MODE()+",";
             }
         }
-        PanelString="";
-        for (int i = 0; i < e屏数组.length; i++) {
-            PanelString+=e屏数组[i]+"\r\n";
+            PanelString="";
+            for (int i = 0; i < e屏数组.length; i++) {
+                PanelString+=e屏数组[i]+"\r\n";
+            }
         }
+
         Fileprocessing.updateFile(sw.getFull_name_of_software_screen_parameter_name_path(),PanelString);
     }
 

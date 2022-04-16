@@ -152,6 +152,8 @@
             <input  style="display: none;" type="text" th:field="*{panel.Mirror_MODE}"/>
             <input  style="display: none;" type="text" th:field="*{panel.Bit_MODE}"/>
             <input  style="display: none;" type="text" th:field="*{software_name}"/>
+            <input  style="display: none;" type="text" th:field="*{Plan}"/>
+            <input  style="display: none;" type="text" th:field="*{isRTK}"/>
             <input  style="display: none;" type="text" th:field="*{full_name_of_software_path}"/>
             <input  style="display: none;" type="text"
                    th:field="*{full_name_of_software_screen_parameter_name_path}"/>
@@ -262,7 +264,6 @@
                     </td>
                 </tr>
                 <tr>
-                    powerOn
                     <td>
                         <a th:onclick="openFileRow([[${SW.getSwinfo().getJb2()}]],'str_')">待机模式：</a>
                         <span th:text="${SW.getSwinfo().getStandby_mode()}"></span>

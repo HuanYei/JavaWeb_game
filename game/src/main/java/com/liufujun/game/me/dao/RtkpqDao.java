@@ -8,6 +8,8 @@ import com.liufujun.game.pdf.util.StringUtil;
 import com.liufujun.game.util.inter.ICallback;
 import com.liufujun.game.util.服务器使用路径;
 
+import java.io.File;
+
 public class RtkpqDao {
 
 //    public static void main(String[] args) {
@@ -235,8 +237,12 @@ public class RtkpqDao {
                 ConnectLinux.execComm("cd "+服务器使用路径.rtk2851_pq_Linux+"\n"+"./genPanelFactoryOSD.pl"+"\n");
                 String old=StringUtil.提取文件名(path).replace("VIP_Panel","vip").replace("Osd","osd").replace("cpp","bin");
                 old=服务器使用路径.rtk2851_pq_Windows+"PanelParam/"+old;
-                String newbin=StringUtil.提取文件路径(path)+"vip_default_osd.bin";
-                Fileprocessing.newFile(old,newbin);
+                if (new File(old).exists()){
+                    String newbin=StringUtil.提取文件路径(path)+"vip_default_osd.bin";
+                    Fileprocessing.newFile(old,newbin);
+                }
+                Fileprocessing.deleteDir(服务器使用路径.rtk2851_pq_Windows+"PanelParam/");
+                new File(服务器使用路径.rtk2851_pq_Windows+StringUtil.提取文件名(path)).delete();
             }
         }).start();
     }
@@ -275,12 +281,10 @@ public class RtkpqDao {
 
 
             if (arr[i].indexOf("m_DtvColorFacMode") != -1) {
-
                 DTV = true;
             }
             if (DTV) {
                 if (arr[i].indexOf("BRIGHTNESS_50") != -1) {
-
                     arr[i] = arr[i].replace(StringUtil.截取到第一次出现(arr[i], ","), pq.getDTVBrightness());
                 } else if (arr[i].indexOf("CONTRAST_50") != -1) {
                     arr[i] = arr[i].replace(StringUtil.截取到第一次出现(arr[i], ","), pq.getDTVContrast());

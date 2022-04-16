@@ -289,4 +289,20 @@ public class Fileprocessing {
             e.printStackTrace();
         }
     }
+
+    public static void deleteDir(String path){
+        File file=new File(path);
+        //判断是否为文件夹
+        if(file.isDirectory()){
+            //获取该文件夹下的子文件夹
+            File[] files = file.listFiles();
+            //循环子文件夹重复调用delete方法
+            for (int i = 0; i < files.length; i++) {
+                deleteDir(files[i].getPath());
+            }
+        }
+        //若为空文件夹或者文件删除，File类的删除方法
+        file.delete();
+    }
+
 }
