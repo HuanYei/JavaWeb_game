@@ -1,5 +1,6 @@
 package com.liufujun.game.util;
 
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,4 +18,6 @@ public class MyUtil {
         SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMdd");
         return dateFormat.format(date);
     }
+
+
 }

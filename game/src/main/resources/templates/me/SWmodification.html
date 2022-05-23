@@ -21,7 +21,12 @@
         #swdiv2 span{
             color: rgba(255, 44, 44, 0.64);
         }
-
+        .jian{
+            display: none;
+        }
+        .jian2{
+            display: none;
+        }
     </style>
     <link href="css/button.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
@@ -83,10 +88,15 @@
         <div style="padding-left: 50px">
             <p><b>遥控器配置：
                 <a th:onclick="openpath([[${SW.getSwinfo().getIRpath()}]])">打开目录</a>|
-                <a th:onclick="openFile([[${SW.getSwinfo().getIRpath()}]])">打开文件</a>
+                <a th:onclick="openFile([[${SW.getSwinfo().getIRpath()}]])">打开文件</a>|
+                <a href="@{/image/ykq}">查看丝印</a>
             </b></p>
-            <a th:href="@{/image/ykq}" style="text-decoration:none;">
-            <img style="height: 450px;width: 366px;" border="1" title="点击可查看大图" th:src="@{/image/ykq}">
+            <input id="ykqtu" type="file" style="text-decoration:none;display: none;"/>
+            <a style="text-decoration:none;">
+
+            <label for="ykqtu">
+                <img  style="height: 450px;width: 366px;" border="1"  th:src="@{/image/ykq}">
+            </label>
             </a>
         </div>
     </div>
@@ -285,6 +295,8 @@
                 </tr>
             </table>
         </div>
+<!--        <b>软件特殊配置：</b>-->
+<!--        <input type="text" style="height: 20px;width: 800px"></input><button style="margin-left: 5px;" >提交修改</button>-->
     </div>
 
     </p>
@@ -298,52 +310,57 @@
             <table style="margin-left: 30px">
                 <tr>
                     <th></th>
-                    <th>User</th>
+                    <th class="jian">User</th>
                     <th>Standard</th>
                     <th>COOL</th>
                     <th>Warm</th>
                 </tr>
                 <tr>
                     <th style="background-color: rgba(255,37,22,0.56)">R</th>
-                    <td><input type="text" th:field="*{PQ_data.UserR}"/></td>
+                    <td class="jian" ><input type="text" th:field="*{PQ_data.UserR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolR}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmR}"/></td>
                 </tr>
                 <tr>
                     <th style="background-color: rgba(0,207,0,0.44)">G</th>
-                    <td><input type="text" th:field="*{PQ_data.UserG}"/></td>
+                    <td class="jian"><input type="text" th:field="*{PQ_data.UserG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolG}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmG}"/></td>
                 </tr>
                 <tr>
                     <th style="background-color: rgba(0,0,255,0.44)">B</th>
-                    <td><input type="text" th:field="*{PQ_data.UserB}"/></td>
+                    <td class="jian"><input type="text" th:field="*{PQ_data.UserB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolB}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmB}"/></td>
                 </tr>
-                <tr>
+                <tr class="jian2">
                     <th  style="background-color: rgba(255,37,22,0.56)">R OFFSET</th>
                     <td><input type="text" th:field="*{PQ_data.UserROFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardROFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolROFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmROFF}"/></td>
                 </tr>
-                <tr>
+                <tr class="jian2">
                     <th style="background-color: rgba(0,207,0,0.44)">G OFFSET</th>
                     <td><input type="text" th:field="*{PQ_data.UserGOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardGOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolGOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmGOFF}"/></td>
                 </tr>
-                <tr>
+                <tr class="jian2">
                     <th  style="background-color: rgba(0,0,255,0.44)">B OFFSET</th>
                     <td><input type="text" th:field="*{PQ_data.UserBOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.StandardBOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.CoolBOFF}"/></td>
                     <td><input type="text" th:field="*{PQ_data.WarmBOFF}"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="button" id="butjian" onclick="showhide()">展开</button>
+                    </td>
                 </tr>
             </table>
 
@@ -369,7 +386,7 @@
                     <td><input type="text" th:field="*{PQ_data.HDMIBrightness}"/></td>
                     <td><input type="text" th:field="*{PQ_data.VGABrightness}"/></td>
                     <td><input type="text" th:field="*{PQ_data.USBBrightness}"/></td>
-                    <th>Brightness</th>
+                    <th>明亮度</th>
                 </tr>
                 <tr>
                     <th>Contrast</th>
@@ -380,7 +397,7 @@
                     <td><input type="text" th:field="*{PQ_data.HDMIContrast}"/></td>
                     <td><input type="text" th:field="*{PQ_data.VGAContrast}"/></td>
                     <td><input type="text" th:field="*{PQ_data.USBContrast}"/></td>
-                    <th>Contrast</th>
+                    <th>对比度</th>
                 </tr>
                 <tr>
                     <th>Saturation</th>
@@ -391,7 +408,7 @@
                     <td><input type="text" th:field="*{PQ_data.HDMISaturation}"/></td>
                     <td><input type="text" th:field="*{PQ_data.VGASaturation}"/></td>
                     <td><input type="text" th:field="*{PQ_data.USBSaturation}"/></td>
-                    <th>Saturation</th>
+                    <th>饱和度</th>
                 </tr>
                 <tr>
                     <th>Sharpness</th>
@@ -402,7 +419,7 @@
                     <td><input type="text" th:field="*{PQ_data.HDMISharpness}"/></td>
                     <td><input type="text" th:field="*{PQ_data.VGASharpness}"/></td>
                     <td><input type="text" th:field="*{PQ_data.USBSharpness}"/></td>
-                    <th>Sharpness</th>
+                    <th>锐度</th>
                 </tr>
                 <tr>
                     <th>Hue</th>
@@ -413,11 +430,12 @@
                     <td><input type="text" th:field="*{PQ_data.HDMIHue}"/></td>
                     <td><input type="text" th:field="*{PQ_data.VGAHue}"/></td>
                     <td><input type="text" th:field="*{PQ_data.USBHue}"/></td>
-                    <th>Hue</th>
+                    <th>色调</th>
                 </tr>
             </table>
             <br>
-            <button id="rtksub"  type="button"  style="font-size: 100%;padding: 15px 350px;"  onclick="tijiao()">提交修改</button>
+            <a id="rtksub" style="display: none;"><button   type="button"  style="font-size: 100%;padding: 15px 350px;" onclick="tofwq()">去服务器修改</button></a>
+            <button id="mtksub"  type="button"  style="font-size: 100%;padding: 15px 350px;display: none;"  onclick="tijiao()">提交修改</button>
 <!--            <span id="rtksubzs" style="color: red;" class="zhushi">*提交修改后，会直接修改PQ文件，2851和2842会编译成bin文件并生成在客制化文件夹中，请检查。</span>-->
             <input  style="display: none;" type="text" th:field="*{software_color_temperature_file_path}"/>
             <input  style="display: none;" type="text" th:field="*{software_name}"/>
@@ -476,6 +494,7 @@
         }
         if ([[${SW.getIsRTK()}]] == 0) {
             var a=document.querySelectorAll(".rtksty");
+            document.getElementById("mtksub").style.display = "inline";
             for (var i = 0; i < a.length; i++) {
                 a[i].style.display = "none";
             }
@@ -494,6 +513,8 @@
             for (var i = 0; i < a.length; i++) {
                 a[i].style.display = "none";
             }
+            document.getElementById("rtksub").style.display = "inline";
+
             document.getElementById("donh").src="img/rtk.gif";
         }
         let input = document.getElementById("ScName");
@@ -710,6 +731,105 @@
             contentType: 'application/json'
         });
     }
+
+
+    var aa=true;
+    function showhide() {
+
+        if (aa){
+            var a=document.querySelectorAll(".jian");
+            for (var i = 0; i < a.length; i++) {
+                a[i].style.display = "table-cell";
+            }
+            var b=document.querySelectorAll(".jian2");
+            for (var i = 0; i < b.length; i++) {
+                b[i].style.display = "table-row";
+            }
+            $("#butjian").html("简化");
+            aa=false;
+        }else {
+            var a=document.querySelectorAll(".jian");
+            var b=document.querySelectorAll(".jian2");
+            for (var i = 0; i < b.length; i++) {
+                b[i].style.display = "none";
+            }
+            for (var i = 0; i < a.length; i++) {
+                a[i].style.display = "none";
+            }
+            $("#butjian").html("展开");
+            aa=true;
+        }
+
+    }
+
+    var batchUpload = document.querySelector('#ykqtu');
+    batchUpload.click();
+    batchUpload.addEventListener('change', function () {
+        var filesList = document.querySelector('#ykqtu').files;
+        if (filesList.length == 0) {
+            //如果取消上传，则改文件的长度为0
+            alert("取消上传");
+            return;
+        } else {
+            var url =  'http://172.168.1.230:8888/uploadres';
+            uploadFile(url,filesList[0]);   // 执行单个文件的上传(每次都创建一个新的 form,并提交)
+        }
+    });
+
+    function uploadFile(url,file){
+        var form = new FormData();
+        form.append("file",file);
+        var plan= [[${SW.getPlan()}]];
+        var name= [[${SW.getSwinfo().getIRname()}]]+".jpg";
+        form.append("path","res/IR/"+plan+"/");
+        form.append("name",name);
+        $.ajax({
+            url:url,        //后台url
+            data: form,
+            cache: false,
+            async: true,
+            type: "POST",
+            dataType: 'json',              //数据返回类型，可以是xml、json等
+            processData: false,
+            contentType: false
+        });
+        Refresh(0);
+    }
+
+    function tofwq() {
+        var cusname=[[${SW.getSoftware_customization_name()}]]+".cpp";
+        var path= [[${SW.getSoftware_color_temperature_file_path()}]];
+        $.ajax({
+            type:"post",
+            url:"/upfile",
+            data:path+"::::"+cusname,
+            contentType: 'application/json',
+            success:function (data1) {
+                jsSubmit("http://172.168.1.230:8888/pdfuploadpath","res/pq/"+cusname);
+            }
+        });
+
+    }
+    function jsSubmit(url, params) {
+        var method = "post"
+        var form = $("<form></form>");
+        form.attr({"method": method, "action": url});
+        var input = $("<input type='hidden'>");
+        input.attr("name", "path");
+        input.val(params);
+        form.append(input);
+
+        var plan= [[${SW.getPlan()}]];
+        var input = $("<input type='hidden'>");
+        input.attr("name", "plan");
+        input.val(plan);
+        form.append(input);
+
+        $("html").append(form);
+        form.submit();
+
+    }
+
 </script>
 <script defer="defer">
 

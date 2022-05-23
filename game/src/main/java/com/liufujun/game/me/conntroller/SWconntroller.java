@@ -60,15 +60,21 @@ public class SWconntroller {
 
     public static String JG;
     @PostMapping("/putftp")
-    public String putftp(@RequestParam("swcheckbox") String[] swpath, Model model) {
+    public String putftp(@RequestParam("swcheckbox") String[] swpath,@RequestParam("isdelete") String isdelete,  Model model) {
         if (swpath.length>=1){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                JG="";
-                FtpClientUtil.FtpSwput(swpath);
+            if (!isdelete.equals("1")){
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        JG="";
+                        FtpClientUtil.FtpSwput(swpath);
+                    }
+                }).start();
+            }else {
+                Fileprocessing.deletefiles(swpath);
+                return "forward:/toSWtool";
             }
-        }).start();
+
         }
         return "me/JG";
     }

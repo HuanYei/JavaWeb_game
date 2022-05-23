@@ -1,6 +1,6 @@
 package com.liufujun.game.me.RTK.remote;
 
-import com.liufujun.game.linux.ConnectLinux;
+//import com.liufujun.game.linux.ConnectLinux;
 import com.liufujun.game.pdf.util.Fileprocessing;
 import com.liufujun.game.util.inter.ICallback;
 import com.liufujun.game.util.服务器使用路径;

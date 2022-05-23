@@ -1,11 +1,13 @@
 package com.liufujun.game.me.conntroller;
 
+import com.liufujun.game.config.FaeUpdate;
 import com.liufujun.game.me.dao.PanelDao;
 import com.liufujun.game.me.dao.RtkpqDao;
 import com.liufujun.game.me.dao.SwDao;
 import com.liufujun.game.me.pojo.SW;
 import com.liufujun.game.me.pojo.SwEnglish;
 import com.liufujun.game.pdf.util.Fileprocessing;
+import com.liufujun.game.pdf.util.StringUtil;
 import com.liufujun.game.util.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
@@ -14,12 +16,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URLEncoder;
 
 @Controller
 public class Meconntroller {
@@ -193,6 +198,7 @@ public class Meconntroller {
         if (image_name.equals("dzpt")){
             return poto(电子屏贴path,1);
         }else if (image_name.equals("ykq")){
+            FaeUpdate.downloadByNIO2("http://172.168.1.230:8888/downloadres?path=res/IR/"+Plan+"/"+ StringUtil.提取文件名(遥控器丝印图Path),StringUtil.提取文件路径(遥控器丝印图Path), StringUtil.提取文件名(遥控器丝印图Path));
             System.out.println(666+遥控器丝印图Path);
             return poto(遥控器丝印图Path,2);
         } else {
@@ -231,6 +237,8 @@ public class Meconntroller {
     }
 
 
+
+
     private ResponseEntity poto(String Path,int type) throws Exception{
         byte[] imageContent ;
         File potoFile=new File(Path);
@@ -249,32 +257,32 @@ public class Meconntroller {
 
     private void PQ(SwEnglish sw){
         if (sw.getIsRTK()==1){
-            if (sw.getPlan().equals("2853")||sw.getPlan().equals("2843")){
-                if (sw.getSoftware_color_temperature_file_path().indexOf(sw.getSoftware_customization_name())==-1){
-                    String name="files/customer/PQ_OverScan/";
-                    File file=new File(sw.getFull_name_of_software_customization_path()+name);
-                    file.mkdirs();
-                    String path=sw.getFull_name_of_software_customization_path()+name+"VIP_Panel_"+sw.getScreen_name()+"_"+MyUtil.toDay()+"_Default_Osd.cpp";
-                    Fileprocessing.newFile(sw.getSoftware_color_temperature_file_path(),path);
-                    RtkpqDao.PQ_OSDUpdate(path,sw.getPQ_data());
-                }else {
-                    RtkpqDao.PQ_OSDUpdate(sw.getSoftware_color_temperature_file_path(),sw.getPQ_data());
-                }
-            }else {
-                if (sw.getSoftware_color_temperature_file_path().indexOf(sw.getSoftware_customization_name())==-1){
-                    String name="";
-                    if (sw.getPlan().equals("2851"))
-                        name="pq";
-                    else
-                        name="pq_RTK2842P";
-                    File file=new File(sw.getFull_name_of_software_customization_path()+name+"/");
-                    file.mkdir();
-                    Fileprocessing.newFile(sw.getSoftware_color_temperature_file_path(),sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp");
-                    RtkpqDao.PQ_OSDUpdate(sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp",sw.getPQ_data());
-                }else {
-                    RtkpqDao.PQ_OSDUpdate(sw.getSoftware_color_temperature_file_path(),sw.getPQ_data());
-                }
-            }
+//            if (sw.getPlan().equals("2853")||sw.getPlan().equals("2843")){
+//                if (sw.getSoftware_color_temperature_file_path().indexOf(sw.getSoftware_customization_name())==-1){
+//                    String name="files/customer/PQ_OverScan/";
+//                    File file=new File(sw.getFull_name_of_software_customization_path()+name);
+//                    file.mkdirs();
+//                    String path=sw.getFull_name_of_software_customization_path()+name+"VIP_Panel_"+sw.getScreen_name()+"_"+MyUtil.toDay()+"_Default_Osd.cpp";
+//                    Fileprocessing.newFile(sw.getSoftware_color_temperature_file_path(),path);
+//                    RtkpqDao.PQ_OSDUpdate(path,sw.getPQ_data());
+//                }else {
+//                    RtkpqDao.PQ_OSDUpdate(sw.getSoftware_color_temperature_file_path(),sw.getPQ_data());
+//                }
+//            }else {
+//                if (sw.getSoftware_color_temperature_file_path().indexOf(sw.getSoftware_customization_name())==-1){
+//                    String name="";
+//                    if (sw.getPlan().equals("2851"))
+//                        name="pq";
+//                    else
+//                        name="pq_RTK2842P";
+//                    File file=new File(sw.getFull_name_of_software_customization_path()+name+"/");
+//                    file.mkdir();
+//                    Fileprocessing.newFile(sw.getSoftware_color_temperature_file_path(),sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp");
+//                    RtkpqDao.PQ_OSDUpdate(sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp",sw.getPQ_data());
+//                }else {
+//                    RtkpqDao.PQ_OSDUpdate(sw.getSoftware_color_temperature_file_path(),sw.getPQ_data());
+//                }
+//            }
 
         }else {
             SwDao.MTKPQ写入(sw);

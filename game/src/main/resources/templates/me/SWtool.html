@@ -9,16 +9,19 @@
         }
     </style>
 </head>
+<link href="css/button.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
 <body>
 <div style="width: 100%">
     <a href="/" style="font-size: 150%">主页</a>
 </div>
 <h1>软件包管理</h1>
-<p><button style="font-size: 25px" onclick="allcheckbox()" id="allbutton">全选</button></p>
-<form action="/putftp" method="post">
+<p><button style="font-size: 20px" onclick="allcheckbox()" id="allbutton">全选</button></p>
+
+<form action="/putftp" method="post" >
+    <p><button style="font-size: 20px" type="button" onclick="deleteall()" id="deletebutton" >删除所选软件包</button> <input style="display: none;" type="text" id="isdelete" name="isdelete" value="0"></p>
 <p>
-    <button style="font-size: 25px" type="submit">上传到ftp样机目录</button>
+    <button style="font-size: 20px" type="submit">上传到ftp样机目录</button>
     <select name="merchantNo" id="ChineseSelect" style="font-size: 20px">
         <option value="中文国家路径" th:selected="${IsChinese} eq 'ture'">中文国家路径</option>
         <option value="英文国家路径" th:selected="${IsChinese} eq 'false'">默认国家路径</option>
@@ -76,9 +79,14 @@
             isall=true;
         }
     }
-    function ftpput() {
-        
+    function deleteall() {
+        var res=confirm("确认要删除吗？删除后无法恢复！！！");
+        if (res){
+            $("#isdelete").val("1");
+            $("form").submit();
+        }
     }
+
     $("#ChineseSelect").change(function(){
         //获取选中项的文本值
         var itemText = $("#ChineseSelect option:selected").text();

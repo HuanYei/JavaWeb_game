@@ -4,7 +4,7 @@ import com.liufujun.game.me.pojo.SW;
 import com.liufujun.game.pdf.util.Country;
 import com.liufujun.game.pdf.util.Fileprocessing;
 import com.liufujun.game.pdf.util.StringUtil;
-import com.liufujun.game.sample.pojo.RTKmacro;
+//import com.liufujun.game.sample.pojo.RTKmacro;
 import com.liufujun.game.util.MyUtil;
 import com.liufujun.game.util.服务器使用路径;
 
@@ -98,7 +98,7 @@ public class SWinfoDao {
                     Backlight(sw));
             sw.getSWinfo().setStandby_mode(STR(sw));
             sw.getSWinfo().setEquipment_name(Equipment(sw.getSWinfo().getPath()));
-            sw.getSWinfo().setIRpath(StringUtil.CDDD(StringUtil.提取文件路径(sw.getIRimgPath()))+sw.getSWinfo().getIRname()+".ini");
+
             if (SwDao.e脚本宏查值("defaultVolume").equals("未识别到这个宏"))sw.getSWinfo().setDefaultVolume("30");
             else sw.getSWinfo().setDefaultVolume(SwDao.e脚本宏查值("defaultVolume"));
             if (sw.get方案().equals("368")){
@@ -165,7 +165,7 @@ public class SWinfoDao {
             if (SwDao.e脚本宏查值("defaultVolume").equals("未识别到这个宏")) sw.getSWinfo().setDefaultVolume("30");
             else sw.getSWinfo().setDefaultVolume(SwDao.e脚本宏查值("defaultVolume"));
             sw.getSWinfo().setAutostandby("不待机");
-            sw.getSWinfo().setIRpath(StringUtil.CDDD(StringUtil.提取文件路径(sw.getIRimgPath()))+sw.getSWinfo().getIRname()+".config");
+
             e智像DP(sw);
             sw.getSWinfo().setJb2(sw.get软件路径全称());
         }

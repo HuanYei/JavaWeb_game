@@ -305,4 +305,15 @@ public class Fileprocessing {
         file.delete();
     }
 
+    public static void deletefile(String path){
+        File file=new File(path);
+        if (file.exists())file.delete();
+    }
+    public static void deletefiles(String[] paths){
+        for (String path:
+             paths) {
+            System.out.println("已删除:"+path);
+            deletefile(path);
+        }
+    }
 }

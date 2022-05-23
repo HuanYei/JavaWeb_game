@@ -1,6 +1,6 @@
 package com.liufujun.game.me.dao;
 
-import com.liufujun.game.linux.ConnectLinux;
+//import com.liufujun.game.linux.ConnectLinux;
 import com.liufujun.game.me.pojo.PQ;
 import com.liufujun.game.pdf.Main;
 import com.liufujun.game.pdf.util.Fileprocessing;
@@ -198,54 +198,54 @@ public class RtkpqDao {
         return StringUtil.删除字符(datearr[i], "\t", " ", "{");
     }
 
-    public static void PQ_OSDUpdate(String path, PQ pq) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String content = Fileprocessing.readTxtFile(path);
-                content = UPNO(content, pq);
-                String pqdate[] = content.split("\n");
-                String Colorend;
-                if (path.indexOf("PQ_OverScan")==-1){
-                    Colorend="RELATE_TO_GAMMA_MODE";
-                }else {
-                    Colorend="0";
-                }
-
-                for (int i = 0; i < pqdate.length; i++) {
-                    if (pqdate[i].indexOf("/*USER*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getUserR() + ",\t" + pq.getUserG() + ",\t" + pq.getUserB() + ",\t"+pq.getUserROFF() + ",\t" + pq.getUserGOFF() + ",\t" + pq.getUserBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*USER*/";
-                    } else if (pqdate[i].indexOf("/*NORMAL(7500K)*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getStandardR() + ",\t" + pq.getStandardG() + ",\t" + pq.getStandardB() + ",\t"+pq.getStandardROFF() + ",\t" + pq.getStandardGOFF() + ",\t" + pq.getStandardBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*NORMAL(7500K)*/";
-                    } else if (pqdate[i].indexOf("/*WARMER (5500K)*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t"+pq.getWarmROFF() + ",\t" + pq.getWarmGOFF() + ",\t" + pq.getWarmBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*WARMER (5500K)*/";
-                    } else if (pqdate[i].indexOf("/*WARM (6500K)*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t"+pq.getWarmROFF() + ",\t" + pq.getWarmGOFF() + ",\t" + pq.getWarmBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*WARM (6500K)*/";
-                    } else if (pqdate[i].indexOf("/*COOL (8500K)*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t"+pq.getCoolROFF() + ",\t" + pq.getCoolGOFF() + ",\t" + pq.getCoolBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*COOL (8500K)*/";
-                    } else if (pqdate[i].indexOf("/*COOLER (9500K)*/") != -1) {
-                        pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t"+pq.getCoolROFF() + ",\t" + pq.getCoolGOFF() + ",\t" + pq.getCoolBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*COOLER (9500K)*/";
-                    }
-                }
-                content = "";
-                for (int i = 0; i < pqdate.length; i++) {
-                    content += pqdate[i] + "\n";
-                }
-                Fileprocessing.updateFile(path, content);
-                if (服务器使用路径.rtk2851_pq_Linux.equals(""))return;
-                Fileprocessing.newFile(path, 服务器使用路径.rtk2851_pq_Windows+StringUtil.提取文件名(path));
-                ConnectLinux.execComm("cd "+服务器使用路径.rtk2851_pq_Linux+"\n"+"./genPanelFactoryOSD.pl"+"\n");
-                String old=StringUtil.提取文件名(path).replace("VIP_Panel","vip").replace("Osd","osd").replace("cpp","bin");
-                old=服务器使用路径.rtk2851_pq_Windows+"PanelParam/"+old;
-                if (new File(old).exists()){
-                    String newbin=StringUtil.提取文件路径(path)+"vip_default_osd.bin";
-                    Fileprocessing.newFile(old,newbin);
-                }
-                Fileprocessing.deleteDir(服务器使用路径.rtk2851_pq_Windows+"PanelParam/");
-                new File(服务器使用路径.rtk2851_pq_Windows+StringUtil.提取文件名(path)).delete();
-            }
-        }).start();
-    }
+//    public static void PQ_OSDUpdate(String path, PQ pq) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                String content = Fileprocessing.readTxtFile(path);
+//                content = UPNO(content, pq);
+//                String pqdate[] = content.split("\n");
+//                String Colorend;
+//                if (path.indexOf("PQ_OverScan")==-1){
+//                    Colorend="RELATE_TO_GAMMA_MODE";
+//                }else {
+//                    Colorend="0";
+//                }
+//
+//                for (int i = 0; i < pqdate.length; i++) {
+//                    if (pqdate[i].indexOf("/*USER*/") != -1) {
+//                        pqdate[i] = "\t{\t" + pq.getUserR() + ",\t" + pq.getUserG() + ",\t" + pq.getUserB() + ",\t"+pq.getUserROFF() + ",\t" + pq.getUserGOFF() + ",\t" + pq.getUserBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*USER*/";
+//                    } else if (pqdate[i].indexOf("/*NORMAL(7500K)*/") != -1) {
+//                        pqdate[i] = "\t{\t" + pq.getStandardR() + ",\t" + pq.getStandardG() + ",\t" + pq.getStandardB() + ",\t"+pq.getStandardROFF() + ",\t" + pq.getStandardGOFF() + ",\t" + pq.getStandardBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*NORMAL(7500K)*/";
+//                    } else if (pqdate[i].indexOf("/*WARMER (5500K)*/") != -1) {
+//                        pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t"+pq.getWarmROFF() + ",\t" + pq.getWarmGOFF() + ",\t" + pq.getWarmBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*WARMER (5500K)*/";
+//                    } else if (pqdate[i].indexOf("/*WARM (6500K)*/") != -1) {
+//                        pqdate[i] = "\t{\t" + pq.getWarmR() + ",\t" + pq.getWarmG() + ",\t" + pq.getWarmB() + ",\t"+pq.getWarmROFF() + ",\t" + pq.getWarmGOFF() + ",\t" + pq.getWarmBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*WARM (6500K)*/";
+//                    } else if (pqdate[i].indexOf("/*COOL (8500K)*/") != -1) {
+//                        pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t"+pq.getCoolROFF() + ",\t" + pq.getCoolGOFF() + ",\t" + pq.getCoolBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*COOL (8500K)*/";
+//                    } else if (pqdate[i].indexOf("/*COOLER (9500K)*/") != -1) {
+//                        pqdate[i] = "\t{\t" + pq.getCoolR() + ",\t" + pq.getCoolG() + ",\t" + pq.getCoolB() + ",\t"+pq.getCoolROFF() + ",\t" + pq.getCoolGOFF() + ",\t" + pq.getCoolBOFF()+", MAGIC_CT_ST_VAL, GAMMA_CURVE_"+Colorend+",},/*COOLER (9500K)*/";
+//                    }
+//                }
+//                content = "";
+//                for (int i = 0; i < pqdate.length; i++) {
+//                    content += pqdate[i] + "\n";
+//                }
+//                Fileprocessing.updateFile(path, content);
+//                if (服务器使用路径.rtk2851_pq_Linux.equals(""))return;
+//                Fileprocessing.newFile(path, 服务器使用路径.rtk2851_pq_Windows+StringUtil.提取文件名(path));
+//                ConnectLinux.execComm("cd "+服务器使用路径.rtk2851_pq_Linux+"\n"+"./genPanelFactoryOSD.pl"+"\n");
+//                String old=StringUtil.提取文件名(path).replace("VIP_Panel","vip").replace("Osd","osd").replace("cpp","bin");
+//                old=服务器使用路径.rtk2851_pq_Windows+"PanelParam/"+old;
+//                if (new File(old).exists()){
+//                    String newbin=StringUtil.提取文件路径(path)+"vip_default_osd.bin";
+//                    Fileprocessing.newFile(old,newbin);
+//                }
+//                Fileprocessing.deleteDir(服务器使用路径.rtk2851_pq_Windows+"PanelParam/");
+//                new File(服务器使用路径.rtk2851_pq_Windows+StringUtil.提取文件名(path)).delete();
+//            }
+//        }).start();
+//    }
 
 
     private static String UPNO(String content, PQ pq) {

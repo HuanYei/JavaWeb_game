@@ -263,6 +263,7 @@ public class SwDao {
 
     public static SW PlanType(SW sw){
         String swname=sw.get软件名称();
+        sw.setIRimgPath("res/IR/"+sw.get方案()+"/"+sw.getSWinfo().getIRname()+".jpg");
         if (swname.indexOf("368")!=-1){
             return 赋值368(sw);
         }else if (swname.indexOf("9255")!=-1){
@@ -280,36 +281,41 @@ public class SwDao {
         }else if (swname.indexOf("2843")!=-1){
             return 赋值2843(sw);
         }
+
+
         return sw;
     }
 
     private static SW 赋值2843(SW sw) {
         RTK2851(sw);
-        sw.setIRimgPath(服务器使用路径.RTK2853PATH+"customer/IR/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
+
+
+        sw.getSWinfo().setIRpath(服务器使用路径.RTK2853PATH+"customer/IR/"+sw.getSWinfo().getIRname()+".config");
+
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2843+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2843+sw.get屏名()+".ini");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2843+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
-        String 软件色温文件夹=sw.get软件客制化路径全称()+"files/customer/PQ_OverScan/";
+        String 软件色温文件夹=sw.get软件客制化路径全称()+"PQ_OverScan/";
         File file=new File(软件色温文件夹);
         if (file.exists()) {
             sw.set软件色温文件路径(Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0));
         }else {
-            sw.set软件色温文件路径(服务器使用路径.RTK2853PATH+"customer/PQ_OverScan/2843/VIP_Panel_Default_Osd.cpp");
+            sw.set软件色温文件路径(服务器使用路径.RTK2853PATH+"customer/default/PQ_OverScan/2843/VIP_Panel_Default_Osd.cpp");
         }
         return sw;
     }
 
     private static SW 赋值2853(SW sw) {
         RTK2851(sw);
-        sw.setIRimgPath(服务器使用路径.RTK2853PATH+"customer/IR/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
+        sw.getSWinfo().setIRpath(服务器使用路径.RTK2853PATH+"customer/IR/"+sw.getSWinfo().getIRname()+".config");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2853+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2853+sw.get屏名()+".ini");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2853+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
-        String 软件色温文件夹=sw.get软件客制化路径全称()+"files/customer/PQ_OverScan/";
+        String 软件色温文件夹=sw.get软件客制化路径全称()+"PQ_OverScan/";
         if (!Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0).equals("无")) {
             sw.set软件色温文件路径(Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0));
         }else {
-            sw.set软件色温文件路径(服务器使用路径.RTK2853PATH+"customer/PQ_OverScan/2853/VIP_Panel_Default_Osd.cpp");
+            sw.set软件色温文件路径(服务器使用路径.RTK2853PATH+"customer/default/PQ_OverScan/2853/VIP_Panel_Default_Osd.cpp");
         }
         return sw;
     }
@@ -324,7 +330,7 @@ public class SwDao {
             sw.getSWinfo().setIsbootvideo("true");
         }
         sw.getSWinfo().setPath(服务器使用路径.MTK368PATH);
-        sw.setIRimgPath(服务器使用路径.MTK368PATH+"vendor/toptech/customer/common/ir/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
+        sw.getSWinfo().setIRpath(服务器使用路径.MTK9632PATH+"vendor/toptech/customer/common/ir"+sw.getSWinfo().getIRname()+".ini");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径368+sw.get软件logo名()+".jpg");
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径368+sw.get屏名());
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径368+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
@@ -356,7 +362,7 @@ public class SwDao {
     }
     private static SW 赋值9632(SW sw) {
         MTK9632(sw);
-        sw.setIRimgPath(服务器使用路径.MTK9632PATH+"vendor/toptech/customer/common/ir/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
+        sw.getSWinfo().setIRpath(服务器使用路径.MTK9632PATH+"vendor/toptech/customer/common/ir/"+sw.getSWinfo().getIRname()+".ini");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径9632+sw.get软件logo名()+".jpg");
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径9632+sw.get屏名());
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径9632+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
@@ -366,7 +372,7 @@ public class SwDao {
     }
     private static SW 赋值6681(SW sw) {
         MTK9632(sw);
-        sw.setIRimgPath(服务器使用路径.MTK9632PATH+"vendor/toptech/customer/common/ir/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
+        sw.getSWinfo().setIRpath(服务器使用路径.MTK9632PATH+"vendor/toptech/customer/common/ir/"+sw.getSWinfo().getIRname()+".ini");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径6681+sw.get软件logo名()+".jpg");
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径6681+sw.get屏名());
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径6681+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
@@ -377,7 +383,7 @@ public class SwDao {
 
     private static SW 赋值2851(SW sw) {
         RTK2851(sw);
-        sw.setIRimgPath(服务器使用路径.RTK2851PATH+"customer/IR/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
+        sw.getSWinfo().setIRpath(服务器使用路径.RTK2851PATH+"customer/IR/"+sw.getSWinfo().getIRname()+".config");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2851+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2851+sw.get屏名()+".h");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2851+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
@@ -391,7 +397,7 @@ public class SwDao {
     }
     private static SW 赋值2842(SW sw) {
         RTK2851(sw);
-        sw.setIRimgPath(服务器使用路径.RTK2851PATH+"customer/IR/IR_img/"+sw.getSWinfo().getIRname()+".jpg");
+        sw.getSWinfo().setIRpath(服务器使用路径.RTK2851PATH+"customer/IR/IR_img/"+sw.getSWinfo().getIRname()+".config");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2842+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2842+sw.get屏名()+".h");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2842+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");

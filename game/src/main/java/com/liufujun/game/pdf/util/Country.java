@@ -45,9 +45,10 @@ public class Country {
         SWname=SWname.toUpperCase();
         String nei=Fileprocessing.readTxtFile("res/config/国家.config");
         String list[]=nei.split("\n");
+
         for (String a:list) {
              String sub[]=a.split("=");
-             if (SWname.indexOf(sub[3])!=-1){
+             if (SWname.indexOf(sub[3].toUpperCase())!=-1){
                  return sub[0];
              }
         }
