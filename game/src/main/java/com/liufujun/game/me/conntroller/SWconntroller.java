@@ -1,7 +1,7 @@
 package com.liufujun.game.me.conntroller;
 
 import com.liufujun.game.ftp.FtpClientUtil;
-import com.liufujun.game.pdf.util.Fileprocessing;
+import com.liufujun.game.util.Fileprocessing;
 import com.liufujun.game.util.服务器使用路径;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,20 +25,22 @@ public class SWconntroller {
         model.addAttribute("total",e总仓库);
         List<String> e总软件存放地址=new ArrayList<>();
         for (String path:e总仓库) {
-            if (path.indexOf("MTK368P")!=-1){
+            if (path.indexOf("MTK368P")!=-1||path.indexOf("MTK9632P")!=-1){
                 String a=path.substring(path.indexOf("：")+1);
                 String a2=a.substring(0,a.length()-1);
                 a=a2.substring(0,a2.lastIndexOf("/"));
                 e总软件存放地址.add(a+"/images/android_9/");
-            }else if (path.indexOf("MTK9632P")!=-1){
-                String a=path.substring(path.indexOf("：")+1);
-                String a2=a.substring(0,a.length()-1);
-                a=a2.substring(0,a2.lastIndexOf("/"));
-                e总软件存放地址.add(a+"/images/android_9/");
+                e总软件存放地址.add(a+"/OTA-standard/");
             }else if (path.indexOf("2851_all")!=-1){
                 e总软件存放地址.add(path.substring(path.indexOf("：")+1)+"image_file_creator/");
+                String otapath=path.substring(path.indexOf("：")+1)+"kernel/android/OTA-standard/";
+                if (Fileprocessing.isFile(otapath))
+                    e总软件存放地址.add(otapath);
             }else if (path.indexOf("RTD2853R")!=-1){
                 e总软件存放地址.add(path.substring(path.indexOf("：")+1)+"image_creator/");
+                String otapath=path.substring(path.indexOf("：")+1)+"kernel/android/OTA-standard/";
+                if (Fileprocessing.isFile(otapath))
+                e总软件存放地址.add(otapath);
             }
         }
 

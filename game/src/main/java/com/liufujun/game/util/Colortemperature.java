@@ -1,11 +1,8 @@
 package com.liufujun.game.util;
 
 
-import com.liufujun.game.me.pojo.SW;
 import com.liufujun.game.me.pojo.SwEnglish;
-import com.liufujun.game.pdf.util.Fileprocessing;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;

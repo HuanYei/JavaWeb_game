@@ -1,16 +1,10 @@
 package com.liufujun.game.ftp;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.List;
 
 import com.liufujun.game.me.conntroller.SWconntroller;
-import com.liufujun.game.pdf.util.Country;
-import com.liufujun.game.pdf.util.Fileprocessing;
-import com.liufujun.game.pdf.util.StringUtil;
-import com.liufujun.game.util.PlanUtil;
-import com.liufujun.game.util.服务器使用路径;
-import javafx.scene.layout.Pane;
+import com.liufujun.game.util.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -58,44 +52,82 @@ public class FtpClientUtil {
                 FtpClientUtil f = new FtpClientUtil("172.168.2.84", 21, 服务器使用路径.FtpUser, 服务器使用路径.FtpPassword);
                 if (f.open()) {
                     swname=swname.replace("\\","/");
-                    String e方案=PlanUtil.PlanType(StringUtil.提取文件名(swname));
+                    String filename=StringUtil.提取文件名(swname);
+                    String e方案=PlanUtil.PlanType(filename);
+                    boolean isOTA=filename.indexOf("RealtekATV-")==0||filename.indexOf("OTA-")==0;
                     SWconntroller.JG+="<b>方案：</b>"+e方案+"<br>";
                     System.out.println(e方案);
+                    String e切分ota[]= StringUtil.提取文件名(swname).split("-");
                     String e切分[]= StringUtil.提取文件名(swname).split("_");
                     String IsChinese= Fileprocessing.findJBFile("user.config","FtpCountryIsChinese");
                     String e国家;
-                    if (IsChinese.equals("true"))e国家=Country.e软件名提取中文国家名(swname);
+                    if (IsChinese.equals("true"))e国家= Country.e软件名提取中文国家名(swname);
                     else e国家=e切分[1];
                     if (e国家.equals("无"))e国家=e切分[1];
 
                     if (e方案.equals("368")){
-                        ftppath="/研发样机软件-android/";
-                        ftppath+="MTK368P/Toptech Image/"+e切分[0]+"/"+e国家+"/";
+                        if (isOTA){
+                            ftppath="/研发OTA软件-android/MTK368P/";
+                            ftppath+=e切分ota[2]+"/";
+                        }else {
+                            ftppath="/研发样机软件-android/";
+                            ftppath+="MTK368P/Toptech Image/"+e切分[0]+"/"+e国家+"/";
+                        }
                         System.out.println(ftppath);
                     }else if (e方案.equals("9632")){
-                        ftppath="/研发样机软件-android/";
-                        ftppath+="MTK9632P/Toptech软件/"+e切分[0]+"/"+e国家+"/";
+                        if (isOTA){
+                            ftppath="/研发OTA软件-android/MTK9632/";
+                            ftppath+=e切分ota[2]+"/";
+                        }else {
+                            ftppath = "/研发样机软件-android/";
+                            ftppath += "MTK9632P/Toptech软件/" + e切分[0] + "/" + e国家 + "/";
+                        }
                         System.out.println(ftppath);
                     }else if (e方案.equals("6681")){
-                        ftppath="/研发样机软件-android/";
-                        ftppath+="MTK6681P/"+e切分[0]+"/"+e国家+"/";
+                        if (isOTA) {
+                            ftppath = "/研发OTA软件-android/MTK6681P/";
+                            ftppath += e切分ota[2] + "/";
+                        }else {
+                            ftppath="/研发样机软件-android/";
+                            ftppath+="MTK6681P/"+e切分[0]+"/"+e国家+"/";
+                        }
                         System.out.println(ftppath);
                     }else if (e方案.equals("2851")){
-                        ftppath="/研发样机软件-android/";
-                        ftppath+="RTK2851/"+e切分[0]+"/"+e国家+"/";
+                        if (isOTA) {
+                            ftppath = "/研发OTA软件-android/RTK2851/";
+                            ftppath += e切分ota[1].split("_")[0] + "/";
+                        }else {
+                            ftppath = "/研发样机软件-android/";
+                            ftppath += "RTK2851/" + e切分[0] + "/" + e国家 + "/";
+                        }
                         System.out.println(ftppath);
                     }else if (e方案.equals("2842")){
-                        ftppath="/研发样机软件-android/";
-                        ftppath+="RTK2842/"+e切分[0]+"/"+e国家+"/";
+                        if (isOTA) {
+                            ftppath = "/研发OTA软件-android/RTK2842/";
+                            ftppath += e切分ota[1].split("_")[0] + "/";
+                        }else {
+                            ftppath = "/研发样机软件-android/";
+                            ftppath += "RTK2842/" + e切分[0] + "/" + e国家 + "/";
+                        }
                         System.out.println(ftppath);
                     }else if (e方案.equals("2853")){
-                        ftppath="/研发样机软件-android/";
-                        ftppath+="RTK2853R/"+e切分[0]+"/"+e国家+"/";
+                        if (isOTA) {
+                            ftppath = "/研发OTA软件-android/RTK2853R/";
+                            ftppath += e切分ota[1].split("_")[0] + "/";
+                        }else {
+                            ftppath = "/研发样机软件-android/";
+                            ftppath += "RTK2853R/" + e切分[0] + "/" + e国家 + "/";
+                        }
                         System.out.println(ftppath);
                     }else if (e方案.equals("2843")){
-                        ftppath="/研发样机软件-android/";
-                        ftppath+="RTK2843R/"+e切分[0]+"/"+e国家+"/";
-                        System.out.println(ftppath);
+                        if (isOTA) {
+                            ftppath = "/研发OTA软件-android/RTK2843R/";
+                            ftppath += e切分ota[1].split("_")[0] + "/";
+                        }else {
+                            ftppath = "/研发样机软件-android/";
+                            ftppath += "RTK2843R/" + e切分[0] + "/" + e国家 + "/";
+                            System.out.println(ftppath);
+                        }
                     } else {
                         ftppath="";
                     }
@@ -310,6 +342,7 @@ public class FtpClientUtil {
             System.out.println(11111111);
             return false;
         }
+        System.out.println(00000000);
         boolean flag = false;
         if (ftpClient != null) {
             File srcFile = new File(localDirectoryAndFileName);
@@ -320,7 +353,6 @@ public class FtpClientUtil {
                 // 创建目录
 
                 this.mkDir(ftpDirectory);
-
                 ftpClient.setBufferSize(1024);
                 ftpClient.setControlEncoding("UTF-8");
                 // 设置文件类型（二进制）

@@ -21,10 +21,10 @@
         #swdiv2 span{
             color: rgba(255, 44, 44, 0.64);
         }
-        .jian{
-            display: none;
-        }
-        .jian2{
+        /*.jian{*/
+        /*    display: none;*/
+        /*}*/
+        #PQTable{
             display: none;
         }
     </style>
@@ -89,7 +89,7 @@
             <p><b>遥控器配置：
                 <a th:onclick="openpath([[${SW.getSwinfo().getIRpath()}]])">打开目录</a>|
                 <a th:onclick="openFile([[${SW.getSwinfo().getIRpath()}]])">打开文件</a>|
-                <a href="@{/image/ykq}">查看丝印</a>
+                <a th:href="@{/image/ykq}">查看丝印</a>
             </b></p>
             <input id="ykqtu" type="file" style="text-decoration:none;display: none;"/>
             <a style="text-decoration:none;">
@@ -108,6 +108,7 @@
 <!--        <b><a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getScreen_name()}]])">屏参文件名：</a></b>-->
         <input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;"></input>
         <button onclick="UPPanel()" >更换屏参</button>
+        <button onclick="rmandnew(4)" >新建屏参</button>
 <!--    <span style="color: red;" class="zhushi">*请打开目录，复制你要修改的屏文件名称，填入输入框更换配屏</span>-->
         <br><br>
         <form action="#" th:action="@{/Panel}" method="post" th:object="${SW}" style="background-color: #eeeeee">
@@ -305,8 +306,10 @@
         <br>
         <br>
         <h1>PQ信息</h1>
-        <b>色温:</b>
+
         <form id="pqfrom" action="#" th:action="@{/Color}" method="post" th:object="${SW}">
+            <div id="PQTable">
+                <b>色温:</b>
             <table style="margin-left: 30px">
                 <tr>
                     <th></th>
@@ -359,7 +362,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <button type="button" id="butjian" onclick="showhide()">展开</button>
+                        <button type="button" id="butjian" onclick="showhide()">简化</button>
                     </td>
                 </tr>
             </table>
@@ -433,6 +436,7 @@
                     <th>色调</th>
                 </tr>
             </table>
+            </div>
             <br>
             <a id="rtksub" style="display: none;"><button   type="button"  style="font-size: 100%;padding: 15px 350px;" onclick="tofwq()">去服务器修改</button></a>
             <button id="mtksub"  type="button"  style="font-size: 100%;padding: 15px 350px;display: none;"  onclick="tijiao()">提交修改</button>
@@ -495,6 +499,7 @@
         if ([[${SW.getIsRTK()}]] == 0) {
             var a=document.querySelectorAll(".rtksty");
             document.getElementById("mtksub").style.display = "inline";
+            document.getElementById("PQTable").style.display = "inline";
             for (var i = 0; i < a.length; i++) {
                 a[i].style.display = "none";
             }
@@ -578,11 +583,16 @@
             oldScname = [[${SW.full_name_of_software_path}]];
             newScname = document.getElementById("ScName").value;
             old = [[${SW.software_name}]];
-        }else {
+        }else if (ismm==4){
+            oldScname = [[${SW.full_name_of_software_screen_parameter_name_path}]];
+            newScname = document.getElementById("panelName").value;
+            old = [[${SW.getScreen_name}]];
+        } else {
             oldScname = [[${SW.full_name_of_software_customization_path}]];
             newScname = document.getElementById("CuDir").value;
             old = [[${SW.software_customization_name}]];
         }
+
         var SwName = [[${SW.software_name}]];
         if (old == newScname) {
             alert("请在上方输入框重命名");
@@ -613,11 +623,6 @@
             postForm.method = "post";
             postForm.action = '/UPlogo';
 
-            var oldScnameInput = document.createElement("input");
-            oldScnameInput.setAttribute("name", "oldScname");
-            oldScnameInput.setAttribute("value", oldScname);
-            postForm.appendChild(oldScnameInput);
-
             var SwNameInput = document.createElement("input");
             SwNameInput.setAttribute("name", "SwName");
             SwNameInput.setAttribute("value", SwName);
@@ -637,18 +642,12 @@
         var oldScname = [[${SW.software_logo_name}]];
         var newScname = document.getElementById("panelName").value;
         var SwName = [[${SW.software_name}]];
-
         if (oldScname == newScname) {
             alert("请在输入框更改屏参名");
         } else {
             var postForm = document.createElement("form");//表单对象
             postForm.method = "post";
             postForm.action = '/UPlogo';
-
-            var oldScnameInput = document.createElement("input");
-            oldScnameInput.setAttribute("name", "oldScname");
-            oldScnameInput.setAttribute("value", oldScname);
-            postForm.appendChild(oldScnameInput);
 
             var SwNameInput = document.createElement("input");
             SwNameInput.setAttribute("name", "SwName");
@@ -659,6 +658,7 @@
             newScnameInput.setAttribute("name", "newScname");
             newScnameInput.setAttribute("value", newScname);
             postForm.appendChild(newScnameInput);
+
 
             document.body.appendChild(postForm);
             postForm.submit();
@@ -733,7 +733,7 @@
     }
 
 
-    var aa=true;
+    var aa=false;
     function showhide() {
 
         if (aa){

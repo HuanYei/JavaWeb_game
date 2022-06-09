@@ -1,4 +1,7 @@
-package com.liufujun.game.pdf.util;
+package com.liufujun.game.util;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringUtil {
 
@@ -41,7 +44,10 @@ public class StringUtil {
         int a= 源路径全称.lastIndexOf("/")+1;
         return 源路径全称.substring(a);
     }
-
+    public static String 提取文件后缀(String 源路径全称){
+        String a= 提取文件名(源路径全称).split("\\.")[1];
+        return "."+a;
+    }
     public static int 统计字符出现次数(String 字符串,char 字符){
         char[] chars=字符串.toCharArray();
         int ci=0;
@@ -63,7 +69,7 @@ public class StringUtil {
     }
 
     public static String 提取config文件的值(String path,String 宏){
-        String textarr[]=Fileprocessing.readTxtFile(path).split("\n");
+        String textarr[]= Fileprocessing.readTxtFile(path).split("\n");
 
         for (String a:textarr){
             if (a.indexOf(宏)!=-1){
@@ -80,5 +86,34 @@ public class StringUtil {
     };
     public static void main(String[] args) {
       System.out.println(截取到第一次出现("104,//_BRIGHTNESS_25,",","))  ;
+    }
+
+    public static String replaceBlank(String str) {
+        String dest = "";
+        if (str != null) {
+            Pattern p = Pattern.compile("\\s*|\t|\r|\n|");
+            Matcher m = p.matcher(str);
+            dest = m.replaceAll("");
+        }
+        return dest;
+
+    }
+    public static String v(String sc, String 初始, String 结束) {
+        if (sc.indexOf(初始)==-1||sc.indexOf(结束)==-1){
+            return "";
+        }
+        int 初始长度 = 初始.length();
+        if (结束.equals("")){
+            return sc.substring(sc.indexOf(初始) + 初始长度);
+        }
+        return sc.substring(sc.indexOf(初始) + 初始长度, sc.indexOf(结束, sc.indexOf(初始) + 初始长度));
+    }
+
+    public static String RePath(String 完整路径,String 文件名){
+        if (文件名.split("\\.").length>1){
+            return 提取文件路径(完整路径)+文件名;
+        }
+        return 提取文件路径(完整路径)+文件名+提取文件后缀(完整路径);
+
     }
 }

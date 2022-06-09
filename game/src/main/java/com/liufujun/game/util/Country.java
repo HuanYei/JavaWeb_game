@@ -1,9 +1,9 @@
-package com.liufujun.game.pdf.util;
+package com.liufujun.game.util;
 
 public class Country {
     public static String 单个翻译语言(String yu){
         yu=yu.replace("■","");
-        String nei=Fileprocessing.readTxtFile("res/config/语言.config");
+        String nei= Fileprocessing.readTxtFile("res/config/语言.config");
         String list[]=nei.split("\n");
         for (String a:list) {
             if (a.indexOf(yu)!=-1){
@@ -31,7 +31,7 @@ public class Country {
     }
     public static String to国家值(String gu,int s){
         gu=gu.replace("■","");
-        String nei=Fileprocessing.readTxtFile("res/config/国家.config");
+        String nei= Fileprocessing.readTxtFile("res/config/国家.config");
         String list[]=nei.split("\n");
         for (String a:list) {
             if (a.indexOf(gu)!=-1){
@@ -43,7 +43,7 @@ public class Country {
     }
     public static String e软件名提取中文国家名(String SWname){
         SWname=SWname.toUpperCase();
-        String nei=Fileprocessing.readTxtFile("res/config/国家.config");
+        String nei= Fileprocessing.readTxtFile("res/config/国家.config");
         String list[]=nei.split("\n");
 
         for (String a:list) {
@@ -100,7 +100,7 @@ public class Country {
 
 
     public static String 语言(String yu,String defaultyu){
-        yu=StringUtil.删除字符(yu,"，","、","/","\\");
+        yu= StringUtil.删除字符(yu,"，","、","/","\\");
         yu=yu.replace(defaultyu,"");
         defaultyu=defaultyu.replace("语","");
         String[]  strs=yu.split("语");

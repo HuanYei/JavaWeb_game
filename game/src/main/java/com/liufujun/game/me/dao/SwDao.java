@@ -3,11 +3,9 @@ package com.liufujun.game.me.dao;
 import com.liufujun.game.me.pojo.PQ;
 import com.liufujun.game.me.pojo.SW;
 import com.liufujun.game.me.pojo.SwEnglish;
-import com.liufujun.game.pdf.Main;
-import com.liufujun.game.pdf.util.Fileprocessing;
-import com.liufujun.game.pdf.util.StringUtil;
+import com.liufujun.game.util.Fileprocessing;
 import com.liufujun.game.util.PlanUtil;
-import com.liufujun.game.util.RAWUtils;
+import com.liufujun.game.util.StringUtil;
 import com.liufujun.game.util.服务器使用路径;
 
 import java.io.File;
@@ -330,7 +328,7 @@ public class SwDao {
             sw.getSWinfo().setIsbootvideo("true");
         }
         sw.getSWinfo().setPath(服务器使用路径.MTK368PATH);
-        sw.getSWinfo().setIRpath(服务器使用路径.MTK9632PATH+"vendor/toptech/customer/common/ir"+sw.getSWinfo().getIRname()+".ini");
+        sw.getSWinfo().setIRpath(服务器使用路径.MTK368PATH+"vendor/toptech/customer/common/ir/"+sw.getSWinfo().getIRname()+".ini");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径368+sw.get软件logo名()+".jpg");
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径368+sw.get屏名());
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径368+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
@@ -528,7 +526,7 @@ public class SwDao {
     private static String Stringmacro(String pcb_board_type, String pcb_board_type1,String jbString) {
         String Stringshu[]=jbString.split("\n");
         for (int i=0;i<Stringshu.length;i++) {
-            String yuan = Main.v(Stringshu[i],pcb_board_type+"=","");
+            String yuan = StringUtil.v(Stringshu[i],pcb_board_type+"=","");
             if (!yuan.equals("")){
                 Stringshu[i] = Stringshu[i].replace(yuan, pcb_board_type1);
             }

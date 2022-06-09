@@ -27,6 +27,49 @@ public class PlanUtil {
         }
     }
 
+    public static boolean PlanIs2853(String swname){
+        if (swname.indexOf("2853")!=-1){
+            return true;
+        } else if (swname.indexOf("2843")!=-1){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public static boolean PlanIs2851(String swname){
+        if (swname.indexOf("2851")!=-1){
+            return true;
+        } else if (swname.indexOf("2842")!=-1){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public static boolean PlanIsRTK(String swname){
+
+        if (swname.indexOf("368")!=-1){
+            return false;
+        }else if (swname.indexOf("9255")!=-1){
+            return false;
+        }else if (swname.indexOf("2851")!=-1){
+            return true;
+        }else if (swname.indexOf("9632")!=-1){
+            return false;
+        }else if (swname.indexOf("6681")!=-1){
+            return false;
+        } else if (swname.indexOf("2842")!=-1){
+            return true;
+        } else if (swname.indexOf("2853")!=-1){
+            return true;
+        } else if (swname.indexOf("2843")!=-1){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     public static String SW脚本路径(String swname){
 
         if (swname.indexOf("368")!=-1){

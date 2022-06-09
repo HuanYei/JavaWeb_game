@@ -2,12 +2,9 @@ package com.liufujun.game.me.conntroller;
 
 import com.liufujun.game.config.FaeUpdate;
 import com.liufujun.game.me.dao.PanelDao;
-import com.liufujun.game.me.dao.RtkpqDao;
 import com.liufujun.game.me.dao.SwDao;
 import com.liufujun.game.me.pojo.SW;
 import com.liufujun.game.me.pojo.SwEnglish;
-import com.liufujun.game.pdf.util.Fileprocessing;
-import com.liufujun.game.pdf.util.StringUtil;
 import com.liufujun.game.util.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
@@ -16,15 +13,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URLEncoder;
 
 @Controller
 public class Meconntroller {
@@ -74,7 +68,10 @@ public class Meconntroller {
         if (!服务器使用路径.comparison_tool.equals("")){
             model.addAttribute("Iscomparison","true");
         }
-
+        model.addAttribute("ischeckbox368",Fileprocessing.findJBboolean("user.config","368configure="));
+        model.addAttribute("ischeckbox9632",Fileprocessing.findJBboolean("user.config","9632configure="));
+        model.addAttribute("ischeckbox2851",Fileprocessing.findJBboolean("user.config","2851configure="));
+        model.addAttribute("ischeckbox2853",Fileprocessing.findJBboolean("user.config","2853configure="));
         return "me/meindex";
     }
     @RequestMapping("/dzpt")
@@ -90,12 +87,17 @@ public class Meconntroller {
         String oldScname=path.split(" ")[1];
         String neworrm=path.split(" ")[2];
         String SwName=path.split(" ")[3];
+        boolean is2851=PlanUtil.PlanIs2851(SwName);
         String newScnameNAME=newScname;
         System.out.println(path);
+
+        //判断是否是文件夹
         if (oldScname.charAt(oldScname.length()-1)=='/'){
             oldScname=oldScname.substring(0,oldScname.length()-1);
             newScname=oldScname.replace(oldScname.substring(oldScname.substring(0,oldScname.length()-2).lastIndexOf("/")+1),"")+newScname;
-        }else newScname=oldScname.replace(oldScname.substring(oldScname.lastIndexOf("/")+1),"")+newScname+".sh";
+        }else {
+            newScname=StringUtil.RePath(oldScname,newScname);
+        }
         System.out.println(newScname);
         if (Fileprocessing.isFile(newScname)){
             return "失败，该文件名已存在";
@@ -106,12 +108,34 @@ public class Meconntroller {
             System.out.println(newScnameNAME);
             SwDao.SW宏修改(SwName,newScnameNAME);
             Fileprocessing.ReNameFile(oldScname,newScname);
-        }
-        else if (neworrm.equals("3")){
+        } else if (neworrm.equals("3")){
             System.out.println(newScnameNAME);
             SwDao.SW宏修改(SwName,newScnameNAME);
             Fileprocessing.copy(oldScname+"/",newScname+"/");
+        } else if (neworrm.equals("4")){
+            System.out.println(newScnameNAME);
+            SwDao.SW宏修改(SwName,newScnameNAME);
+            Fileprocessing.newFile(oldScname,newScname);
+            if (is2851){
+                String panelset= StringUtil.CDDD( StringUtil.CDDD(oldScname))+"panel_setting.h";
+
+                String text=Fileprocessing.readTxtFile(panelset);
+                String panel相对路径=newScname.replace(StringUtil.CDDD( StringUtil.CDDD(oldScname)),"");
+                String update="\t#elif defined(TOPTECH_PANEL_NAME_"+newScnameNAME+")\n" +
+                        "          #include \""+panel相对路径+"\"\n" +
+                        "\t#else";
+                System.out.println("panelset:"+panelset+"panel相对路径:"+panel相对路径+"update:"+update);
+
+                if (text.indexOf("\t#else")==-1){
+                    text=text.replace("#else",update);
+                }else {
+                    text=  text.replace("\t#else",update);
+                }
+                Fileprocessing.updateFile(panelset,text);
+            }
         }
+
+
        return "成功";
     }
 
@@ -120,12 +144,8 @@ public class Meconntroller {
 
 
     @PostMapping("/UPlogo")
-    public String  UPlogo(@RequestParam("oldScname") String oldScname,@RequestParam("newScname") String newScname,@RequestParam("SwName") String SwName,Model model){
+    public String  UPlogo(@RequestParam("newScname") String newScname,@RequestParam("SwName") String SwName,Model model){
         SwDao.SW宏修改(SwName,newScname);
-        model.addAttribute("msg","更改LOGO成功");
-        if (newScname.indexOf(".ini")!=-1){
-            model.addAttribute("msg","更改屏参成功");
-        }
         return  "forward:/subswname?swname="+SwName;
     }
 
@@ -175,6 +195,8 @@ public class Meconntroller {
         变量赋值(sw);
         model.addAttribute("SW",swE);
         model.addAttribute("msg","");
+        sw=null;
+        swE=null;
         return "me/SWmodification";
     }
 
@@ -256,38 +278,8 @@ public class Meconntroller {
 
 
     private void PQ(SwEnglish sw){
-        if (sw.getIsRTK()==1){
-//            if (sw.getPlan().equals("2853")||sw.getPlan().equals("2843")){
-//                if (sw.getSoftware_color_temperature_file_path().indexOf(sw.getSoftware_customization_name())==-1){
-//                    String name="files/customer/PQ_OverScan/";
-//                    File file=new File(sw.getFull_name_of_software_customization_path()+name);
-//                    file.mkdirs();
-//                    String path=sw.getFull_name_of_software_customization_path()+name+"VIP_Panel_"+sw.getScreen_name()+"_"+MyUtil.toDay()+"_Default_Osd.cpp";
-//                    Fileprocessing.newFile(sw.getSoftware_color_temperature_file_path(),path);
-//                    RtkpqDao.PQ_OSDUpdate(path,sw.getPQ_data());
-//                }else {
-//                    RtkpqDao.PQ_OSDUpdate(sw.getSoftware_color_temperature_file_path(),sw.getPQ_data());
-//                }
-//            }else {
-//                if (sw.getSoftware_color_temperature_file_path().indexOf(sw.getSoftware_customization_name())==-1){
-//                    String name="";
-//                    if (sw.getPlan().equals("2851"))
-//                        name="pq";
-//                    else
-//                        name="pq_RTK2842P";
-//                    File file=new File(sw.getFull_name_of_software_customization_path()+name+"/");
-//                    file.mkdir();
-//                    Fileprocessing.newFile(sw.getSoftware_color_temperature_file_path(),sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp");
-//                    RtkpqDao.PQ_OSDUpdate(sw.getFull_name_of_software_customization_path()+name+"/VIP_Panel_TEST_default_Osd.cpp",sw.getPQ_data());
-//                }else {
-//                    RtkpqDao.PQ_OSDUpdate(sw.getSoftware_color_temperature_file_path(),sw.getPQ_data());
-//                }
-//            }
-
-        }else {
-            SwDao.MTKPQ写入(sw);
-            Colortemperature.Colortupdate(sw);
-        }
+        SwDao.MTKPQ写入(sw);
+        Colortemperature.Colortupdate(sw);
 
     }
 }

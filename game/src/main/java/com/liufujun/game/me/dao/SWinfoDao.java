@@ -1,12 +1,8 @@
 package com.liufujun.game.me.dao;
 
 import com.liufujun.game.me.pojo.SW;
-import com.liufujun.game.pdf.util.Country;
-import com.liufujun.game.pdf.util.Fileprocessing;
-import com.liufujun.game.pdf.util.StringUtil;
 //import com.liufujun.game.sample.pojo.RTKmacro;
-import com.liufujun.game.util.MyUtil;
-import com.liufujun.game.util.服务器使用路径;
+import com.liufujun.game.util.*;
 
 
 public class SWinfoDao {
@@ -79,7 +75,7 @@ public class SWinfoDao {
             sw.getSWinfo().setECO_MODE(ECO());
             sw.getSWinfo().setCountry_and_language(Country.to国家值(
                     SwDao.e脚本宏查值("default_country"),0
-            )+" "+Country.单个翻译语言(StringUtil.截取到第一次出现(SwDao.e脚本宏查值("language_list")," ")
+            )+" "+ Country.单个翻译语言(StringUtil.截取到第一次出现(SwDao.e脚本宏查值("language_list")," ")
             .replace("\"",""))+"语");
             sw.getSWinfo().setIsdolby( 杜比());
             sw.getSWinfo().setIsBluetooth(SwDao.e脚本宏查值("BluetoothEnable").equals("1")?"带":"不带");
@@ -181,7 +177,7 @@ public class SWinfoDao {
     public static String initconfig(String e宏){
         String Stringshu[];
         if (is2853){
-            Stringshu=Fileprocessing.readTxtFile(服务器使用路径.RTK2853PATH+"customer/scripts/init.sh").split("\n");
+            Stringshu= Fileprocessing.readTxtFile(服务器使用路径.RTK2853PATH+"customer/scripts/init.sh").split("\n");
         }else {
             Stringshu=Fileprocessing.readTxtFile(服务器使用路径.RTK2851PATH+"customer/scripts/init.sh").split("\n");
         }

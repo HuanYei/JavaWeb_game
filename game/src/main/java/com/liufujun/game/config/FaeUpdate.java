@@ -1,6 +1,6 @@
 package com.liufujun.game.config;
 
-import com.liufujun.game.pdf.util.Fileprocessing;
+import com.liufujun.game.util.Fileprocessing;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,11 +24,13 @@ public class FaeUpdate {
         downloadByNIO2("http://172.168.1.230:8888/Versiondownload", courseFile, "fae_tool_update.log");
         String Ver=courseFile+"\\fae_tool_update.log";
         int fwqvercode=Integer.parseInt(Fileprocessing.findJBFile(Ver,"VersionCode="));
+        String e更新内容=Fileprocessing.readTxtFile(Ver).split("\n")[2];
         System.out.println(fwqvercode);
         if (fwqvercode>Versionconfig.VerCode){
             downloadByNIO2("http://172.168.1.230:8888/autodownload", courseFile, "jar.jar");
             System.out.println("done...");
             try {
+                Runtime.getRuntime().exec("mshta vbscript:msgbox(\""+e更新内容+"\",64,\"FAE工具更新内容\")(window.close)");
                 String cmd="\""+courseFile+ "\\update.bat \"";
                 System.out.println(cmd);
                 Runtime.getRuntime().exec(cmd);

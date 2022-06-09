@@ -56,11 +56,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId> e-iceblue </groupId>
-            <artifactId>spire.pdf</artifactId>
-            <version>3.11.6</version>
-        </dependency>
-        <dependency>
 
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
@@ -71,6 +66,11 @@
             <groupId>com.github.jai-imageio</groupId>
             <artifactId>jai-imageio-core</artifactId>
             <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId> e-iceblue </groupId>
+            <artifactId>spire.pdf</artifactId>
+            <version>3.11.6</version>
         </dependency>
         <dependency>
             <groupId>net.coobird</groupId>

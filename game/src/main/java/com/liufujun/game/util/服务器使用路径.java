@@ -1,7 +1,5 @@
 package com.liufujun.game.util;
 
-import com.liufujun.game.pdf.util.Fileprocessing;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +10,6 @@ public class 服务器使用路径 {
     public static String comparison_tool="";
 
     public static String ip="";
-    public static int port = 22;
     public static String user = "";
     public static String password = "";
     public static String rtk2851_pq_Linux="";
@@ -21,10 +18,6 @@ public class 服务器使用路径 {
     public static String FtpPassword="";
 
 
-    public static String 彩讯订单PDF文件存储路径="res/pdf/订单pdf文件/";
-    public static String 彩讯订单参考脚本文件存储路径="res/pdf/参考脚本文件/";
-    public static String 彩讯订单脚本生成路径="res/pdf/生成脚本文件/";
-    public static String RTK脚本="res/pdf/RTK脚本文件/";
 
     //368
     public static List<String> MTK368PALL=new ArrayList<String>();
@@ -33,7 +26,6 @@ public class 服务器使用路径 {
     public static String  LOGO路径368="";
     public static String  屏参路径368="";
     public static String  客制化文件夹路径368="";
-    public static String  MTK368_Linux="/media/workspace0/liufujun/9255/New9255/MTK368P";
 
     //9632
     public static List<String> MTK9632PALL=new ArrayList<String>();
@@ -55,7 +47,6 @@ public class 服务器使用路径 {
     public static String  LOGO路径2851="";
     public static String  屏参路径2851="";
     public static String  客制化文件夹路径2851="";
-    public static String rtk2851_Linux="";
 
     //2842
     public static String  脚本路径2842="";
@@ -71,7 +62,6 @@ public class 服务器使用路径 {
     public static String  LOGO路径2853="";
     public static String  屏参路径2853="";
     public static String  客制化文件夹路径2853="";
-    public static String rtk2853_Linux="";
 
     //2843
     public static String  脚本路径2843="";
@@ -83,7 +73,7 @@ public class 服务器使用路径 {
         String PathContent= Fileprocessing.readTxtFile("user.config").replace("\\","/");
         String PathContentarray[]=PathContent.split("\n");
         for (int i = 0; i <PathContentarray.length ; i++) {
-            if (PathContentarray[i].indexOf("368")!=-1){
+            if (PathContentarray[i].indexOf("368仓库")!=-1){
                 MTK368PATH=PathContentarray[i].substring(PathContentarray[i].indexOf("=")+1,PathContentarray[i].indexOf(">"));
                 System.out.println(MTK368PATH);
                 String AA=PathContentarray[i].substring(PathContentarray[i].indexOf(">")+1);
@@ -118,9 +108,6 @@ public class 服务器使用路径 {
             }if (PathContentarray[i].indexOf("LinuxIP")!=-1){
                 ip=PathContentarray[i].substring(PathContentarray[i].indexOf("=")+1);
                 System.out.println(ip);
-            }if (PathContentarray[i].indexOf("2851_Linux")!=-1){
-                rtk2851_Linux=PathContentarray[i].substring(PathContentarray[i].indexOf("=")+1);
-                System.out.println(rtk2851_Linux);
             }if (PathContentarray[i].indexOf("FtpUser")!=-1){
                 FtpUser=PathContentarray[i].substring(PathContentarray[i].indexOf("=")+1);
                 System.out.println(FtpUser);

@@ -1,8 +1,6 @@
 package com.liufujun.game.me.conntroller;
 
-import com.liufujun.game.config.Versionconfig;
-import com.liufujun.game.pdf.util.Fileprocessing;
-import com.liufujun.game.pdf.util.StringUtil;
+import com.liufujun.game.util.Fileprocessing;
 import com.liufujun.game.util.PlanUtil;
 import com.liufujun.game.util.服务器使用路径;
 import org.springframework.core.io.FileSystemResource;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,7 +27,7 @@ import java.util.Arrays;
 
 @Controller
 public class SHconntroller {
-    private ArrayList<String> JBAlllist=new ArrayList<>();
+    public static ArrayList<String> JBAlllist=new ArrayList<>();
     @RequestMapping(value = "/chaJB", method = RequestMethod.POST)
     @ResponseBody
     public String jiakey (@RequestBody(required=false) String jiaoben) {
@@ -93,27 +90,34 @@ public class SHconntroller {
         服务器使用路径.Info2853(path.substring(path.indexOf("：")+1));
         System.out.println(服务器使用路径.RTK2853PATH+"  当前路径");
     }
+
+    @RequestMapping(value = "/checkboxonclick", method = RequestMethod.POST)
+    @ResponseBody
+    public void checkboxonclick (@RequestBody(required=false) String plan) {
+        Fileprocessing.updateJBboolean("user.config",plan);
+    }
+
     @RequestMapping(value = "/JBall", method = RequestMethod.POST)
     @ResponseBody
     public void JBall () {
         JBAlllist.clear();
-        if (!服务器使用路径.MTK368PATH.equals("")) {
+        if (!服务器使用路径.MTK368PATH.equals("")&&Fileprocessing.findJBboolean("user.config","368configure=")) {
             File file368=new File(服务器使用路径.脚本路径368);
             JBAlllist.addAll(Arrays.asList(提取file名称(file368)));
         }
-        if (!服务器使用路径.RTK2851PATH.equals("")) {
+        if (!服务器使用路径.RTK2851PATH.equals("")&&Fileprocessing.findJBboolean("user.config","2851configure=")) {
             File file2851=new File(服务器使用路径.脚本路径2851);
             File file2842=new File(服务器使用路径.脚本路径2842);
             JBAlllist.addAll(Arrays.asList(提取file名称(file2842)));
             JBAlllist.addAll(Arrays.asList(提取file名称(file2851)));
         }
-        if (!服务器使用路径.RTK2853PATH.equals("")) {
+        if (!服务器使用路径.RTK2853PATH.equals("")&&Fileprocessing.findJBboolean("user.config","2853configure=")) {
             File file2853=new File(服务器使用路径.脚本路径2853);
             File file2843=new File(服务器使用路径.脚本路径2843);
             JBAlllist.addAll(Arrays.asList(提取file名称(file2843)));
             JBAlllist.addAll(Arrays.asList(提取file名称(file2853)));
         }
-        if (!服务器使用路径.MTK9632PATH.equals("")) {
+        if (!服务器使用路径.MTK9632PATH.equals("")&&Fileprocessing.findJBboolean("user.config","9632configure=")) {
             File file9632=new File(服务器使用路径.脚本路径9632);
             File file6681=new File(服务器使用路径.脚本路径6681);
             JBAlllist.addAll(Arrays.asList(提取file名称(file6681)));
@@ -162,6 +166,7 @@ public class SHconntroller {
         for (int i = 0; i <s.length ; i++) {
             s[i]=file[i].getName();
         }
+        file=null;
         return s;
     }
 

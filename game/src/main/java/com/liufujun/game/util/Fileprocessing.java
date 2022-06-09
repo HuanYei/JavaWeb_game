@@ -1,15 +1,9 @@
-package com.liufujun.game.pdf.util;
+package com.liufujun.game.util;
 
 import com.liufujun.game.me.dao.SwDao;
 import com.liufujun.game.me.pojo.SW;
-import com.liufujun.game.util.PlanUtil;
-import com.liufujun.game.util.服务器使用路径;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
@@ -41,22 +35,6 @@ public class Fileprocessing {
         return map;
     }
 
-    public static String getFileContent(String filePath) {
-
-        StringBuilder result = new StringBuilder();
-        try{
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath),"UTF-8"));
-            String s = null;
-            while((s = br.readLine())!=null){
-                result.append(System.lineSeparator()+s);
-            }
-            br.close();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return result.toString();
-
-    }
 
     public static boolean updateFile(String path, String content) {
         FileOutputStream fos;
@@ -89,7 +67,7 @@ public class Fileprocessing {
         System.out.println(path+"ssssssssssssssssssssssssssssss"+row);
 
         try {
-            if (isopenpath&&!isopenpathrow) Runtime.getRuntime().exec("explorer /select," + path);
+            if (isopenpath&&!isopenpathrow) Runtime.getRuntime().exec(new String[]{"cmd","/C","explorer  /select,\""+ path+"\""});
             else if (isopenpathrow) Runtime.getRuntime().exec("\""+服务器使用路径.codeEditor +"\" -n"+row+" \""+ path+"\"");
             else Runtime.getRuntime().exec("\""+服务器使用路径.codeEditor +"\"  \""+ path+"\"");
         } catch (IOException e) {
@@ -151,12 +129,6 @@ public class Fileprocessing {
 
     }
 
-//    public static void main(String[] args) {
-//        File file=new File("C:/Users/Administrator/Desktop/ssdsd/");
-//        file.mkdir();
-//        newFile("Z:/2851/2851_all/customer/bootlogo/BOE.raw","C:/Users/Administrator/Desktop/ssdsd/555.raw");
-//
-//    }
 
     public static ArrayList<String> lookupwai(String path,String 关键字){
         fileList=new ArrayList<String>();
@@ -231,7 +203,7 @@ public class Fileprocessing {
     }
 
     //简单更新文件宏值
-    public static void updateJBFile(String 脚本路径,String 宏,String 值){
+    public static boolean updateJBFile(String 脚本路径,String 宏,String 值){
 
        String con[]=  readTxtFile(脚本路径).split("\n");
        boolean kon=true;
@@ -242,14 +214,39 @@ public class Fileprocessing {
                 break;
             }
         }
-
         StringBuffer str5 = new StringBuffer();
         for (String s : con) {
             str5.append(s+"\n");
         }
 //        if (kon)str5.append(宏+值+"\n");
         updateFile(脚本路径,str5.toString());
+        return kon;
     }
+
+    //简单更新文件宏值不存在则创建
+    public static void updateORnewJBFile(String 脚本路径,String 宏,String 值){
+        if (updateJBFile(脚本路径,宏,值)){
+            updateFile(脚本路径,readTxtFile(脚本路径)+"\n"+宏+值);
+        }
+    }
+
+    public static void updateJBboolean(String 脚本路径,String 宏){
+        if (findJBboolean(脚本路径,宏)){
+            updateORnewJBFile(脚本路径,宏,"false");
+        }else {
+            updateORnewJBFile(脚本路径,宏,"true");
+        }
+    }
+    //读取值为
+    public static boolean findJBboolean(String 脚本路径,String 宏){
+        boolean jg=true;
+        String findjg=findJBFile(脚本路径,宏);
+        if (findjg.equals("0")||findjg.equals("false")||findjg.equals("未识别到这个宏")){
+            jg=false;
+        }
+        return jg;
+    }
+
     //简单读取文件宏值
     public static String findJBFile(String 脚本路径,String 宏){
         String Stringshu[]=  readTxtFile(脚本路径).split("\n");
@@ -315,5 +312,12 @@ public class Fileprocessing {
             System.out.println("已删除:"+path);
             deletefile(path);
         }
+    }
+    public static boolean isFile存在(String path){
+        File file=new File(path);
+        if (file.exists()){
+            return true;
+        }
+        return false;
     }
 }

@@ -32,6 +32,7 @@
     <div style=" width: 70%;" align="left">
         <h2>软件信息查找</h2>
         <div th:if="${isSelt368}">
+            <input type="checkbox"  th:checked="${ischeckbox368}" onclick="checkboxonclick('368configure=')"/>
         368仓库：
         <select name="merchantNo" id="368select">
             <option th:each="item:${equManager368}"
@@ -43,6 +44,7 @@
         <br>
         </div>
         <div th:if="${isSelt9632}">
+            <input type="checkbox"  th:checked="${ischeckbox9632}" onclick="checkboxonclick('9632configure=')"/>
         9632仓库：
         <select name="merchantNo" id="9632select">
             <option th:each="item:${equManager9632}"
@@ -54,6 +56,7 @@
         <br>
         </div>
         <div th:if="${isSelt2851}">
+            <input type="checkbox"  th:checked="${ischeckbox2851}" onclick="checkboxonclick('2851configure=')"/>
         2851仓库：
         <select name="merchantNo" id="2851select">
             <option th:each="item:${equManager2851}"
@@ -64,6 +67,7 @@
         </select>
         </div>
         <div th:if="${isSelt2853}">
+            <input type="checkbox"  th:checked="${ischeckbox2853}" onclick="checkboxonclick('2853configure=')"/>
             2853仓库：
             <select name="merchantNo" id="2853select">
                 <option th:each="item:${equManager2853}"
@@ -196,11 +200,13 @@
             type:"post",
             url:"/Changku368",
             data:itemText,
+            async: false,
             contentType: 'application/json'
         });
         $.ajax({
             type: "post",
             url: "/JBall",
+            async: false,
             contentType: 'application/json',
             success: function () {
                 f();
@@ -215,11 +221,13 @@
             type:"post",
             url:"/Changku2851",
             data:itemText,
+            async: false,
             contentType: 'application/json'
         });
         $.ajax({
             type: "post",
             url: "/JBall",
+            async: false,
             contentType: 'application/json',
             success: function () {
                 f();
@@ -234,11 +242,13 @@
             type:"post",
             url:"/Changku2853",
             data:itemText,
+            async: false,
             contentType: 'application/json'
         });
         $.ajax({
             type: "post",
             url: "/JBall",
+            async: false,
             contentType: 'application/json',
             success: function () {
                 f();
@@ -253,16 +263,38 @@
             type:"post",
             url:"/Changku9632",
             data:itemText,
+            async: false,
             contentType: 'application/json'
         });
         $.ajax({
             type: "post",
             url: "/JBall",
+            async: false,
             contentType: 'application/json',
             success: function () {
                 f();
             }
         });
     });
+    
+    function checkboxonclick(str) {
+        $.ajax({
+            type:"post",
+            url:"/checkboxonclick",
+            data:str,
+            async: false,
+            contentType: 'application/json'
+        });
+
+        $.ajax({
+            type: "post",
+            url: "/JBall",
+            async: false,
+            contentType: 'application/json',
+            success: function () {
+                f();
+            }
+        });
+    }
 </script>
 </html>
