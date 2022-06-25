@@ -186,11 +186,12 @@ public class Meconntroller {
         sw.set软件名称(swname);
         sw.set方案(PlanUtil.PlanType(swname));
         sw.set软件路径全称(PlanUtil.SW脚本路径(swname));
-        sw=SwDao.读取软件所有属性(sw.get软件路径全称(),sw);
+        sw=SwDao.读取软件所有属性(sw.get软件路径全称(),sw,model);
         System.out.println(sw.toString());
 
         String SwType= PlanUtil.PlanType(swname);
         model.addAttribute("SwType",SwType);
+
         SwEnglish swE=new SwEnglish(sw);
         变量赋值(sw);
         model.addAttribute("SW",swE);
@@ -220,6 +221,7 @@ public class Meconntroller {
         if (image_name.equals("dzpt")){
             return poto(电子屏贴path,1);
         }else if (image_name.equals("ykq")){
+            if (遥控器丝印图Path.indexOf(":")==-1)
             FaeUpdate.downloadByNIO2("http://172.168.1.230:8888/downloadres?path=res/IR/"+Plan+"/"+ StringUtil.提取文件名(遥控器丝印图Path),StringUtil.提取文件路径(遥控器丝印图Path), StringUtil.提取文件名(遥控器丝印图Path));
             System.out.println(666+遥控器丝印图Path);
             return poto(遥控器丝印图Path,2);

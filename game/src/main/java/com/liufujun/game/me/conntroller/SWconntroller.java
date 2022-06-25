@@ -13,7 +13,26 @@ import java.util.*;
 @Controller
 public class SWconntroller {
 
+    public  class Swstore{
+         String name;
+         boolean is;
 
+        public  String getName() {
+            return name;
+        }
+
+        public  void setName(String name) {
+            this.name = name;
+        }
+
+        public  boolean isIs() {
+            return is;
+        }
+
+        public  void setIs(boolean is) {
+            this.is = is;
+        }
+    }
 
     @RequestMapping("/toSWtool")
     public String toSWtool(Model model){
@@ -22,6 +41,24 @@ public class SWconntroller {
         e总仓库.addAll(服务器使用路径.MTK9632PALL);
         e总仓库.addAll(服务器使用路径.RTK2851PALL);
         e总仓库.addAll(服务器使用路径.RTK2853PALL);
+        List<Swstore> e需要的仓库=new ArrayList<Swstore>();
+        for (int i = 0; i <e总仓库.size() ; i++) {
+            System.out.println(e总仓库.get(i));
+            Swstore swstore=new Swstore();
+            swstore.setName(e总仓库.get(i));
+            boolean jg=Fileprocessing.findJBboolean("user.config",e总仓库.get(i));
+            swstore.setIs(jg);
+            e需要的仓库.add(swstore);
+        }
+        e总仓库.clear();
+        for (Swstore a:
+             e需要的仓库) {
+            if (a.isIs()){
+                e总仓库.add(a.getName());
+            }
+        }
+        System.out.println(e总仓库.size());
+        model.addAttribute("Swstorelist",e需要的仓库);
         model.addAttribute("total",e总仓库);
         List<String> e总软件存放地址=new ArrayList<>();
         for (String path:e总仓库) {

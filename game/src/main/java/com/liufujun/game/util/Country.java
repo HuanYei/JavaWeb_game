@@ -30,11 +30,11 @@ public class Country {
         return to国家值(gu,3);
     }
     public static String to国家值(String gu,int s){
-        gu=gu.replace("■","");
+        gu=gu.replace("■","").toLowerCase();
         String nei= Fileprocessing.readTxtFile("res/config/国家.config");
         String list[]=nei.split("\n");
         for (String a:list) {
-            if (a.indexOf(gu)!=-1){
+            if (a.toLowerCase().indexOf(gu)!=-1){
                 String sub[]=a.split("=");
                 return sub[s];
             }
@@ -45,9 +45,16 @@ public class Country {
         SWname=SWname.toUpperCase();
         String nei= Fileprocessing.readTxtFile("res/config/国家.config");
         String list[]=nei.split("\n");
-
+        System.out.println(SWname);
         for (String a:list) {
              String sub[]=a.split("=");
+             if (sub.length<3){
+                 continue;
+             }
+             if (sub[3].charAt(0)!='_'){
+                 sub[3]="_"+sub[3];
+             }
+
              if (SWname.indexOf(sub[3].toUpperCase())!=-1){
                  return sub[0];
              }

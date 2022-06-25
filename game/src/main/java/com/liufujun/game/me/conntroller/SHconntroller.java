@@ -176,7 +176,7 @@ public class SHconntroller {
         for (int i = 0; i <JBAlllist.size() ; i++) {
             boolean 判断符合=true;
             for (int j = 0; j <e关键字arr.length ; j++) {
-                if (JBAlllist.get(i).indexOf(e关键字arr[j])==-1){
+                if (JBAlllist.get(i).toLowerCase().indexOf(e关键字arr[j].toLowerCase())==-1){
                     判断符合=false;
                 }
             }

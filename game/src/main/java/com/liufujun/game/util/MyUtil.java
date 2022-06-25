@@ -18,6 +18,22 @@ public class MyUtil {
         SimpleDateFormat dateFormat= new SimpleDateFormat("yyyyMMdd");
         return dateFormat.format(date);
     }
+    //现在时间
+    public static String totime(){
+        return new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+    }
+public static void main(String[] args) {
+    String cent[]=Fileprocessing.readTxtFile("res/test.txt").replace(")","").replace("(","").split("\n");
+    for (int i = 0; i <cent.length ; i++) {
+        String aa[]=cent[i].split("=");
 
+        System.out.println(i);
+        cent[i]=aa[2]+"=a="+aa[1]+"="+aa[0]+"=a=a=a=a=a";
+    }
 
+    for (String a:
+         cent) {
+        System.out.println(a);
+    }
+}
 }

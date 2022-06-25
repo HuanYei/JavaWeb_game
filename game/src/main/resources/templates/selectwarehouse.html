@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/button.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
+    <style>
+        button{
+            width: 300px;
+            height: 45px;
+        }
+    </style>
+</head>
+<body>
+<div align="center">
+    <br><br><br><br>
+    <h1>请选择生成仓库</h1>
+
+    <table>
+        <tr th:each="item:${list}">
+            <th><button th:text="${item}" th:onclick="f([[${item}]])"></button></th>
+        </tr>
+    </table>
+    <form action="/resdeal" id="resdealform">
+        <input type="hidden" th:value="${path}" name="path">
+        <input type="hidden" id="drepositoryname" name="drepositoryname">
+    </form>
+</div>
+</body>
+<script>
+function f(name) {
+    $("#drepositoryname").val(name);
+    $("#resdealform").submit();
+}
+</script>
+</html>

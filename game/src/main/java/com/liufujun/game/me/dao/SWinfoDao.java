@@ -75,8 +75,7 @@ public class SWinfoDao {
             sw.getSWinfo().setECO_MODE(ECO());
             sw.getSWinfo().setCountry_and_language(Country.to国家值(
                     SwDao.e脚本宏查值("default_country"),0
-            )+" "+ Country.单个翻译语言(StringUtil.截取到第一次出现(SwDao.e脚本宏查值("language_list")," ")
-            .replace("\"",""))+"语");
+            ));
             sw.getSWinfo().setIsdolby( 杜比());
             sw.getSWinfo().setIsBluetooth(SwDao.e脚本宏查值("BluetoothEnable").equals("1")?"带":"不带");
             sw.getSWinfo().setLanguageAll(Country.to中文语言(SwDao.e脚本宏查值("language_list")));
@@ -124,8 +123,7 @@ public class SWinfoDao {
             sw.getSWinfo().setATVManual(ATV画面+" "+ATV声音);
             sw.getSWinfo().setCountry_and_language(Country.to国家值(
                     SwDao.e脚本宏查值("config_default_country").replace("\"",""),0
-            )+" "+Country.单个翻译语言(StringUtil.截取到第一次出现(SwDao.e脚本宏查值("config_product_locales")," ")
-                    .replace("\"",""))+"语");
+            ));
             if (is2853)sw.getSWinfo().setIsdolby(SwDao.e脚本宏查值("config_dolby_enable").equals("1")?"带":"不带");
             else sw.getSWinfo().setIsdolby(SwDao.e脚本宏查值("config_dolby_able").equals("1")?"带":"不带");
 

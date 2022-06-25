@@ -3,16 +3,22 @@ package com.liufujun.game.me.dao;
 import com.liufujun.game.me.pojo.PQ;
 import com.liufujun.game.me.pojo.SW;
 import com.liufujun.game.me.pojo.SwEnglish;
-import com.liufujun.game.util.Fileprocessing;
-import com.liufujun.game.util.PlanUtil;
-import com.liufujun.game.util.StringUtil;
-import com.liufujun.game.util.服务器使用路径;
+import com.liufujun.game.util.*;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 
 public class SwDao {
     static  String Stringshu[];
-    public static SW 读取软件所有属性(String swpath,SW sw){
+    public static SW 读取软件所有属性(String swpath, SW sw, Model model){
         String e脚本内容= Fileprocessing.readTxtFile(swpath);
         Stringshu=e脚本内容.split("\n");
 
@@ -25,6 +31,7 @@ public class SwDao {
             sw.set按键数量(e脚本宏查值("config_keypad_name"));
             sw.set客户名缩写(e脚本宏查值("config_customer_name").replace("\"","").substring(0,4));
             sw.set软件客制化名称(e脚本宏查值("config_customer_folder_name").replace("\"",""));
+            sw.getSWinfo().setTimezone(e脚本宏查值("config_default_timezone").replace("\"",""));
 
             sw.setIsrtk(1);
             PlanType(sw);
@@ -33,12 +40,17 @@ public class SwDao {
             sw.getSWinfo().setKEYboardType(SWinfoDao.按键板类型(sw,0));
             sw.setPQ数据(RtkpqDao.PQDate(sw.get软件色温文件路径(),new PQ()));
             sw.set电子屏贴路径(sw.get软件客制化路径全称()+"overlay/com.toptech.tvmenu/res/drawable-nodpi/sticker.png");
+            if (model!=null){
+                model.addAttribute("logos",Fileprocessing.e获取目录下所有文件名(StringUtil.提取文件路径(sw.get软件logo路径全称()),true));
+                model.addAttribute("panels",Fileprocessing.e获取目录下所有文件名(StringUtil.提取文件路径(sw.get软件屏参名路径全称()),false));
+            }
+            RTKPQ上传(sw);
         }else {
             sw.setIsrtk(0);
             //MTK
             sw.getSWinfo().setKEYboardName(e脚本宏查值("keypad_file"));
             sw.getSWinfo().setIRname(e脚本宏查值("ir_file"));
-
+            sw.getSWinfo().setTimezone(e脚本宏查值("timezone").replace("\"",""));
             sw.set软件logo名(e脚本宏查值("bootlogo_file"));
             sw.set屏名(e脚本宏查值("panelname"));
             sw.set按键数量(e脚本宏查值("keypad_file"));
@@ -61,16 +73,48 @@ public class SwDao {
             PlanType(sw);
             Pq赋值(sw);
             PanelDao.PanelMTK赋值(sw);
-
-
             sw.getSWinfo().setKEYboardType(SWinfoDao.按键板类型(sw,1));
             sw.setIs电子屏贴(e脚本宏查值("config_sticker_visible"));
             sw.set电子屏贴路径(sw.get软件客制化路径全称()+"overlay/com.toptech.tvmenu/res/drawable-nodpi/sticker.png");
+            if (model!=null){
+                model.addAttribute("logos",Fileprocessing.e获取目录下所有文件名(StringUtil.提取文件路径(sw.get软件logo路径全称()),false));
+                model.addAttribute("panels",Fileprocessing.e获取目录下所有文件名(StringUtil.提取文件路径(sw.get软件屏参名路径全称()),true));
+            }
+
         }
         SWinfoDao.SWinfohandle(sw);
+        e所有方案收尾(sw);
         return sw;
     }
 
+    private static void RTKPQ上传(SW sw) {
+        RestTemplate restTemplate=new RestTemplate();
+        File file=new File(sw.get软件色温文件路径());
+        String name="PQ"+ MyUtil.totime()+".cpp";
+        sw.getSWinfo().setRTKpqfwqname(name);
+        String url = "http://172.168.1.230:8888/"+"uploadres";
+        // 请求头设置,x-www-form-urlencoded格式的数据
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        FileSystemResource resource = new FileSystemResource(file);
+        //提交参数设置
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+        map.add("file", resource);
+        map.add("path", "res/pq/");
+        map.add("name", name);
+        // 组装请求体
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map);
+        // 发送post请求，并打印结果，以String类型接收响应结果JSON字符串
+        restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+    }
+
+    private static void e所有方案收尾(SW sw) {
+        String IRpath=sw.getSWinfo().getIRpath();
+        String IRimgPath=IRpath.replace(StringUtil.提取文件后缀(IRpath),".jpg");
+        if(new File(IRimgPath).exists()){
+            sw.setIRimgPath(IRimgPath);
+        }
+    }
 
 
     public static void MTKPQ写入(SwEnglish sw){
@@ -280,16 +324,13 @@ public class SwDao {
             return 赋值2843(sw);
         }
 
-
         return sw;
     }
 
     private static SW 赋值2843(SW sw) {
         RTK2851(sw);
-
-
         sw.getSWinfo().setIRpath(服务器使用路径.RTK2853PATH+"customer/IR/"+sw.getSWinfo().getIRname()+".config");
-
+        sw.getSWinfo().setCurrentdate(服务器使用路径.RTK2853PATH);
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2843+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2843+sw.get屏名()+".ini");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2843+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
@@ -304,7 +345,7 @@ public class SwDao {
     }
 
     private static SW 赋值2853(SW sw) {
-        RTK2851(sw);
+        RTK2853(sw);
         sw.getSWinfo().setIRpath(服务器使用路径.RTK2853PATH+"customer/IR/"+sw.getSWinfo().getIRname()+".config");
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2853+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2853+sw.get屏名()+".ini");
@@ -355,6 +396,16 @@ public class SwDao {
             sw.getSWinfo().setIsbootvideo("false");
         }else {
             sw.set软件开机视频路径全称(服务器使用路径.RTK2851PATH+"customer/bootlogo/"+bootvideoname);
+            sw.getSWinfo().setIsbootvideo("true");
+        }
+    }
+    private static void RTK2853(SW sw){
+        sw.getSWinfo().setPath(服务器使用路径.RTK2853PATH);
+        String bootvideoname=e脚本宏查值("config_bootvideo_name");
+        if (bootvideoname.equals("")||bootvideoname.equals("未识别到这个宏")){
+            sw.getSWinfo().setIsbootvideo("false");
+        }else {
+            sw.set软件开机视频路径全称(服务器使用路径.RTK2853PATH+"customer/bootlogo/"+bootvideoname);
             sw.getSWinfo().setIsbootvideo("true");
         }
     }
@@ -510,7 +561,7 @@ public class SwDao {
                 String jb =Stringmacro("config_bootlogo_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2843+swname+".sh"));
                 Fileprocessing.updateFile(服务器使用路径.脚本路径2843+swname+".sh",jb);
                 return;
-            }else if (客制化.indexOf("2842")!=-1){
+            }else if (客制化.indexOf("2843")!=-1){
                 客制化="\""+客制化+"\"";
                 String jb =Stringmacro("config_customer_folder_name",客制化,Fileprocessing.readTxtFile(服务器使用路径.脚本路径2843+swname+".sh"));
                 Fileprocessing.updateFile(服务器使用路径.脚本路径2843+swname+".sh",jb);

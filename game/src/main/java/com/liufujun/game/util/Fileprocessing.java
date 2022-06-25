@@ -2,6 +2,7 @@ package com.liufujun.game.util;
 
 import com.liufujun.game.me.dao.SwDao;
 import com.liufujun.game.me.pojo.SW;
+import org.springframework.ui.Model;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -239,11 +240,13 @@ public class Fileprocessing {
     }
     //读取值为
     public static boolean findJBboolean(String 脚本路径,String 宏){
+        System.out.println("脚本路径 = [" + 脚本路径 + "], 宏 = [" + 宏 + "]");
         boolean jg=true;
         String findjg=findJBFile(脚本路径,宏);
         if (findjg.equals("0")||findjg.equals("false")||findjg.equals("未识别到这个宏")){
             jg=false;
         }
+        System.out.println(jg);
         return jg;
     }
 
@@ -265,13 +268,13 @@ public class Fileprocessing {
         SW sw1=new SW(),sw2=new SW();
         sw1.set软件名称(StringUtil.提取文件名(path1));
         sw1.set方案(PlanUtil.PlanType(StringUtil.提取文件名(path1)));
-        SwDao.读取软件所有属性(path1,sw1);
+        SwDao.读取软件所有属性(path1, sw1, null);
         String cusPath1=sw1.get软件客制化路径全称();
         System.out.println(cusPath1+"   SSSSSS  ");
 
         sw2.set软件名称(StringUtil.提取文件名(path2));
         sw2.set方案(PlanUtil.PlanType(StringUtil.提取文件名(path2)));
-        SwDao.读取软件所有属性(path2,sw2);
+        SwDao.读取软件所有属性(path2,sw2,null);
         String cusPath2=sw2.get软件客制化路径全称();
 
         System.out.println(cusPath1+"   SSSSSS  "+cusPath2);
@@ -319,5 +322,22 @@ public class Fileprocessing {
             return true;
         }
         return false;
+    }
+
+    public static String[] e获取目录下所有文件名(String path,boolean 是否要后缀){
+        File file总目录=new File(path);
+        if(file总目录.isDirectory()){
+            //获取该文件夹下的子文件夹
+            File[] files = file总目录.listFiles();
+            String[] filename=new String[files.length];
+            //循环子文件夹重复调用delete方法
+            for (int i = 0; i < files.length; i++) {
+                if (是否要后缀) filename[i]=files[i].getName();
+                else filename[i]=StringUtil.e去除文件后缀(files[i].getName());
+            }
+            return filename;
+        }else {
+            return null;
+        }
     }
 }

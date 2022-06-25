@@ -48,6 +48,10 @@ public class StringUtil {
         String a= 提取文件名(源路径全称).split("\\.")[1];
         return "."+a;
     }
+    public static String e去除文件后缀(String 文件名){
+        String a= 提取文件名(文件名).split("\\.")[0];
+        return a;
+    }
     public static int 统计字符出现次数(String 字符串,char 字符){
         char[] chars=字符串.toCharArray();
         int ci=0;

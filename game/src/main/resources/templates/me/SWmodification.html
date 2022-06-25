@@ -41,6 +41,7 @@
     <h1>软件信息</h1>
     <div style="display: flex;">
         <div>
+            <p><b>当前仓库：</b><span th:text="${SW.getSwinfo().getPath()}"></span>&nbsp;&nbsp;<b><a th:onclick="openpath([[${SW.getSwinfo().getPath()}]])">打开目录</a></b></p>
             <p><b>智像DP：</b><span th:text="${SW.getZeasn_devicetype()}"></span>&nbsp;&nbsp;<button onclick="copyDP()">点击复制</button></p>
             <p><b>脚本：
 <!--                <a th:href="${'/toScript?swSCpath='}+${SW.getFull_name_of_software_path}">编辑脚本</a>|-->
@@ -60,7 +61,7 @@
                 <!--        <span style="color: red;" class="zhushi">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>-->
             </div>
 
-            <p><b>logo<span id="dzpt1" style="display: none">和电子屏贴</span>：<a th:onclick="openpath([[${SW.full_name_of_software_logo_path}]])" >打开LOGO目录</a><span  class="rtksty">|<a id="clogo"  href="/toRAWLOGO">制作logo</a></span><span id="dzpt3" style="display: none;">|<a th:onclick="openpath([[${SW.dzptPath}]])"  >打开电子屏贴目录</a></span></b>
+            <p><b>logo<span id="dzpt1" style="display: none">和电子屏贴</span>：<a th:onclick="openpath([[${SW.full_name_of_software_logo_path}]])" >打开LOGO目录</a><span  class="rtksty">|<a id="clogo"  href="http://172.168.1.230:8888/toRAWLOGO">制作logo</a></span><span id="dzpt3" style="display: none;">|<a th:onclick="openpath([[${SW.dzptPath}]])"  >打开电子屏贴目录</a></span></b>
 
             <div style="margin-left: 30px;display: flex;" >
             <div>
@@ -82,8 +83,13 @@
                 <!--        <span style="color: red;" class="zhushi">*请打开logo目录，复制你要修改的logo名称，填入输入框更换logo。</span>-->
             </div>
 <!--            <b><a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSoftware_logo_name()}]])" class="tit2">Logo名称：</a></b>-->
-            <input class="tit2" id="logo" type="text" th:value="${SW.software_logo_name}" style="width: 23%;height: 20px;"></input>
+            <input class="tit2" id="logo" type="text" th:value="${SW.software_logo_name}" list="listlogo" style="width: 23%;height: 20px;"></input>
             <button onclick="UPlogo()">更换logo</button>
+            <datalist id="listlogo">
+                  <span th:each="logo:${logos}">
+                     <option th:value="${logo}"/>
+                  </span>
+            </datalist>
         </div>
         <div style="padding-left: 50px">
             <p><b>遥控器配置：
@@ -102,11 +108,15 @@
     </div>
     <p>
         <div id="swdiv1">
-
+    <datalist id="listpanel">
+                  <span th:each="panel:${panels}">
+                     <option th:value="${panel}"/>
+                  </span>
+    </datalist>
         <b>屏： <a th:onclick="openpath([[${SW.full_name_of_software_screen_parameter_name_path}]])" >打开目录</a>|<a th:onclick="openFile([[${SW.full_name_of_software_screen_parameter_name_path}]])">打开文件</a></b>
     <div class="tit2">
 <!--        <b><a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getScreen_name()}]])">屏参文件名：</a></b>-->
-        <input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;"></input>
+        <input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;" list="listpanel"></input>
         <button onclick="UPPanel()" >更换屏参</button>
         <button onclick="rmandnew(4)" >新建屏参</button>
 <!--    <span style="color: red;" class="zhushi">*请打开目录，复制你要修改的屏文件名称，填入输入框更换配屏</span>-->
@@ -226,8 +236,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'_country')">国家+默认语言：</a>
-                        <span th:text="${SW.getSwinfo().getCountry_and_language()}"></span>
+                        <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'_country')">国家：</a>
+                        <span th:text="${SW.getSwinfo().getCountry_and_language()}+' '+${SW.getSwinfo().getTimezone()}"></span>
                     </td>
                     <td>
                         <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],'dolby')">杜比：</a>
@@ -306,7 +316,9 @@
         <br>
         <br>
         <h1>PQ信息</h1>
+        <iframe frameborder=0  width="100%" height="800px" scrolling="yes" id="rtksub" style="display: none;" th:src="'http://172.168.1.230:8888/pdfuploadpath?path=res/pq/'+${SW.getSwinfo().getRTKpqfwqname()}+'&plan='+${SW.getPlan()}">
 
+        </iframe>
         <form id="pqfrom" action="#" th:action="@{/Color}" method="post" th:object="${SW}">
             <div id="PQTable">
                 <b>色温:</b>
@@ -437,8 +449,9 @@
                 </tr>
             </table>
             </div>
+
             <br>
-            <a id="rtksub" style="display: none;"><button   type="button"  style="font-size: 100%;padding: 15px 350px;" onclick="tofwq()">去服务器修改</button></a>
+<!--            <a id="rtksub" style="display: none;"><button   type="button"  style="font-size: 100%;padding: 15px 350px;" onclick="tofwq()">去服务器修改</button></a>-->
             <button id="mtksub"  type="button"  style="font-size: 100%;padding: 15px 350px;display: none;"  onclick="tijiao()">提交修改</button>
 <!--            <span id="rtksubzs" style="color: red;" class="zhushi">*提交修改后，会直接修改PQ文件，2851和2842会编译成bin文件并生成在客制化文件夹中，请检查。</span>-->
             <input  style="display: none;" type="text" th:field="*{software_color_temperature_file_path}"/>
@@ -448,6 +461,7 @@
             <input  style="display: none;" type="text" th:field="*{screen_name}"/>
             <input  style="display: none;" type="text" th:field="*{software_customization_name}"/>
             <input  style="display: none;" type="text" th:field="*{Plan}"/>
+
         </form>
     </div>
     <div style="height: 400px">
@@ -772,16 +786,22 @@
             return;
         } else {
             var url =  'http://172.168.1.230:8888/uploadres';
-            uploadFile(url,filesList[0]);   // 执行单个文件的上传(每次都创建一个新的 form,并提交)
+            var path= "res/IR/"+[[${SW.getPlan()}]]+"/";
+            var name= [[${SW.getSwinfo().getIRname()}]]+".jpg";
+            uploadFile(url,filesList[0],path,name);   // 执行单个文件的上传(每次都创建一个新的 form,并提交)
+
+            var url2 =  '/uploadres';
+            var path2= ""+[[${SW.getSwinfo().getIRpath}]]+"";
+            var name2= [[${SW.getSwinfo().getIRname()}]]+".jpg";
+            uploadFile(url2,filesList[0],path2,name2);   // 执行单个文件的上传(每次都创建一个新的 form,并提交)
         }
     });
 
-    function uploadFile(url,file){
+    function uploadFile(url,file,path,name){
         var form = new FormData();
         form.append("file",file);
-        var plan= [[${SW.getPlan()}]];
-        var name= [[${SW.getSwinfo().getIRname()}]]+".jpg";
-        form.append("path","res/IR/"+plan+"/");
+
+        form.append("path",path);
         form.append("name",name);
         $.ajax({
             url:url,        //后台url

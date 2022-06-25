@@ -15,18 +15,24 @@
 <div style="width: 100%">
     <a href="/" style="font-size: 150%">主页</a>
 </div>
-<h1>软件包管理</h1>
-<p><button style="font-size: 20px" onclick="allcheckbox()" id="allbutton">全选</button></p>
+<div>
 
+<h1>软件包管理</h1>
+    <div style="width: 50%">
+<b >
+    仓库选择：<a href="/toSWtool"><button onclick="">刷新选择</button></a><br>
+    <p th:each="item:${Swstorelist}">
+    <input type="checkbox"  th:checked="${item.isIs()}" th:onclick="checkboxonclick([[${item.getName()}]])"/>
+    <span th:text="${item.getName()}"></span>&nbsp;&nbsp;&nbsp;
+    </p>
+</b>
+    </div>
+</div>
+<br>
+<!--<p><button style="font-size: 20px" onclick="allcheckbox()" type="button" id="allbutton">全选</button></p>-->
 <form action="/putftp" method="post" >
-    <p><button style="font-size: 20px" type="button" onclick="deleteall()" id="deletebutton" >删除本地软件包</button> <input style="display: none;" type="text" id="isdelete" name="isdelete" value="0"></p>
-<p>
-    <button style="font-size: 20px" type="submit">上传到ftp样机目录</button>
-    <select name="merchantNo" id="ChineseSelect" style="font-size: 20px">
-        <option value="中文国家路径" th:selected="${IsChinese} eq 'ture'">中文国家路径</option>
-        <option value="英文国家路径" th:selected="${IsChinese} eq 'false'">默认国家路径</option>
-    </select>
-</p>
+    <p></p>
+
 
 <div align="center" >
 <!--    <form action="/" method="post" enctype="multipart/form-data" style="display: none">-->
@@ -42,6 +48,17 @@
 
     <table>
         <tr>
+            <td colspan="2">
+                <button style="font-size: 20px" onclick="allcheckbox()" type="button" id="allbutton">全选</button>
+                <button style="font-size: 20px" type="button" onclick="deleteall()" id="deletebutton" >删除</button>
+                <input style="display: none;" type="text" id="isdelete" name="isdelete" value="0">
+                <button style="font-size: 20px" type="submit">上传到ftp样机目录</button>
+                <select name="merchantNo" id="ChineseSelect" style="font-size: 20px">
+                    <option value="中文国家路径" th:selected="${IsChinese} eq 'ture'">中文国家路径</option>
+                    <option value="英文国家路径" th:selected="${IsChinese} eq 'false'">默认国家路径</option>
+                </select> </td>
+        </tr>
+        <tr>
             <th>软件名称</th>
             <th>操作</th>
         </tr>
@@ -53,6 +70,7 @@
     </table>
 </div>
 </form>
+
 <script>
     function openpath(path) {
         $.ajax({
@@ -97,6 +115,16 @@
             contentType: 'application/json'
         });
     });
+
+    function checkboxonclick(str) {
+        $.ajax({
+            type: "post",
+            url: "/checkboxonclick",
+            data: str+"=",
+            async: false,
+            contentType: 'application/json'
+        });
+    }
 </script>
 </body>
 </html>
