@@ -1,5 +1,7 @@
 package com.liufujun.game.me.pojo;
 
+import com.liufujun.game.me.dao.EDID;
+
 public class SWINFO {
     String IRname;
     String KEYboardName;
@@ -13,8 +15,10 @@ public class SWINFO {
     String APPS, IsEshare, IsZeasn, UpdateName, Model_name;
     String IsDzpt,backlight,IsPower_memory,Equipment_name,
             Standby_mode,Isbootvideo,Path,IRpath,defaultVolume,
-            ishotel,adjustment,autostandby,jb2,Timezone,Currentdate;
+            ishotel,adjustment,autostandby,jb2,Timezone,Currentdate,EDIDpath;
     String RTKpqfwqname="null";
+    EDID edid;
+
     @Override
     public String toString() {
         return "SWINFO{" +
@@ -350,11 +354,27 @@ public class SWINFO {
         Timezone = timezone;
     }
 
+    public String getEDIDpath() {
+        return EDIDpath;
+    }
+
+    public void setEDIDpath(String EDIDpath) {
+        this.EDIDpath = EDIDpath;
+    }
+
     public String getCurrentdate() {
         return Currentdate;
     }
 
     public void setCurrentdate(String currentdate) {
         Currentdate = currentdate;
+    }
+
+    public EDID getEdid() {
+        return edid;
+    }
+
+    public void setEdid(EDID edid) {
+        this.edid = edid;
     }
 }

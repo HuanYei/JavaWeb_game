@@ -2,45 +2,44 @@
 <html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <style>
-        #divtisi{
-            width: 90.4%;
-            font-size: 15px;
-            border: solid 1px rgba(0, 0, 0, 0.53);
-        }
-        tr{
-            word-break:break-all;
-            display:block;
-            padding:3px 0px;
-        }
-        tr:hover {
-            background-color: rgba(0, 0, 0, 0.17);
-            color: #020aff;
-        }
-        select{
-            font-size: 25px;
-        }
-        .checkboxcss{
-            width: 25px;
-            height: 25px;
-        }
-    </style>
+    <title>FAE工具主页</title>
+    <link href="css/meindex.css" type="text/css" rel="stylesheet">
     <link href="css/button.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
 </head>
-<body >
-<div style="width: 100%" >
-    <a href="/tool" style="font-size: 150%">其他工具</a>
+<body>
+<div style="clear: both;position:relative; ">
+    <div style="font-size: 150%;" id="qitadiv" >
+        <a onclick="indexshow()">其他工具</a>
+    </div>
+    <div>
+        <span id="timediv"  th:text="${datetime}"></span>
+    </div>
 </div>
-<div align="center" >
+<br><br>
+<span >
+    <div id="myindexiframe"  style="display: none">
+        <p><a href="/toSWtool" target="_top">本地软件</a></p>
+        <p><a href="/toYangji" target="_top">样机制作</a></p>
+        <p><a href="http://172.168.1.230:8888/toRAWLOGO" target="_top">RTK LOGO</a></p>
+        <p><a href="http://172.168.1.230:8888/toRTKpq" target="_top">RTK PQ</a></p>
+        <p><a href="http://172.168.1.230:8888/toRTKRemote" target="_top">遥控器</a></p>
+        <p><a href="http://172.168.1.230:8888/toPDF" target="_top">彩讯PO单</a></p>
+        <p><a href="http://172.168.1.230:8888/test" target="_top">RCA报告</a></p>
+        <p><a href="/toupdate" target="_top">检查更新</a></p>
+    </div>
+</span>
+<br><br>
+<div id="homediv"  align="center" onmousedown="indexhide()">
 <form id="SWform" action="/subswname" method="post" enctype="multipart/form-data" style="font-size: 150%;">
     <div style=" width: 70%;" align="left">
         <h2>软件信息查找</h2>
         <div th:if="${isSelt368}">
             <input type="checkbox" class="checkboxcss"  th:checked="${ischeckbox368}" onclick="checkboxonclick('368configure=')"/>
-        368仓库：
-        <select name="merchantNo" id="368select">
+            <span class="cangtext">
+                9255仓库：
+            </span>
+        <select name="merchantNo" id="368select" class="select_wrap">
             <option th:each="item:${equManager368}"
                 th:value="${item}"
                     th:selected="${isSelt368==item}"
@@ -51,8 +50,10 @@
         </div>
         <div th:if="${isSelt9632}">
             <input type="checkbox" class="checkboxcss"  th:checked="${ischeckbox9632}" onclick="checkboxonclick('9632configure=')"/>
-        9632仓库：
-        <select name="merchantNo" id="9632select">
+            <span class="cangtext">
+                9632仓库：
+            </span>
+        <select name="merchantNo" id="9632select"  class="select_wrap">
             <option th:each="item:${equManager9632}"
                     th:value="${item}"
                     th:selected="${isSelt9632==item}"
@@ -63,8 +64,10 @@
         </div>
         <div th:if="${isSelt2851}">
             <input type="checkbox" class="checkboxcss"  th:checked="${ischeckbox2851}" onclick="checkboxonclick('2851configure=')"/>
-        2851仓库：
-        <select name="merchantNo" id="2851select">
+            <span class="cangtext">
+               2851仓库：
+            </span>
+        <select name="merchantNo" id="2851select"  class="select_wrap">
             <option th:each="item:${equManager2851}"
                     th:value="${item}"
                     th:selected="${isSelt2851==item}"
@@ -72,10 +75,12 @@
             </option>
         </select>
         </div>
-        <div th:if="${isSelt2853}">
+        <div th:if="${isSelt2853}" >
             <input type="checkbox" class="checkboxcss"  th:checked="${ischeckbox2853}" onclick="checkboxonclick('2853configure=')"/>
-            2853仓库：
-            <select name="merchantNo" id="2853select">
+            <span class="cangtext">
+                2853仓库：
+            </span>
+            <select name="merchantNo" id="2853select" class="select_wrap">
                 <option th:each="item:${equManager2853}"
                         th:value="${item}"
                         th:selected="${isSelt2853==item}"
@@ -88,8 +93,7 @@
             <input type="button" id="Comparedid" style="visibility: hidden;" onclick="Comparedmethod()" />
         </div>
     <div style="margin-top: 80px">
-    <input id="text" type="text"  name="swname" style="text-align:center; font-size:15px; width: 87%;height: 40px;"placeholder="请输入脚本名" autocomplete="off"></input>
-    <button type="submit" style="font-size:15px;height: 50px; width: 100px" >查询</button>
+    <input id="text" type="text"  name="swname" placeholder="请输入脚本信息 用空格隔开" autocomplete="off"/><button id="mysubmit" type="submit" >查询</button>
     </div>
         <div id="divtisi">
 
@@ -99,6 +103,21 @@
 </div>
 </body>
 <script>
+    var ishide=true;
+    function indexhide() {
+        ishide=true;
+        $("#myindexiframe").hide(500);
+    }
+    function indexshow() {
+        if (ishide){
+            ishide=false;
+            $("#myindexiframe").show(500);
+        }else {
+            ishide=true;
+            $("#myindexiframe").hide(500);
+        }
+
+    }
     function row() {
         var siying=document.getElementById("key_chasiying").value;
         $.ajax({

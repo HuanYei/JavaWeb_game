@@ -1,0 +1,26 @@
+#navigation a{
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.button1 button{
+    font-size: 36px;
+    width: 270px;
+    height: 90px;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+    font-size:100% ;
+    color: white;
+    background-color: rgba(133, 133, 133, 0.6);
+}
+.button1{
+    display: none;
+}
+.button1 input{
+    width: 80%;
+}
+#fangandiv{
+    display:inline;
+}

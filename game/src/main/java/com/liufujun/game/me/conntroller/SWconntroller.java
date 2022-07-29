@@ -166,7 +166,7 @@ public class SWconntroller {
                 if (file.isDirectory()) {
                     getFiles(file.getAbsolutePath(), files);
                 } else {
-                    if (file.getName().length()>80) files.add(file);
+                    if (file.getName().length()>68) files.add(file);
                     else if (file.getName().equals("MTK368P.bin"))files.add(file);
                     else if (file.getName().equals("MTK9632P.bin"))files.add(file);
                     else if (file.getName().equals("MTK9632P_YES.bin"))files.add(file);

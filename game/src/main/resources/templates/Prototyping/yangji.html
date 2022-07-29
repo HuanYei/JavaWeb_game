@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>样机制作</title>
+    <link href="css/button.css" type="text/css" rel="stylesheet">
+    <link href="css/yangji.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
+    <script type="text/javascript" src="js/yangji.js" ></script>
+</head>
+<body>
+<div style="width: 100%">
+    <a href="/" style="font-size: 150%">主页</a>
+</div>
+<div align="center">
+    <div>
+        <h1>样机制作系统</h1>
+        <div id="navigation">
+            <a href="#" style="background-color: #f47c00;color: white">方案</a><a href="#">脚本</a><a href="#">样机单</a><a href="#">客户</a><a href="#">客户合同号</a><a href="#">客户机型名</a><a href="#">版型</a><a href="#">杜比</a><a href="#">背光电流</a><a href="#">屏</a><a href="#">按键板</a>
+            <br><br>
+            <a href="#">声音</a><a href="#">端口</a><a href="#">CI卡</a><a href="#">制式</a><a href="#">TV选项</a><a href="#">蓝牙</a><a href="#">内存</a><a href="#">备注</a><a href="#">国家</a><a href="#">语言</a><a href="#">LOGO</a><a href="#">遥控器</a><a href="#">智像</a><a href="#">Eshare</a>
+<!--            <a href="#">方案</a>|<a href="#">脚本</a>|<a href="#">样机单</a>|<a href="#">客户</a>|<a href="#">客户合同号</a>|-->
+<!--            <a href="#">客户机型名</a>|<a href="#">版型</a>|<a href="#">杜比</a>|<a href="#">背光电流</a>|<a href="#">屏</a>|-->
+<!--            <a href="#">按键板</a>|<a href="#">声音</a>|<a href="#">端口</a>|<a href="#">CI卡</a>|<a href="#">制式</a>|<a href="#">TV选项</a>|-->
+<!--            <a href="#">蓝牙</a>|<a href="#">内存</a>|<a href="#">备注</a>|<a href="#">国家</a>|<a href="#">语言</a>|-->
+<!--            <a href="#">LOGO</a>|<a href="#">遥控器</a>|<a href="#">智像</a>|<a href="#">Eshare</a>-->
+        </div>
+        <br>
+        <div class="button1" id="fangandiv">
+            <h2>请选择方案</h2>
+            <button  onclick="fanganonclick('2853')">RTK2853</button>
+            <button  onclick="fanganonclick('2843')">RTK2843</button>
+        </div>
+        <div class="button1" id="jiaobendiv">
+            <h2>请选择参考脚本</h2>
+            <button onclick="jiaoben('public')">默认公版脚本</button>
+            <button onclick="jiaoben('user')">下方输入框内脚本</button><br>
+            <input id="jiaobentext" type="text">
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+</body>
+</html>

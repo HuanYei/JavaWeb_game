@@ -2,7 +2,15 @@ package com.liufujun.game.util;
 
 import com.liufujun.game.me.dao.SwDao;
 import com.liufujun.game.me.pojo.SW;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -12,7 +20,6 @@ import java.util.ArrayList;
 public class Fileprocessing {
     public static String readTxtFile(String filePath) {
         if (!filePath.equals("res/config/语言.config")) System.out.println("读取文件路径："+filePath);
-
         String map = "";
         try {
             String encoding = "UTF-8";
@@ -50,7 +57,17 @@ public class Fileprocessing {
         }
         return true;
     }
+    public static boolean updateFiles(String path, String[] contents){
+        String content="";
+        for (String a:
+                contents) {
+            if (!a.equals("<hyp>")){
+                content+=a+"\n";
+            }
+        }
 
+        return  updateFile(path,content);
+    }
     public static void openFile(String path) {
         boolean isopenpath=true;
         boolean isopenpathrow=false;
@@ -338,6 +355,149 @@ public class Fileprocessing {
             return filename;
         }else {
             return null;
+        }
+    }
+    public static void e单个文件上传(String path,String despath,String name){
+        File file=new File(path);
+        RestTemplate restTemplate=new RestTemplate();
+
+//        String url = "http://127.0.0.1:8888/"+"uploadres";
+        String url = "http://172.168.1.230:8888/"+"uploadres";
+        // 请求头设置,x-www-form-urlencoded格式的数据
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        FileSystemResource resource = new FileSystemResource(file);
+        //提交参数设置
+        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+        map.add("file", resource);
+        map.add("path", despath);
+        map.add("name", name);
+        // 组装请求体
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map);
+        // 发送post请求，并打印结果，以String类型接收响应结果JSON字符串
+        restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+    }
+
+    public static String[] readTxtFileln(String filePath){
+        return readTxtFile(filePath).split("\n");
+    }
+    public static boolean e在源文件下方换行加入(String path,String 内容,String 末端标签){
+        System.out.println("path = [" + path + "], 内容 = [" + 内容 + "]");
+
+        return updateFile(path,(readTxtFile(path).replace(末端标签,"")+内容.replaceAll("\r\n","\n")+末端标签).replace("\n","\r\n"));
+    }
+    public static boolean e在源文件下方换行加入Linux(String path,String 内容,String 末端标签){
+        System.out.println("path = [" + path + "], 内容 = [" + 内容 + "]");
+        if (readTxtFile(path).indexOf(末端标签)==-1){
+            return false;
+        }
+        return updateFile(path,(readTxtFile(path).replace(末端标签,内容+末端标签)).replace("\r\n","\n"));
+    }
+    public static void eRTK遥控器头码添加(String e遥控器文件位置, String e遥控器文件名字) {
+        String e红外开机文件路径=e遥控器文件位置.replace("customer/IR/","")+"bootcode\\bootcode\\uboot\\include\\asm\\arch\\platform_lib\\board\\pcb\\toptech_remote_keypad_def.h";
+        String epower="0xf40bdf20";
+        String eIRpath=e遥控器文件位置+e遥控器文件名字;
+        String eIRname=StringUtil.e去除文件后缀(e遥控器文件名字);
+
+        String eIRFiles[]=readTxtFileln(eIRpath);
+        for (int i = 0; i <eIRFiles.length ; i++) {
+            if (eIRFiles[i].indexOf("KEY_POWER")!=-1&&eIRFiles[i].indexOf("0xf40bdf20")==-1){
+                epower=StringUtil.删除字符(eIRFiles[i],"KEY_POWER",",");
+                epower="0x"+StringUtil.v(epower,"0x","");
+            }
+        }
+        String e头码内容="#define POWER_KEY_"+eIRname+"       ("+epower+")//need modify keycode\n";
+        e在源文件下方换行加入Linux(e红外开机文件路径,e头码内容,"#define TO_POWER(power1, power2)  \\");
+
+        String e声明内容="    #define REMOTE_IR_POWER_56        TO_POWER(INVALID_IR_CODE, INVALID_IR_CODE)\n" +
+                "#elif (defined(TOPTECH_REMOTE_NAME_"+eIRname+") && (1 == TOPTECH_REMOTE_NAME_"+eIRname+"))\n" +
+                "    #define VERSION_CODE            1\n" +
+                "    #define POWER_KEY_COUNT            2\n" +
+                "    #define REMOTE_IR_PROTOCAL        TO_VERSION(PROTOCAL_NEC, REMOTE_KK_Y096L, POWER_KEY_COUNT, 1, 0, 0, 0, VERSION_CODE)\n" +
+                "    #define REMOTE_IR_POWER_12        TO_POWER(POWER_KEY_"+eIRname+", POWER_KEY_TOPTECH)\n" +
+                "    #define REMOTE_IR_POWER_34        TO_POWER(INVALID_IR_CODE, INVALID_IR_CODE)\n";
+        boolean jg=e在源文件下方换行加入Linux(e红外开机文件路径,e声明内容,"    #define REMOTE_IR_POWER_56        TO_POWER(INVALID_IR_CODE, INVALID_IR_CODE)\n" +
+                "#endif");
+        if (!jg){
+            jg=e在源文件下方换行加入Linux(e红外开机文件路径,e声明内容,"    #define REMOTE_IR_POWER_56        TO_POWER(INVALID_IR_CODE, INVALID_IR_CODE)\t\n" +
+                    "#endif");
+        }
+    }
+
+    public static void e删除按键复用(String path, String e内容) {
+        String[] cs= readTxtFileln(path);
+        boolean is子项=false;
+        for (int i = 0; i <cs.length; i++) {
+            if (cs[i].indexOf("</keys>")!=-1){
+                if (is子项) cs[i]="<hyp>";
+                is子项=false;
+            }
+            if (is子项){
+                cs[i]="<hyp>";
+            }
+            if (cs[i].indexOf(e内容)!=-1){
+                cs[i]="<hyp>";
+                is子项=true;
+            }
+        }
+        updateFiles(path,cs);
+    }
+
+    public static void e删除红外开机键(String e遥控器文件位置, String e遥控器文件名字) {
+        String e红外开机文件路径=e遥控器文件位置.replace("customer/IR/","")+"bootcode\\bootcode\\uboot\\include\\asm\\arch\\platform_lib\\board\\pcb\\toptech_remote_keypad_def.h";
+        String eIRname=StringUtil.e去除文件后缀(e遥控器文件名字);
+        String e头码内容="#define POWER_KEY_"+eIRname;
+        String[] cs= readTxtFileln(e红外开机文件路径);
+        System.out.println("(defined(TOPTECH_REMOTE_NAME_"+eIRname);
+        for (int i = 0; i <cs.length; i++) {
+            if (cs[i].indexOf(e头码内容)!=-1){
+                cs[i]="<hyp>";
+            }
+            if (cs[i].indexOf("(defined(TOPTECH_REMOTE_NAME_"+eIRname)!=-1){
+                cs[i]="<hyp>"; cs[i+1]="<hyp>"; cs[i+2]="<hyp>"; cs[i+3]="<hyp>"; cs[i+4]="<hyp>"; cs[i+5]="<hyp>"; cs[i+6]="<hyp>";
+            }
+        }
+        updateFiles(e红外开机文件路径,cs);
+    }
+
+
+    //读取文件为byte
+    public static byte[] readFileByBytes(String fileName) {
+        InputStream in = null;
+        ByteArrayOutputStream out = null;
+        try {
+            in = new BufferedInputStream(new FileInputStream(fileName));
+            out = new ByteArrayOutputStream();
+            byte[] tempbytes = new byte[in.available()];
+            for (int i = 0; (i = in.read(tempbytes)) != -1;) {
+                out.write(tempbytes, 0, i);
+            }
+        }catch (Exception e){
+
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return out.toByteArray();
+    }
+
+    /**
+     * 向文件写入byte[]
+     * @param fileName 文件名
+     * @param bytes    字节内容
+     * @param append   是否追加
+     * @throws IOException
+     */
+    public static void writeFileByBytes(String fileName, byte[] bytes, boolean append) {
+        try(OutputStream out = new BufferedOutputStream(new FileOutputStream(fileName, append))){
+            out.write(bytes);
+        }catch (Exception e){
+
         }
     }
 }

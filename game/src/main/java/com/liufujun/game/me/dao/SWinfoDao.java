@@ -3,6 +3,11 @@ package com.liufujun.game.me.dao;
 import com.liufujun.game.me.pojo.SW;
 //import com.liufujun.game.sample.pojo.RTKmacro;
 import com.liufujun.game.util.*;
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class SWinfoDao {
@@ -115,7 +120,7 @@ public class SWinfoDao {
             sw.getSWinfo().setTV_system(RTKTV());
 
             e电子屏贴(sw);
-
+            if (is2853)sw.getSWinfo().setEdid(EDID2853(sw));;
             String ATV画面=SwDao.e脚本宏查值("config_color_system").toUpperCase();
             if (ATV画面.equals("未识别到这个宏"))ATV画面="PAL";
             String ATV声音=SwDao.e脚本宏查值("config_sound_system");
@@ -172,6 +177,27 @@ public class SWinfoDao {
 
         通道处理(sw);
     }
+
+    private static EDID EDID2853(SW sw) {
+
+//        File file[]=new File(sw.getSWinfo().getEDIDpath()).listFiles();
+//        Set<String> set=new HashSet();
+//        System.out.println(file.length);
+//        for (int i = 0; i <file.length ; i++) {
+//            System.out.println(file[i].getPath());
+//            EDID edid=new EDID(file[i].getPath());
+//            set.add(edid.toString2());
+//        }
+//        System.out.println("sizesize:"+set.size());
+//
+//
+//        for (String object : set) {
+//            System.out.println(object.toString());
+//        }
+        System.out.println(sw.getSWinfo().getEDIDpath());
+        return new EDID(sw.getSWinfo().getEDIDpath()+"hdmi_edid_std_1p4_0.bin");
+    }
+
     public static String initconfig(String e宏){
         String Stringshu[];
         if (is2853){
@@ -212,6 +238,9 @@ public class SWinfoDao {
                 sw.setIs电子屏贴("true");
                 isdzpt=sw.getIs电子屏贴().equals("true")?"带,默认开":"带，默认关";
                 sw.set电子屏贴路径(sw.get软件客制化路径全称()+"overlay/com.toptech.tvmenu/res/drawable-nodpi/img_sticker.png");
+                if (!Fileprocessing.isFile存在(sw.get软件客制化路径全称()+"overlay/com.toptech.tvmenu/res/drawable-nodpi/img_sticker.png")){
+                    sw.set电子屏贴路径(sw.get软件客制化路径全称()+"files/kernel/android/R/vendor/toptech/apps/TvApi/TvMenu/res/drawable-nodpi/img_sticker.png");
+                }
             }
         }
         else{
@@ -358,7 +387,37 @@ public class SWinfoDao {
             String ECOdate=SwDao.e脚本宏查值("config_shopmode_backlight");
             return "显示为"+isECO+",默认为"+ECOenabled+",开启时为"+ECOdate;
         }else {
-            if (is2853)return "2853未完善，无法识别";
+            if (is2853){
+                String ECOvisible=SwDao.e脚本宏查值("config_eco_mode_visible").equals("true")?"显示":"隐藏";
+                String ECOenable=SwDao.e脚本宏查值("config_eco_mode_enable").equals("true")?"开":"关";
+                String ECOfour=SwDao.e脚本宏查值("config_eco_four_option").equals("true")?"多选项":"双选项";
+                String Shopvisible=SwDao.e脚本宏查值("config_shop_mode_visible").equals("true")?"显示":"隐藏";
+                String Shopenable=SwDao.e脚本宏查值("config_shop_mode_enable").equals("true")?"开":"关";
+                String Shopvalue=SwDao.e脚本宏查值("config_shop_mode_value");
+                if (Shopvalue.equals("未识别到这个宏"))Shopvalue="80";
+                int index;
+                try {
+                     index=Integer.parseInt(SwDao.e脚本宏查值("config_eco_four_option_index"));
+                }catch (Exception e){
+                    index=3;
+                }
+                String values=SwDao.e脚本宏查值("config_eco_four_option_value").replace("\"","");
+                if (values.equals("未识别到这个宏"))values="90,80,70";
+
+                if(ECOenable.equals("关")&&ECOvisible.equals("隐藏")&&Shopvisible.equals("隐藏")&&Shopenable.equals("关")){
+                    return "无任何能效";
+                }else  if(Shopvisible.equals("显示")||Shopenable.equals("开")){
+                    return "商场模式默认为"+Shopenable+",打开时背光为"+Shopvalue+"，默认"+Shopvisible+"该选项";
+                }else {
+                    if (ECOfour.equals("双选项")){
+                        return "节能模式为双选项，默认为"+ECOenable+",打开时背光为"+Shopvalue+"，默认"+ECOvisible+"该选项";
+                    }else {
+                        return "节能模式为四选项，四选项分别为：off,"+values+",默认选择第"+(index+1)+"个，默认"+ECOvisible+"该选项";
+                    }
+                }
+
+
+            }
             return "无节能模式";
         }
     }
@@ -516,7 +575,6 @@ public class SWinfoDao {
                 board2851= Fileprocessing.readTxtFile(服务器使用路径.RTK2853PATH+"kernel/system/board.json").split("\n");
             }
             else {
-                System.out.println("11111111111111111111111111111111111111111111111111111111");
                 board=SwDao.e脚本宏查值("config_pcb_varient");
                 board2851= Fileprocessing.readTxtFile(服务器使用路径.RTK2851PATH+"kernel/system/board.json").split("\n");
             }

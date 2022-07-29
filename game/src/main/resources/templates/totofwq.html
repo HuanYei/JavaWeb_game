@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/jquery-3.6.0.js" ></script>
+</head>
+<body>
+<form id="tform" action="http://127.0.0.1/">
+    <input type="hidden" name="path" th:value="${path}">
+</form>
+</body>
+<script type="text/javascript" th:inline="javascript">
+    $(function(){
+        var http = [[${http}]];
+        $("#tform").attr("action",http);
+        $("#tform").submit();
+    });
+</script>
+
+</html>

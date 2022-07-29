@@ -38,7 +38,7 @@ public class SwDao {
             PanelDao.PanelRTK赋值(sw);
 
             sw.getSWinfo().setKEYboardType(SWinfoDao.按键板类型(sw,0));
-            sw.setPQ数据(RtkpqDao.PQDate(sw.get软件色温文件路径(),new PQ()));
+//            sw.setPQ数据(RtkpqDao.PQDate(sw.get软件色温文件路径(),new PQ()));
             sw.set电子屏贴路径(sw.get软件客制化路径全称()+"overlay/com.toptech.tvmenu/res/drawable-nodpi/sticker.png");
             if (model!=null){
                 model.addAttribute("logos",Fileprocessing.e获取目录下所有文件名(StringUtil.提取文件路径(sw.get软件logo路径全称()),true));
@@ -88,24 +88,9 @@ public class SwDao {
     }
 
     private static void RTKPQ上传(SW sw) {
-        RestTemplate restTemplate=new RestTemplate();
-        File file=new File(sw.get软件色温文件路径());
         String name="PQ"+ MyUtil.totime()+".cpp";
         sw.getSWinfo().setRTKpqfwqname(name);
-        String url = "http://172.168.1.230:8888/"+"uploadres";
-        // 请求头设置,x-www-form-urlencoded格式的数据
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        FileSystemResource resource = new FileSystemResource(file);
-        //提交参数设置
-        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-        map.add("file", resource);
-        map.add("path", "res/pq/");
-        map.add("name", name);
-        // 组装请求体
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map);
-        // 发送post请求，并打印结果，以String类型接收响应结果JSON字符串
-        restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+        Fileprocessing.e单个文件上传(sw.get软件色温文件路径(),"res/pq/",name);
     }
 
     private static void e所有方案收尾(SW sw) {
@@ -328,12 +313,22 @@ public class SwDao {
     }
 
     private static SW 赋值2843(SW sw) {
-        RTK2851(sw);
+        RTK2853(sw);
         sw.getSWinfo().setIRpath(服务器使用路径.RTK2853PATH+"customer/IR/"+sw.getSWinfo().getIRname()+".config");
         sw.getSWinfo().setCurrentdate(服务器使用路径.RTK2853PATH);
+
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2843+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2843+sw.get屏名()+".ini");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2843+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
+
+        String 软件EDID文件夹=sw.get软件客制化路径全称()+"edid/2k/";
+        File edidfiles=new File(软件EDID文件夹);
+        if (edidfiles.exists()) {
+            sw.getSWinfo().setEDIDpath(软件EDID文件夹);
+        }else {
+            sw.getSWinfo().setEDIDpath(服务器使用路径.RTK2853PATH+"customer/default/edid/EDID_DOLBY/2K/");
+        }
+
         String 软件色温文件夹=sw.get软件客制化路径全称()+"PQ_OverScan/";
         File file=new File(软件色温文件夹);
         if (file.exists()) {
@@ -350,6 +345,15 @@ public class SwDao {
         sw.set软件logo路径全称(服务器使用路径.LOGO路径2853+sw.get软件logo名());
         sw.set软件屏参名路径全称(服务器使用路径.屏参路径2853+sw.get屏名()+".ini");
         sw.set软件客制化路径全称(服务器使用路径.客制化文件夹路径2853+sw.get客户名缩写()+"/"+sw.get软件客制化名称()+"/");
+
+        String 软件EDID文件夹=sw.get软件客制化路径全称()+"edid/4k/";
+        File edidfiles=new File(软件EDID文件夹);
+        if (edidfiles.exists()) {
+            sw.getSWinfo().setEDIDpath(软件EDID文件夹);
+        }else {
+            sw.getSWinfo().setEDIDpath(服务器使用路径.RTK2853PATH+"customer/default/edid/EDID_DOLBY/4K/");
+        }
+
         String 软件色温文件夹=sw.get软件客制化路径全称()+"PQ_OverScan/";
         if (!Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0).equals("无")) {
             sw.set软件色温文件路径(Fileprocessing.lookupwai(软件色温文件夹, "Osd").get(0));

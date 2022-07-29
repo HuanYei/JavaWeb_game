@@ -1,5 +1,6 @@
 package com.liufujun.game.me.conntroller;
 
+import com.liufujun.game.conntroller.ResConntroller;
 import com.liufujun.game.util.Fileprocessing;
 import com.liufujun.game.util.PlanUtil;
 import com.liufujun.game.util.服务器使用路径;
@@ -97,6 +98,13 @@ public class SHconntroller {
         Fileprocessing.updateJBboolean("user.config",plan);
     }
 
+    @RequestMapping(value = "/upcolorpath", method = RequestMethod.POST)
+    @ResponseBody
+    public void upcolorpath (@RequestBody(required=false) String path) {
+        ResConntroller.RTKPQpath=path;
+        System.out.println(ResConntroller.RTKPQpath);
+    }
+
     @RequestMapping(value = "/JBall", method = RequestMethod.POST)
     @ResponseBody
     public void JBall () {
@@ -125,7 +133,6 @@ public class SHconntroller {
         }
     }
 
-    private RestTemplate restTemplate=new RestTemplate();
 
     @RequestMapping(value = "/upfile", method = RequestMethod.POST)
     @ResponseBody
@@ -141,21 +148,7 @@ public class SHconntroller {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String url = "http://172.168.1.230:8888/"+"uploadres";
-        // 请求头设置,x-www-form-urlencoded格式的数据
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        FileSystemResource resource = new FileSystemResource(file);
-        //提交参数设置
-        MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-        map.add("file", resource);
-        map.add("path", "res/pq/");
-        map.add("name", name);
-        // 组装请求体
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map);
-        // 发送post请求，并打印结果，以String类型接收响应结果JSON字符串
-        restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
-
+        Fileprocessing.e单个文件上传(path,"res/pq/",name);
         return "成功";
     }
 

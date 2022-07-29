@@ -13,13 +13,13 @@
             margin-left: 20px;
         }
         .tit2{
-            margin-left: 30px;
-        }
-        #swdiv2 td{
-            padding-left: 20px;
+
         }
         #swdiv2 span{
             color: rgba(255, 44, 44, 0.64);
+        }
+        #swdiv2 td{
+            padding-right: 35px;
         }
         /*.jian{*/
         /*    display: none;*/
@@ -37,16 +37,15 @@
     <a href="/" style="font-size: 150%">主页</a>
     <a onclick="Refresh(0)" href="#" style="font-size: 100%">按(Ctrl+Alt+Z)刷新页面</a>
 </div>
-<div style="margin-left: 20px">
+<div style="margin-left: 50px">
     <h1>软件信息</h1>
     <div style="display: flex;">
         <div>
             <p><b>当前仓库：</b><span th:text="${SW.getSwinfo().getPath()}"></span>&nbsp;&nbsp;<b><a th:onclick="openpath([[${SW.getSwinfo().getPath()}]])">打开目录</a></b></p>
             <p><b>智像DP：</b><span th:text="${SW.getZeasn_devicetype()}"></span>&nbsp;&nbsp;<button onclick="copyDP()">点击复制</button></p>
             <p><b>脚本：
-<!--                <a th:href="${'/toScript?swSCpath='}+${SW.getFull_name_of_software_path}">编辑脚本</a>|-->
-                <a th:onclick="openpath([[${SW.getFull_name_of_software_path}]])">打开目录</a>|<a th:onclick="openFile([[${SW.getFull_name_of_software_path}]])">打开文件</a></b></p>
-            <div style="margin-left: 30px">
+                <a th:onclick="openpath([[${SW.getFull_name_of_software_path}]])">打开目录</a><span class="spacespan"></span><a th:onclick="openFile([[${SW.getFull_name_of_software_path}]])">打开文件</a></b></p>
+            <div >
                 <input id="ScName" type="text" th:value=" ${SW.software_name}"></input><br>
                 <button onclick="rmandnew(0)">重命名脚本</button>
                 <button onclick="rmandnew(1)">创建新脚本</button>
@@ -54,16 +53,16 @@
             </div>
 
             <p><b>客制化文件夹：<a th:onclick="openpath([[${SW.full_name_of_software_customization_path}]])" >打开目录</a></b></p>
-            <div style="margin-left: 30px">
+            <div >
                 <input type="text" id="CuDir" th:value="${SW.software_customization_name}"></input><br>
                 <button onclick="rmandnew(2)">重命名文件夹</button>
                 <button onclick="rmandnew(3)">创建新文件夹</button>
                 <!--        <span style="color: red;" class="zhushi">*重命名或新建客制化文件夹都会自动更新脚本中的宏</span>-->
             </div>
 
-            <p><b>logo<span id="dzpt1" style="display: none">和电子屏贴</span>：<a th:onclick="openpath([[${SW.full_name_of_software_logo_path}]])" >打开LOGO目录</a><span  class="rtksty">|<a id="clogo"  href="http://172.168.1.230:8888/toRAWLOGO">制作logo</a></span><span id="dzpt3" style="display: none;">|<a th:onclick="openpath([[${SW.dzptPath}]])"  >打开电子屏贴目录</a></span></b>
+            <p><b>LOGO<span id="dzpt1" style="display: none">和电子屏贴</span>：<a th:onclick="openpath([[${SW.full_name_of_software_logo_path}]])" >打开LOGO目录</a><span  class="rtksty"><span class="spacespan"></span><a id="clogo"  href="http://172.168.1.230:8888/toRAWLOGO">制作LOGO</a></span><span id="dzpt3" style="display: none;"><span class="spacespan"></span><a th:onclick="openpath([[${SW.dzptPath}]])"  >打开电子屏贴目录</a></span></b>
 
-            <div style="margin-left: 30px;display: flex;" >
+            <div style="display: flex;" >
             <div>
                 <a th:href="@{/image/logo}" style="text-decoration:none;">
                     <img style="height: 180px;width: 320px;" border="3" title="点击可查看大图" th:src="@{/image/logo}">
@@ -80,30 +79,117 @@
                     <img id="donh" style="position:absolute;height: 42px;width: 170px; margin: 69px 78px;"  title="点击可查看大图" src="img/android-logo-mask.png"/>
             </div>
             <br>
-                <!--        <span style="color: red;" class="zhushi">*请打开logo目录，复制你要修改的logo名称，填入输入框更换logo。</span>-->
             </div>
 <!--            <b><a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSoftware_logo_name()}]])" class="tit2">Logo名称：</a></b>-->
-            <input class="tit2" id="logo" type="text" th:value="${SW.software_logo_name}" list="listlogo" style="width: 23%;height: 20px;"></input>
-            <button onclick="UPlogo()">更换logo</button>
+            <input class="tit2" id="logo" type="text" th:value="${SW.software_logo_name}" list="listlogo" style="width: 228px;height: 20px;"></input>
+            <button onclick="UPlogo()">更换LOGO</button>
             <datalist id="listlogo">
                   <span th:each="logo:${logos}">
                      <option th:value="${logo}"/>
                   </span>
             </datalist>
         </div>
-        <div style="padding-left: 50px">
+        <div style="padding-left: 40px">
             <p><b>遥控器配置：
-                <a th:onclick="openpath([[${SW.getSwinfo().getIRpath()}]])">打开目录</a>|
-                <a th:onclick="openFile([[${SW.getSwinfo().getIRpath()}]])">打开文件</a>|
+                <a th:onclick="openpath([[${SW.getSwinfo().getIRpath()}]])">打开目录</a>
+                <a th:onclick="openFile([[${SW.getSwinfo().getIRpath()}]])">打开文件</a>
                 <a th:href="@{/image/ykq}">查看丝印</a>
+                <a th:href="@{/IRUpdate(path=${SW.getSwinfo().getIRpath()})}">编辑遥控</a>
             </b></p>
             <input id="ykqtu" type="file" style="text-decoration:none;display: none;"/>
             <a style="text-decoration:none;">
 
             <label for="ykqtu">
-                <img  style="height: 450px;width: 366px;" border="1"  th:src="@{/image/ykq}">
+                <img  style="height: 468px;width: 366px;" border="1"  th:src="@{/image/ykq}">
             </label>
             </a>
+        </div>
+
+        <div style="padding-left: 40px">
+            <form action="#"  method="post" th:object="${SW}">
+                <p><b>EDID配置：</b></p>
+            <table>
+                <tr>
+                    <td> 制造商：</td>
+                    <td><input style="width: 50px" type="text" th:field="*{swinfo.edid.manufacturer}" disabled="disabled" />
+                </tr>
+                <tr>
+                    <td> 设备名：</td>
+                    <td colspan="2"><input style="width: 80px" type="text" th:field="*{swinfo.edid.equipment_name}" disabled="disabled"/>
+                </tr>
+
+                <tr>
+                    <td> 生产年：</td>
+                    <td><input style="width: 50px" type="text" th:field="*{swinfo.edid.year}"/>
+
+                </tr>
+
+                <tr>
+                    <td> 生产周：</td>
+                    <td><input type="text" style="width: 50px" th:field="*{swinfo.edid.week}"/>
+
+                </tr>
+
+                <tr>
+                    <td> 尺寸：</td>
+                    <td><input type="text" style="width: 50px" th:field="*{swinfo.edid.size}"/>
+                    <td class="danwei">inch</td>
+                </tr>
+
+                <tr>
+                    <td> 最大尺寸：</td>
+                    <td><input type="text" style="width: 50px" disabled="disabled" th:field="*{swinfo.edid.maxsize}"/>
+                    <td class="danwei">inch</td>
+                </tr>
+
+                <tr>
+                    <td> 长：</td>
+                    <td><input type="text" style="width: 50px" disabled="disabled" th:field="*{swinfo.edid.hsize1}"/>
+                    <td class="danwei">mm</td>
+                </tr>
+
+                <tr>
+                    <td> 宽：</td>
+                    <td><input type="text" style="width: 50px" disabled="disabled" th:field="*{swinfo.edid.vsize1}"/>
+                    <td class="danwei">mm</td>
+                </tr>
+
+                <tr>
+                    <td> 最大长：</td>
+                    <td><input type="text" style="width: 50px" disabled="disabled" th:field="*{swinfo.edid.maxhsize}"/>
+                    <td class="danwei">cm</td>
+                </tr>
+
+                <tr>
+                    <td> 最大宽：</td>
+                    <td><input type="text" style="width: 50px" disabled="disabled" th:field="*{swinfo.edid.maxvsiez}"/>
+                    <td class="danwei">cm</td>
+                </tr>
+
+                <tr>
+                    <td>H 像素数：</td>
+                    <td><input style="width: 50px" type="text" disabled="disabled" th:field="*{swinfo.edid.hfbl1}"/>
+                    <td class="danwei">px</td>
+                </tr>
+
+                <tr>
+                    <td>V 像素数：</td>
+                    <td><input type="text" style="width: 50px" disabled="disabled" th:field="*{swinfo.edid.vfbl1}"/></td>
+                    <td class="danwei">px</td>
+                </tr>
+
+                <tr>
+                    <td> 刷新率：</td>
+                    <td><input style="width: 50px" type="text" disabled="disabled" th:field="*{swinfo.edid.fps}"/>
+                    <td class="danwei">hz</td>
+                </tr>
+                <tr>
+                    <th colspan="2"><button type="button" style="width: 120px;">提交修改</button></th>
+                </tr>
+            </table>
+                <br>
+                <span style="color: red;">注意：数据源自HDMI 1.4 <br>提交修改是修改全部文件</span>
+            </form>
         </div>
     </div>
     <p>
@@ -113,15 +199,15 @@
                      <option th:value="${panel}"/>
                   </span>
     </datalist>
-        <b>屏： <a th:onclick="openpath([[${SW.full_name_of_software_screen_parameter_name_path}]])" >打开目录</a>|<a th:onclick="openFile([[${SW.full_name_of_software_screen_parameter_name_path}]])">打开文件</a></b>
+        <b>屏： <a th:onclick="openpath([[${SW.full_name_of_software_screen_parameter_name_path}]])" >打开目录</a><span class="spacespan"></span><a th:onclick="openFile([[${SW.full_name_of_software_screen_parameter_name_path}]])">打开文件</a></b>
     <div class="tit2">
 <!--        <b><a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getScreen_name()}]])">屏参文件名：</a></b>-->
-        <input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;" list="listpanel"></input>
+        <input id="panelName" type="text" th:value="${SW.screen_name}" style="height: 20px;width: 163px"  list="listpanel"></input>
         <button onclick="UPPanel()" >更换屏参</button>
         <button onclick="rmandnew(4)" >新建屏参</button>
 <!--    <span style="color: red;" class="zhushi">*请打开目录，复制你要修改的屏文件名称，填入输入框更换配屏</span>-->
         <br><br>
-        <form action="#" th:action="@{/Panel}" method="post" th:object="${SW}" style="background-color: #eeeeee">
+        <form action="#" th:action="@{/Panel}" method="post" th:object="${SW}" style="background-color: #eeeeee;width: 324px;">
             工厂菜单显示名:
             <input type="text" th:field="*{panel.M_PNAME}"/>
             <br>
@@ -164,7 +250,7 @@
             </div>
 
             <br>
-            <button style="padding: 5px 150px;" type="submit">提交修改</button>
+            <button style="padding: 5px 135px;" type="submit">提交修改</button>
 <!--            <span style="color: red;" class="zhushi">*提交修改后，会直接修改屏参文件，请注意检查。</span>-->
             <br>
             <input  style="display: none;" type="text" th:field="*{panel.Ti_MODE}"/>
@@ -184,9 +270,9 @@
     <div id="swdiv2">
       <b>软件基础配置：</b>
         <div class="tit2">
-            <table>
+            <table >
                 <tr>
-                    <td>
+                    <td >
                         <a th:onclick="openFileRow([[${SW.getFull_name_of_software_path}]],[[${SW.getSwinfo().getIRname()}]])"> 遥控器名：</a>
                         <span th:text="${SW.getSwinfo().getIRname()}"></span>
                     </td>
@@ -316,7 +402,7 @@
         <br>
         <br>
         <h1>PQ信息</h1>
-        <iframe frameborder=0  width="100%" height="800px" scrolling="yes" id="rtksub" style="display: none;" th:src="'http://172.168.1.230:8888/pdfuploadpath?path=res/pq/'+${SW.getSwinfo().getRTKpqfwqname()}+'&plan='+${SW.getPlan()}">
+        <iframe  frameborder=0  width="100%" height="800px" scrolling="yes" id="rtkiframe" style="display: none;" th:src="'http://172.168.1.230:8888/pdfuploadpath?path=res/pq/'+${SW.getSwinfo().getRTKpqfwqname()}+'&plan='+${SW.getPlan()}+'&despath='+${SW.getSoftware_color_temperature_file_path()}">
 
         </iframe>
         <form id="pqfrom" action="#" th:action="@{/Color}" method="post" th:object="${SW}">
@@ -451,9 +537,9 @@
             </div>
 
             <br>
-<!--            <a id="rtksub" style="display: none;"><button   type="button"  style="font-size: 100%;padding: 15px 350px;" onclick="tofwq()">去服务器修改</button></a>-->
+<!--            <a id="rtkiframe" style="display: none;"><button   type="button"  style="font-size: 100%;padding: 15px 350px;" onclick="tofwq()">去服务器修改</button></a>-->
             <button id="mtksub"  type="button"  style="font-size: 100%;padding: 15px 350px;display: none;"  onclick="tijiao()">提交修改</button>
-<!--            <span id="rtksubzs" style="color: red;" class="zhushi">*提交修改后，会直接修改PQ文件，2851和2842会编译成bin文件并生成在客制化文件夹中，请检查。</span>-->
+<!--            <span id="rtkiframezs" style="color: red;" class="zhushi">*提交修改后，会直接修改PQ文件，2851和2842会编译成bin文件并生成在客制化文件夹中，请检查。</span>-->
             <input  style="display: none;" type="text" th:field="*{software_color_temperature_file_path}"/>
             <input  style="display: none;" type="text" th:field="*{software_name}"/>
             <input  style="display: none;" type="text" th:field="*{isRTK}"/>
@@ -532,7 +618,7 @@
             for (var i = 0; i < a.length; i++) {
                 a[i].style.display = "none";
             }
-            document.getElementById("rtksub").style.display = "inline";
+            document.getElementById("rtkiframe").style.display = "inline";
 
             document.getElementById("donh").src="img/rtk.gif";
         }
@@ -849,6 +935,8 @@
         form.submit();
 
     }
+
+
 
 </script>
 <script defer="defer">

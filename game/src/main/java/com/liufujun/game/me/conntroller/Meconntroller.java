@@ -72,11 +72,40 @@ public class Meconntroller {
         model.addAttribute("ischeckbox9632",Fileprocessing.findJBboolean("user.config","9632configure="));
         model.addAttribute("ischeckbox2851",Fileprocessing.findJBboolean("user.config","2851configure="));
         model.addAttribute("ischeckbox2853",Fileprocessing.findJBboolean("user.config","2853configure="));
+
+
+        model.addAttribute("datetime",MyUtil.time());
         return "me/meindex";
     }
     @RequestMapping("/dzpt")
     public String  todzpt(){
         return "me/dzpt";
+    }
+
+    @RequestMapping("/IRUpdate")
+    public String  IRUpdate(@RequestParam("path") String IRPath,Model model){
+
+        String name =MyUtil.totime()+".ini";
+        String fuyonname =MyUtil.totime()+".xml";
+        String fuyonPath=StringUtil.提取文件路径(IRPath)+"keys_extra.xml";
+        //判断是否为368
+        if (IRPath.indexOf("/MTK368P/")!=-1){
+             name =MyUtil.totime()+".ini";
+             fuyonname =MyUtil.totime()+".xml";
+             fuyonPath=StringUtil.提取文件路径(IRPath)+"key_extras/com.toptech.tvmenu/keys_extra.xml";
+        }else if (IRPath.indexOf("/RTD2853R/")!=-1){
+             name =MyUtil.totime()+".config";
+             fuyonname =MyUtil.totime()+".xml";
+             fuyonPath=StringUtil.提取文件路径(IRPath)+"_tv_keys.xml";
+        }
+        System.out.println("fuyonPath="+fuyonPath+"\nIRPath="+IRPath);
+        Fileprocessing.e单个文件上传(IRPath,"res/IR/IRfile/",name);
+        Fileprocessing.e单个文件上传(fuyonPath,"res/IR/IRfile/",fuyonname);
+        model.addAttribute("path","res/IR/IRfile/"+name+"="+StringUtil.e去除文件后缀(StringUtil.提取文件名(IRPath))+"?res/IR/IRfile/"+fuyonname);
+        model.addAttribute("http","http://172.168.1.230:8888/FAEtoIRselect");
+//        model.addAttribute("http","http://127.0.0.1:8888/FAEtoIRselect");
+        System.out.println("IRPath = [" + IRPath + "], model = [" + model + "]");
+        return "totofwq";
     }
 
     @RequestMapping(value = "/RmScname", method = RequestMethod.POST)
@@ -118,7 +147,6 @@ public class Meconntroller {
             Fileprocessing.newFile(oldScname,newScname);
             if (is2851){
                 String panelset= StringUtil.CDDD( StringUtil.CDDD(oldScname))+"panel_setting.h";
-
                 String text=Fileprocessing.readTxtFile(panelset);
                 String panel相对路径=newScname.replace(StringUtil.CDDD( StringUtil.CDDD(oldScname)),"");
                 String update="\t#elif defined(TOPTECH_PANEL_NAME_"+newScnameNAME+")\n" +
